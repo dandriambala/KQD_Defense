@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.iut.paris8.towerdefense.control.Controleur">
+
+   <top>
+      <HBox fx:id="Top" alignment="CENTER_LEFT" prefHeight="63.0" prefWidth="960.0" spacing="20.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Vie" />
+            <Label text="20" />
+            <Label text="\$" />
+         </children>
+      </HBox>
+   </top>
+
+
+   <center>
+      <Pane fx:id="pane" prefHeight="352.0" prefWidth="960.0" BorderPane.alignment="CENTER">
+         <children>
+            <TilePane fx:id="tilepane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="352.0" prefTileHeight="16.0" prefTileWidth="16.0" prefWidth="960.0" />
+         </children>
+      </Pane>
+   </center>
+
+   <bottom>
+      <HBox prefHeight="85.0" prefWidth="960.0" spacing="15.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" onAction="#testEnnemieLent" text="Lent" />
+            <Button mnemonicParsing="false" onAction="#testEnnemieRapide" text="Rapide" />
+            <Button fx:id="ajoutTourelle" mnemonicParsing="false" onAction="#testTourelle" text="Tourelle" />
+         </children>
+      </HBox>
+   </bottom>
+
+</BorderPane>
