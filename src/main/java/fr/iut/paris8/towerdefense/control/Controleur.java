@@ -46,9 +46,6 @@ public class Controleur implements Initializable {
         ListChangeListener l1 = new ObservateurEnnemi(pane);
         this.env.getEnnemis().addListener(l1);
 
-
-        // this.env.getVague().getEnnemis().addListener(l1);
-
     }
 
     private void initTowerDefense() {
@@ -76,7 +73,6 @@ public class Controleur implements Initializable {
         ajoutTourelle.setOnMouseDragged(eve -> {
                     t.setColonne((int) eve.getSceneX());
                     t.setLigne((int) (eve.getSceneY() - Top.getHeight()));
-                    System.out.println("Tourelle :" + t.getColonne() + " " + t.getLigne());
                 }
         );
 
@@ -95,8 +91,6 @@ public class Controleur implements Initializable {
         c.setOnMouseExited(e -> {
                     ajouterDefenseDansModele(t.getColonne(), t.getLigne());
                     ajusterEmplacementtourelle(t, (Math.round(t.getColonne() / 16)), Math.round(t.getLigne() / 16));
-                    afficherTerrain(env.getTerrainModele());
-                    System.out.println(t.colonneProperty().getValue() + " " + t.ligneProperty().getValue());
 
                 }
         );
@@ -115,7 +109,6 @@ public class Controleur implements Initializable {
         if (env.getTerrainModele().dansTerrain(li,co) && env.getTerrainModele().getTerrain()[li][co] == 0) {
             env.getTerrainModele().getTerrain()[li][co] = 3;
         }
-        else System.out.println("erreur placement");
     }
 
     public void ajusterEmplacementtourelle(TourelleBase t, int ligne, int colonne) {

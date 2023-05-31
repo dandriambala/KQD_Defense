@@ -6,8 +6,4 @@ public class EnnemiRapide extends Ennemi{
         super(8, 160, 3, 10, 100, env);
     }
 
-    public EnnemiRapide(Environnement env, int x, int y){
-
-        super(x, y,3, 10, 100, env);
-    }
 }

@@ -28,9 +28,7 @@ public class ObservateurEnnemi implements ListChangeListener<Ennemi> {
             }
 
             for (Ennemi nouveau : change.getAddedSubList()){
-
                 creerSpriteEnnemi(nouveau);
-                System.out.println("nv sprite");
             }
 
         }

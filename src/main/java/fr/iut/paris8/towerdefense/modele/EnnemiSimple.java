@@ -6,8 +6,4 @@ public class EnnemiSimple extends Ennemi{
         super(8, 160, 1, 10, 100, env);
     }
 
-    public EnnemiSimple(Environnement env, int x, int y){
-        super(x, y,1, 10, 100, env);
-    }
-
 }
