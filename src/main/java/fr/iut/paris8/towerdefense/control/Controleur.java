@@ -1,5 +1,6 @@
 package fr.iut.paris8.towerdefense.control;
 
+import fr.iut.paris8.towerdefense.BFS.Sommet;
 import fr.iut.paris8.towerdefense.modele.Ennemi;
 import fr.iut.paris8.towerdefense.modele.Environnement;
 import fr.iut.paris8.towerdefense.modele.TerrainModele;
@@ -20,6 +21,7 @@ import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class Controleur implements Initializable {
@@ -106,6 +108,13 @@ public class Controleur implements Initializable {
                 }
         );
 
+        Sommet sommet = new Sommet();
+        for ( Sommet s : env.getBfs().getParcours()){
+            if ( s.getI() == t.getColonne() && s.getJ() == t.getLigne() / 16 ) {
+                sommet = s;
+                break;
+            }
+        }
 
     }
 
@@ -122,7 +131,8 @@ public class Controleur implements Initializable {
                     ajouterDefenseDansModele(t.getColonne(), t.getLigne());
                     ajusterEmplacementtourelle(t, (Math.round(t.getColonne() / 16)), Math.round(t.getLigne() / 16));
                     afficherTerrain(env.getTerrainModele());
-                    System.out.println(t.colonneProperty().getValue() + " " + t.ligneProperty().getValue());
+                    System.out.println("TourelleX " + t.colonneProperty().getValue()/16 + " TourelleY " + t.ligneProperty().getValue()/16);
+                    env.getBfs().testBFS();
 
                 }
         );
@@ -143,6 +153,14 @@ public class Controleur implements Initializable {
 //        System.out.println(this.dansTerrain(co, li));
         if (env.getTerrainModele().dansTerrain(li, co) && env.getTerrainModele().getTerrain()[li][co] == 0) {
             env.getTerrainModele().getTerrain()[li][co] = 3;
+            Sommet sommet = new Sommet();
+            for ( Sommet s : env.getBfs().getParcours()){
+                if ( s.getI() == co && s.getJ() == li ) {
+                    sommet = s;
+                    break;
+                }
+            }
+            env.getBfs().getG().deconnecte(sommet);
         } else System.out.println("erreur placement");
     }
 

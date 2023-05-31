@@ -34,6 +34,9 @@ public class TerrainModele {
     public boolean dansTerrain(int ligne, int colonne) {
         return (0 <= ligne && ligne < this.ligne && 0 <= colonne && colonne < this.colonne);
     }
+    public boolean dansTerrainEnnemie(int ligne, int colonne) {
+        return (1 <= ligne && ligne < this.ligne-1 && 0 <= colonne && colonne < this.colonne-1);
+    }
 
     public int getWidth() {
         return colonne * pixel;

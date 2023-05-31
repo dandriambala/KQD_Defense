@@ -1,5 +1,8 @@
 package fr.iut.paris8.towerdefense.modele;
 
+import fr.iut.paris8.towerdefense.BFS.BFS;
+import fr.iut.paris8.towerdefense.BFS.Grille;
+import fr.iut.paris8.towerdefense.BFS.Sommet;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
@@ -12,6 +15,7 @@ public class Environnement {
     private ObservableList<Defense> defenses;
     private IntegerProperty nbToursProperty;
     private TerrainModele t;
+    private BFS bfs;
 
     public Environnement(TerrainModele t) {
         super();
@@ -20,6 +24,7 @@ public class Environnement {
         this.defenses = FXCollections.observableArrayList();
         this.ennemis = FXCollections.observableArrayList();
         this.t = t;
+        this.bfs = new BFS(new Grille(t.getWidth()/16,t.getHeight()/16),new Sommet(59,10));
     }
 
     public final IntegerProperty nbToursProperty() {
@@ -69,7 +74,7 @@ public class Environnement {
         }
         for (int i = ennemis.size() - 1; i >= 0; i--) {
 
-            if (ennemis.get(i).estVivant()) {
+            if (ennemis.get(i).estVivant() && t.dansTerrain(ennemis.get(i).getY()/16, ennemis.get(i).getX()/16 ) ) {
                 ennemis.get(i).agir();
             } else {
                 ennemis.remove(ennemis.get(i));
@@ -77,5 +82,12 @@ public class Environnement {
         }
     }
 
+    public BFS getBfs () {
+        return bfs;
+    }
+
+    public TerrainModele getT () {
+        return t;
+    }
 }
 
