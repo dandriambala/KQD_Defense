@@ -5,8 +5,8 @@ import java.util.*;
 public class Grille {
     private int w;
     private int h;
-    private Map<Sommet, Set<Sommet>> listeAdj;
-    private ArrayList<Sommet> obstacles;
+    private Map<Case, Set<Case>> listeAdj;
+    private ArrayList<Case> obstacles;
 
     public Grille ( int w, int h ) {
         this.w = w;
@@ -21,34 +21,34 @@ public class Grille {
         int j;
         for (i = 0; i < this.w; ++i) {
             for (j = 0; j < this.h; ++j) {
-                this.listeAdj.put(new Sommet(i, j), new HashSet());
+                this.listeAdj.put(new Case(i, j), new HashSet());
             }
         }
 
         for (i = 0; i < this.w; ++i) {
             for (j = 0; j < this.h; ++j) {
-                Sommet s = new Sommet(i, j);
+                Case s = new Case(i, j);
                 if ( this.dansGrille(i - 1, j) ) {
-                    ( (Set) this.listeAdj.get(s) ).add(new Sommet(i - 1, j));
+                    ( (Set) this.listeAdj.get(s) ).add(new Case(i - 1, j));
                 }
 
                 if ( this.dansGrille(i + 1, j) ) {
-                    ( (Set) this.listeAdj.get(s) ).add(new Sommet(i + 1, j));
+                    ( (Set) this.listeAdj.get(s) ).add(new Case(i + 1, j));
                 }
 
                 if ( this.dansGrille(i, j + 1) ) {
-                    ( (Set) this.listeAdj.get(s) ).add(new Sommet(i, j + 1));
+                    ( (Set) this.listeAdj.get(s) ).add(new Case(i, j + 1));
                 }
 
                 if ( this.dansGrille(i, j - 1) ) {
-                    ( (Set) this.listeAdj.get(s) ).add(new Sommet(i, j - 1));
+                    ( (Set) this.listeAdj.get(s) ).add(new Case(i, j - 1));
                 }
             }
         }
 
     }
 
-    public boolean estDeconnecte ( Sommet s ) {
+    public boolean estDeconnecte ( Case s ) {
         return this.obstacles.contains(s);
     }
 
@@ -56,10 +56,10 @@ public class Grille {
         return x >= 0 && x < this.w && y >= 0 && y < this.h;
     }
 
-    public Set<Sommet> adjacents ( Sommet s ) {
+    public Set<Case> adjacents ( Case s ) {
         return (Set) ( !this.estDeconnecte(s) ? (Set) this.listeAdj.get(s) : new HashSet() );
     }
-    public void deconnecte(Sommet s) {
+    public void deconnecte( Case s) {
         this.obstacles.add(s);
     }
 }

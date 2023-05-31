@@ -7,21 +7,21 @@ import java.util.Map;
 
 public class BFS {
     private Grille g;
-    private Sommet source;
-    private ArrayList<Sommet> parcours;
-    private Map<Sommet, Sommet> predecesseurs;
+    private Case source;
+    private ArrayList<Case> parcours;
+    private Map<Case, Case> predecesseurs;
 
-    public BFS(Grille g, Sommet source) {
+    public BFS(Grille g, Case source) {
         this.g = g;
         this.source = source;
         testBFS();
     }
 
     public void testBFS() {
-        Sommet s;
-        LinkedList<Sommet> fifo = new LinkedList<>();
+        Case s;
+        LinkedList<Case> fifo = new LinkedList<>();
         parcours = new ArrayList<>();
-        predecesseurs = new HashMap<Sommet, Sommet>();
+        predecesseurs = new HashMap<Case, Case>();
 
         predecesseurs.put(source,null);
         parcours.add(source);
@@ -29,7 +29,7 @@ public class BFS {
 
         while(!fifo.isEmpty()){
             s = fifo.pollLast();
-            for( Sommet t: g.adjacents(s))
+            for( Case t: g.adjacents(s))
                 if (!parcours.contains(t)){
                     parcours.add(t);
                     fifo.addFirst(t);
@@ -39,9 +39,9 @@ public class BFS {
 
     }
 
-    public ArrayList<Sommet> cheminVersSource(Sommet cible) {
-        ArrayList<Sommet> chemin = new ArrayList<>();
-        Sommet s = cible;
+    public ArrayList<Case> cheminVersSource( Case cible) {
+        ArrayList<Case> chemin = new ArrayList<>();
+        Case s = cible;
 
         while(s != source){
             chemin.add(s);
@@ -51,11 +51,11 @@ public class BFS {
         return chemin;
     }
 
-    public ArrayList<Sommet> getParcours () {
+    public ArrayList<Case> getParcours () {
         return parcours;
     }
 
-    public Sommet getSource () {
+    public Case getSource () {
         return source;
     }
 

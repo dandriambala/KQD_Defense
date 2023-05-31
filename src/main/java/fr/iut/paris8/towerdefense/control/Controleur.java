@@ -1,6 +1,6 @@
 package fr.iut.paris8.towerdefense.control;
 
-import fr.iut.paris8.towerdefense.BFS.Sommet;
+import fr.iut.paris8.towerdefense.BFS.Case;
 import fr.iut.paris8.towerdefense.modele.Ennemi;
 import fr.iut.paris8.towerdefense.modele.Environnement;
 import fr.iut.paris8.towerdefense.modele.TerrainModele;
@@ -21,7 +21,6 @@ import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class Controleur implements Initializable {
@@ -108,9 +107,9 @@ public class Controleur implements Initializable {
                 }
         );
 
-        Sommet sommet = new Sommet();
-        for ( Sommet s : env.getBfs().getParcours()){
-            if ( s.getI() == t.getColonne() && s.getJ() == t.getLigne() / 16 ) {
+        Case sommet = new Case();
+        for ( Case s : env.getBfs().getParcours()){
+            if ( s.getColonne() == t.getColonne() && s.getLigne() == t.getLigne() / 16 ) {
                 sommet = s;
                 break;
             }
@@ -153,9 +152,9 @@ public class Controleur implements Initializable {
 //        System.out.println(this.dansTerrain(co, li));
         if (env.getTerrainModele().dansTerrain(li, co) && env.getTerrainModele().getTerrain()[li][co] == 0) {
             env.getTerrainModele().getTerrain()[li][co] = 3;
-            Sommet sommet = new Sommet();
-            for ( Sommet s : env.getBfs().getParcours()){
-                if ( s.getI() == co && s.getJ() == li ) {
+            Case sommet = new Case();
+            for ( Case s : env.getBfs().getParcours()){
+                if ( s.getColonne() == co && s.getLigne() == li ) {
                     sommet = s;
                     break;
                 }

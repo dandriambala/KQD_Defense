@@ -2,7 +2,7 @@ package fr.iut.paris8.towerdefense.modele;
 
 import fr.iut.paris8.towerdefense.BFS.BFS;
 import fr.iut.paris8.towerdefense.BFS.Grille;
-import fr.iut.paris8.towerdefense.BFS.Sommet;
+import fr.iut.paris8.towerdefense.BFS.Case;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
@@ -24,7 +24,7 @@ public class Environnement {
         this.defenses = FXCollections.observableArrayList();
         this.ennemis = FXCollections.observableArrayList();
         this.t = t;
-        this.bfs = new BFS(new Grille(t.getWidth()/16,t.getHeight()/16),new Sommet(59,10));
+        this.bfs = new BFS(new Grille(t.getWidth()/16,t.getHeight()/16),new Case(59,10));
     }
 
     public final IntegerProperty nbToursProperty() {

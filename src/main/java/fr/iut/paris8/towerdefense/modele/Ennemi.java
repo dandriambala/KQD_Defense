@@ -1,6 +1,6 @@
 package fr.iut.paris8.towerdefense.modele;
 
-import fr.iut.paris8.towerdefense.BFS.Sommet;
+import fr.iut.paris8.towerdefense.BFS.Case;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
@@ -17,7 +17,7 @@ public class Ennemi {
     private int prime; //L'argent que donnera l'ennemi à sa mort
     private int pv;
     private Environnement env;
-    private Sommet destinationSommet;
+    private Case destinationSommet;
 
 
     public Ennemi(int x, int y, int vitesse, int prime, int pv, Environnement env) {
@@ -74,7 +74,7 @@ public class Ennemi {
         System.out.println("Pos ennemie \n X : " + getX() + " Y : " + getY() + "  I : " + getX() / 16 + " J : " + getY() / 16);
 
         System.out.println("Sommet\nX : " + destinationSommet.getX() + " Y : " + destinationSommet.getY());
-        System.out.println("I : " + destinationSommet.getI() + " J : " + destinationSommet.getJ());
+        System.out.println("I : " + destinationSommet.getColonne() + " J : " + destinationSommet.getLigne());
         for (int i = 1; i <= vitesse; i++) {
             if ( env.getT().dansTerrainEnnemie(this.getY() / 16, this.getX() / 16) ) {
                 if ( getX() != destinationSommet.getX() ) {
@@ -137,17 +137,17 @@ public class Ennemi {
     }
 
     public void setDestinationSommet(){
-        ArrayList<Sommet> Sommets = env.getBfs().getParcours();
+        ArrayList<Case> Sommets = env.getBfs().getParcours();
 
-        Sommet sommet = new Sommet();
-        for (Sommet s : Sommets) {
-            if ( s.getI() == this.x.getValue() / 16 && s.getJ() == this.y.getValue() / 16 ) {
+        Case sommet = new Case();
+        for (Case s : Sommets) {
+            if ( s.getColonne() == this.x.getValue() / 16 && s.getLigne() == this.y.getValue() / 16 ) {
                 sommet = s;
                 break;
             }
         }
 
-        ArrayList<Sommet> chemin = env.getBfs().cheminVersSource(sommet);
+        ArrayList<Case> chemin = env.getBfs().cheminVersSource(sommet);
 
         for (int i = 0; i < chemin.size(); i++) {
             if ( chemin.get(i) == sommet ) {
