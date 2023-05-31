@@ -70,7 +70,7 @@ public class Controleur implements Initializable {
 
     @FXML
     void testEnnemieLent(ActionEvent event) {
-        Ennemi e = new Ennemi(8, 160, 1, 10, 100, env);
+        Ennemi e = new Ennemi(16, 160, 1, 10, 100, env);
         creerSpriteEnnemi(e);
 
         env.ajouterEnnemi(e);

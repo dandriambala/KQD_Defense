@@ -71,38 +71,40 @@ public class Ennemi {
         if ( destinationSommet == null )
             setDestinationSommet();
 
-        System.out.println(getX() + " " + getY());
+        System.out.println("Pos ennemie \n X : " + getX() + " Y : " + getY() + "  I : " + getX() / 16 + " J : " + getY() / 16);
 
-
-        if ( env.getT().dansTerrainEnnemie(this.getY() / 16, this.getX() / 16) ) {
-            if ( getX() != destinationSommet.getX() ) {
-                if ( destinationSommet.getX() - getX() > 0 ) {
-                    avancerEnX();
-                    if ( destinationSommet.getX() - getX() < 0 )
-                        setDestinationSommet();
+        System.out.println("Sommet\nX : " + destinationSommet.getX() + " Y : " + destinationSommet.getY());
+        System.out.println("I : " + destinationSommet.getI() + " J : " + destinationSommet.getJ());
+        for (int i = 1; i <= vitesse; i++) {
+            if ( env.getT().dansTerrainEnnemie(this.getY() / 16, this.getX() / 16) ) {
+                if ( getX() != destinationSommet.getX() ) {
+                    if ( destinationSommet.getX() - getX() > 0 ) {
+                        avancerEnX();
+                        if ( destinationSommet.getX() - getX() < 0 )
+                            setDestinationSommet();
+                    }
+                    else {
+                        reculerEnX();
+                        if ( destinationSommet.getX() - getX() > 0 )
+                            setDestinationSommet();
+                    }
+                }
+                else if ( getY() != destinationSommet.getY() ) {
+                    if ( destinationSommet.getY() - getY() > 0 ) {
+                        descendreEnY();
+                        if ( destinationSommet.getY() - getY() < 0 )
+                            setDestinationSommet();
+                    }
+                    else {
+                        monterEnY();
+                        if ( destinationSommet.getY() - getY() > 0 )
+                            setDestinationSommet();
+                    }
                 }
                 else {
-                    reculerEnX();
-                    if ( destinationSommet.getX() - getX() > 0 )
-                        setDestinationSommet();
+                    setDestinationSommet();
                 }
-            }
-            else if ( getY() != destinationSommet.getY() ) {
-                if ( destinationSommet.getY() - getY() > 0 ) {
-                    monterEnY();
-                    if ( destinationSommet.getY() - getY() < 0 )
-                        setDestinationSommet();
-                }
-                else {
-                    descendreEnY();
-                    if ( destinationSommet.getY() - getY() > 0 )
-                        setDestinationSommet();
-                }
-            }
-            else {
-                setDestinationSommet();
-            }
-            //TODO mettre dans l'environnement et calibrer l'ennemie rapide a cause des saut de pixel
+                //TODO mettre dans l'environnement et calibrer l'ennemie rapide a cause des saut de pixel
 //        else{
 //        }
 //
@@ -111,27 +113,27 @@ public class Ennemi {
 //
 //
 //
+            }
+            else
+                avancerEnX();
         }
-        else
-            avancerEnX();
     }
-
 
     public int getVitesse(){
         return this.vitesse;
     }
 
     private void avancerEnX(){
-        this.x.setValue(this.x.getValue() + this.vitesse);
+        this.x.setValue(this.x.getValue() + 1);
     }
     public void reculerEnX(){
-        this.x.setValue(this.x.getValue() - this.vitesse);
+        this.x.setValue(this.x.getValue() - 1 );
     }
     private void descendreEnY(){
-        this.y.setValue(this.y.getValue() + this.vitesse);
+        this.y.setValue(this.y.getValue() + 1);
     }
     private void monterEnY(){
-        this.y.setValue(this.y.getValue() - this.vitesse);
+        this.y.setValue(this.y.getValue() - 1);
     }
 
     public void setDestinationSommet(){
