@@ -16,8 +16,7 @@ public class Ennemi {
     private Environnement env;
 
 
-
-    public Ennemi (int x, int y, int vitesse, int prime, int pv, Environnement env ) {
+    public Ennemi(int x, int y, int vitesse, int prime, int pv, Environnement env) {
         this.env = env;
         this.x = new SimpleIntegerProperty(x);
         this.y = new SimpleIntegerProperty(y);
@@ -27,45 +26,52 @@ public class Ennemi {
         this.id = "E" + compteur;
         compteur++;
     }
+
     public String getId() {
         return id;
     }
-    public final int getX () {
+
+    public final int getX() {
         return this.x.getValue();
     }
 
-    public final IntegerProperty getXProperty () {
+    public final IntegerProperty getXProperty() {
         return this.x;
     }
 
-    public final int getY () {
+    public final int getY() {
         return this.y.getValue();
     }
 
-    public final IntegerProperty getYProperty () {
+    public final IntegerProperty getYProperty() {
         return this.y;
     }
 
-    public boolean estVivant () {
+    public boolean estVivant() {
         return this.pv >= 0;
     }
 
-    public int getPrime () {
+    public int getPrime() {
         return prime;
     }
-    public void decrementerPv(int nb){
-        this.pv-=nb;
+
+    public void decrementerPv(int nb) {
+        this.pv -= nb;
     }
 
     //TODO à enlever lorsque le BFS fonctionnera
-    public void agir () {
+    public void agir() {
         if (this.getX() < env.getTerrainModele().getWidth()) {
             this.x.setValue(getX() + this.vitesse);
             //System.out.println("Ennemi :" +this.getX()+ " " +this.getY());
         }
     }
-    public int getVitesse(){
+
+    public int getVitesse() {
         return this.vitesse;
     }
-    public int getPv(){return this.pv;}
+
+    public int getPv() {
+        return this.pv;
+    }
 }
