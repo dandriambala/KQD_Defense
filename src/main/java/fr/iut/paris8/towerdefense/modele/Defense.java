@@ -69,8 +69,7 @@ public abstract class Defense {
     public Ennemi chercherDansPortee() {
 
         for (Ennemi ennemi : this.env.getEnnemis()) {
-            if (((this.getColonne() - this.portee) <= ennemi.getX()) && (ennemi.getX() <= (this.getColonne() + portee))
-                    && ((this.getLigne() - portee) <= ennemi.getY()) && (ennemi.getY() <= this.getLigne() + portee)) {
+            if (((this.getColonne() - this.portee) <= ennemi.getX()) && (ennemi.getX() <= (this.getColonne() + portee))){
                 System.out.println("Dans portée");
                 return ennemi;
             }
