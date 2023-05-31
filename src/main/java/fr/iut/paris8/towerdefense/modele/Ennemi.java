@@ -64,11 +64,12 @@ public abstract class Ennemi {
     public void agir () {
         if (this.getX() < env.getTerrainModele().getWidth()) {
             this.x.setValue(getX() + this.vitesse);
-            //System.out.println("Ennemi :" +this.getX()+ " " +this.getY());
         }
     }
+
     public int getVitesse(){
         return this.vitesse;
     }
     public int getPv(){return this.pv;}
+
 }

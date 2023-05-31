@@ -7,11 +7,8 @@ import javafx.collections.ObservableList;
 
 public class Environnement {
 
-    private static int pourcentageDifficulté = 6;
-
-    private int nbVague;
-    private int nbToursDernièreVagueTerminée = -1; // -1 signifie vague en cours
-
+    private static int pourcentageDifficulte = 6;
+    private GenerateurVague vague;
     private ObservableList<Defense> defenses;
     private ObservableList<Ennemi> ennemis;
     private IntegerProperty nbToursProperty;
@@ -25,13 +22,14 @@ public class Environnement {
         this.ennemis = FXCollections.observableArrayList();
         this.defenses = FXCollections.observableArrayList();
         this.t = t;
+        vague = new GenerateurVague();
     }
 
     public final IntegerProperty nbToursProperty() {
         return this.nbToursProperty;
     }
 
-    public final int getNbToursProperty() {
+    public final int getNbTours() {
         return this.nbToursProperty.getValue();
     }
 
@@ -68,15 +66,13 @@ public class Environnement {
             d.attaquer();
         }
 
-        if (nbToursDernièreVagueTerminée == -1 && ennemis.isEmpty() && !finPartie()){
-            nbToursDernièreVagueTerminée = getNbToursProperty();
-        }
+        vague.vaguePourChaqueTour(this);
 
-        if (nbToursDernièreVagueTerminée != -1 && getNbToursProperty()-nbToursDernièreVagueTerminée >= 60) {
-            genererVague();
-            nbToursDernièreVagueTerminée = -1;
-        }
+        this.ennemisPourChaqueTour();
+    }
 
+
+    public void ennemisPourChaqueTour(){
         for (int i = ennemis.size() - 1; i >= 0; i--) {
             if (ennemis.get(i).estVivant()) {
                 ennemis.get(i).agir();
@@ -84,32 +80,6 @@ public class Environnement {
                 ennemis.remove(ennemis.get(i));
             }
         }
-
-    }
-
-    public static boolean reussitProba(double pourcent){
-        double x = Math.random();
-        double pp = pourcent/100;
-        return (x<=pp);
-    }
-
-    //gerer par des pourcentage, plus pourcentageDifficulté sera grand, plus on a de chance d'avoir des ennemis fort
-    //todo ajouter un limiteur lorsqu'on aura des ennemis plus forts : boss
-    public void genererVague(){
-        nbVague++;
-        for (int i=0; i<nbVague+5; i++){
-
-            if (!reussitProba(pourcentageDifficulté)) {
-                ajouterEnnemi(new EnnemiSimple(this));
-            } else {
-                ajouterEnnemi(new EnnemiRapide(this));
-            }
-        }
-        pourcentageDifficulté +=10;
-    }
-
-    public boolean finPartie(){
-        return nbVague ==50;
     }
 
 
