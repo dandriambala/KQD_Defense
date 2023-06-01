@@ -1,13 +1,8 @@
 package fr.iut.paris8.towerdefense.control;
 
+
 import fr.iut.paris8.towerdefense.BFS.Case;
-import fr.iut.paris8.towerdefense.modele.Ennemi;
-import fr.iut.paris8.towerdefense.modele.Environnement;
-import fr.iut.paris8.towerdefense.modele.TerrainModele;
-import fr.iut.paris8.towerdefense.modele.TourelleBase;
-
 import fr.iut.paris8.towerdefense.modele.*;
-
 import fr.iut.paris8.towerdefense.vue.TerrainVue;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -49,9 +44,8 @@ public class Controleur implements Initializable {
         initTowerDefense();
         gameLoop.play();
 
-
-        ListChangeListener l1 = new ObservateurEnnemi(pane);
-        this.env.getEnnemis().addListener(l1);
+        ListChangeListener l1 = new ObservateurEnMouvement(pane);
+        this.env.getEnMouvements().addListener(l1);
 
     }
 
@@ -101,50 +95,51 @@ public class Controleur implements Initializable {
         c.setTranslateY(t.getLigne());
         c.translateXProperty().bind(t.colonneProperty());
         c.translateYProperty().bind(t.ligneProperty());
+        pane.getChildren().add(c);
         c.setOnMouseExited(e -> {
+
+                    if(defenseBienPlacé(t)) {
+                        env.ajouterDefense(t);
+                        System.out.println("Tourelle ajoutée");
+                    }
+
                     ajouterDefenseDansModele(t.getColonne(), t.getLigne());
                     ajusterEmplacementtourelle(t, (Math.round(t.getColonne() / 16)), Math.round(t.getLigne() / 16));
                     env.getBfs().testBFS();
                 }
         );
 
-        env.ajouterDefense(t);
-        pane.getChildren().add(c);
 
     }
 
-    public void ajouterDefenseDansModele( int colonne, int ligne) {
+    public void ajouterDefenseDansModele(int colonne, int ligne) {
 
 
         int co = Math.round(colonne / 16);
         int li = Math.round(ligne / 16);
 
-        if (env.getTerrainModele().dansTerrain(li,co) && env.getTerrainModele().getTerrain()[li][co] == 0) {
+        if (env.getTerrainModele().dansTerrain(li, co) && env.getTerrainModele().getTerrain()[li][co] == 0) {
             env.getTerrainModele().getTerrain()[li][co] = 3;
+
             Case sommet = new Case();
-            for ( Case s : env.getBfs().getParcours()){
-                if ( s.getColonne() == co && s.getLigne() == li ) {
+            for (Case s : env.getBfs().getParcours()) {
+                if (s.getColonne() == co && s.getLigne() == li) {
                     sommet = s;
                     break;
                 }
             }
             env.getBfs().getG().deconnecte(sommet);
         } else System.out.println("erreur placement");
+
     }
 
-    public void ajusterEmplacementtourelle(TourelleBase t, int ligne, int colonne) {
+    public void ajusterEmplacementtourelle(Defense t, int ligne, int colonne) {
         t.setColonne(ligne * 16);
         t.setLigne(colonne * 16);
     }
 
-
-    public static void afficherTerrain(TerrainModele t) {
-        for (int c = 0; c < t.getTerrain().length; c++) {
-            for (int d = 0; d < t.getTerrain()[c].length; d++) {
-                System.out.print(t.getTerrain()[c][d]);
-            }
-            System.out.println();
-        }
+    private boolean defenseBienPlacé(Defense d) {
+        return ((d.getColonne() < tilepane.getMaxWidth() && d.getLigne() < tilepane.getHeight()) && env.getTerrainModele().getTerrain()[d.getLigne() /16][d.getColonne() /16] == 0);
     }
 }
 

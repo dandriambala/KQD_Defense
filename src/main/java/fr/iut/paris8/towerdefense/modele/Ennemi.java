@@ -6,52 +6,21 @@ import javafx.beans.property.SimpleIntegerProperty;
 
 import java.util.ArrayList;
 
-public abstract class Ennemi {
+public abstract class Ennemi extends EnMouvement{
+    private static int compteurEnnemi = 0;
 
-    private String id;
-    private static int compteur = 0;
-
-    private IntegerProperty x;
-    private IntegerProperty y;
-    private int vitesse;
     private int prime; //L'argent que donnera l'ennemi à sa mort
     private int pv;
-    private Environnement env;
     private Case destinationSommet;
 
-
-
-    public Ennemi (int x, int y, int vitesse, int prime, int pv, Environnement env ) {
-        this.env = env;
-        this.x = new SimpleIntegerProperty(x);
-        this.y = new SimpleIntegerProperty(y);
-        this.vitesse = vitesse;
+    public Ennemi(int x, int y, int vitesse,  int prime, int pv, Environnement env) {
+      super(x,y,vitesse,env);
         this.prime = prime;
         this.pv = pv;
-        this.id = "E" + compteur;
-        compteur++;
+        setId("E"+ compteurEnnemi);
+        compteurEnnemi++;
     }
-
-
-
-    public String getId() {
-        return id;
-    }
-    public final int getX () {
-        return this.x.getValue();
-    }
-
-    public final IntegerProperty getXProperty () {
-        return this.x;
-    }
-
-    public final int getY () {
-        return this.y.getValue();
-    }
-
-    public final IntegerProperty getYProperty () {
-        return this.y;
-    }
+    public int getPv(){return this.pv;}
 
     public boolean estVivant () {
         return this.pv >= 0;
@@ -64,9 +33,6 @@ public abstract class Ennemi {
         this.pv-=nb;
     }
 
-    public int getPv () {
-        return pv;
-    }
 
     public void agir () {
         if ( destinationSommet == null )
@@ -76,8 +42,8 @@ public abstract class Ennemi {
 
         System.out.println("Sommet\nX : " + destinationSommet.getX() + " Y : " + destinationSommet.getY());
         System.out.println("I : " + destinationSommet.getColonne() + " J : " + destinationSommet.getLigne());
-        for (int i = 1; i <= vitesse; i++) {
-            if ( env.getT().dansTerrainEnnemie(this.getY() / 16, this.getX() / 16) ) {
+        for (int i = 1; i <= getVitesse(); i++) {
+            if ( getEnv().getTerrainModele().dansTerrainEnnemie(this.getY() / 16, this.getX() / 16) ) {
                 if ( getX() != destinationSommet.getX() ) {
                     if ( destinationSommet.getX() - getX() > 0 ) {
                         avancerEnX();
@@ -111,45 +77,42 @@ public abstract class Ennemi {
         }
     }
 
-    public int getVitesse(){
-        return this.vitesse;
-    }
-
     private void avancerEnX(){
-        this.x.setValue(this.x.getValue() + 1);
+        setPositionXProperty(getX() + 1);
     }
     public void reculerEnX(){
-        this.x.setValue(this.x.getValue() - 1 );
+        setPositionXProperty(getX() - 1 );
     }
     private void descendreEnY(){
-        this.y.setValue(this.y.getValue() + 1);
+        setPositionYProperty(getY() + 1);
     }
     private void monterEnY(){
-        this.y.setValue(this.y.getValue() - 1);
+        setPositionYProperty(getY() - 1);
     }
 
     public void setDestinationSommet(){
-        ArrayList<Case> Sommets = env.getBfs().getParcours();
+        ArrayList<Case> Sommets = getEnv().getBfs().getParcours();
 
         Case sommet = new Case();
         for (Case s : Sommets) {
-            if ( s.getColonne() == this.x.getValue() / 16 && s.getLigne() == this.y.getValue() / 16 ) {
+            if ( s.getColonne() == getX() / 16 && s.getLigne() == getY() / 16 ) {
                 sommet = s;
                 break;
             }
         }
 
-        ArrayList<Case> chemin = env.getBfs().cheminVersSource(sommet);
+        ArrayList<Case> chemin = getEnv().getBfs().cheminVersSource(sommet);
 
         for (int i = 0; i < chemin.size(); i++) {
             if ( chemin.get(i) == sommet ) {
                 if ( chemin.get(i) != chemin.get(chemin.size() - 1) )
                     destinationSommet = chemin.get(i + 1);
                 else
-                    destinationSommet = env.getBfs().getSource();
+                    destinationSommet = getEnv().getBfs().getSource();
                 break;
             }
         }
     }
 }
+
 

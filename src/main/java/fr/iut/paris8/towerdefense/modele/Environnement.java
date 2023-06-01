@@ -8,12 +8,13 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class Environnement {
 
+
+public class Environnement {
     private static int pourcentageDifficulte = 6;
     private GenerateurVague vague;
     private ObservableList<Defense> defenses;
-    private ObservableList<Ennemi> ennemis;
+    private ObservableList<EnMouvement> enMouvements;
     private IntegerProperty nbToursProperty;
     private TerrainModele t;
     private BFS bfs;
@@ -23,8 +24,10 @@ public class Environnement {
         this.nbToursProperty = new SimpleIntegerProperty();
 
         this.nbToursProperty.setValue(0);
-        this.ennemis = FXCollections.observableArrayList();
+
+        this.enMouvements = FXCollections.observableArrayList();
         this.defenses = FXCollections.observableArrayList();
+
         this.t = t;
 
         this.bfs = new BFS(new Grille(t.getWidth()/16,t.getHeight()/16),new Case(59,10));
@@ -43,33 +46,62 @@ public class Environnement {
         this.nbToursProperty.setValue(n);
     }
 
+    public ObservableList<Ennemi> getEnnemis(){
+            ObservableList<Ennemi> listeEnnemis = FXCollections.observableArrayList();
+        for (EnMouvement em: enMouvements) {
+            if (em instanceof Ennemi){
+                listeEnnemis.add((Ennemi) em);
+            }
+        }
+        return listeEnnemis;
+    }
+    public ObservableList<Balle> getBalles(){
+        ObservableList<Balle> listeBalles = FXCollections.observableArrayList();
+        for (EnMouvement em: enMouvements) {
+            if (em instanceof Balle){
+                listeBalles.add((Balle) em);
+            }
+        }
+        return listeBalles;
+    }
+
     public ObservableList<Defense> getDefense() {
         return defenses;
     }
 
+
     public TerrainModele getTerrainModele(){
         return this.t;
+    }
+
+    public ObservableList<EnMouvement> getEnMouvements() {
+        return enMouvements;
     }
 
     public void ajouterDefense(Defense d) {
         defenses.add(d);
     }
 
-    public ObservableList<Ennemi> getEnnemis() {
-        return ennemis;
+    public Ennemi getEnnemiID(String id) {
+        for (Ennemi a : this.getEnnemis()) {
+            if (a.getId().equals(id)) {
+                return a;
+            }
+        }
+        return null;
     }
+
 
     public void ajouterEnnemi(Ennemi a) {
-        ennemis.add(a);
+        enMouvements.add(a);
     }
-
 
     public void unTour() {
 
         nbToursProperty.setValue(nbToursProperty.getValue() + 1);
 
         for (Defense d : getDefense()) {
-            d.attaquer();
+            d.agir();
         }
 
         vague.vaguePourChaqueTour(this);
@@ -78,13 +110,16 @@ public class Environnement {
     }
 
 
-    public void ennemisPourChaqueTour(){
-        for (int i = ennemis.size() - 1; i >= 0; i--) {
-            if (ennemis.get(i).estVivant() && t.dansTerrain(ennemis.get(i).getY() / 16, ennemis.get(i).getX() / 16)) {
-                ennemis.get(i).agir();
-            } else {
-                ennemis.remove(ennemis.get(i));
-            }
+    public void ennemisPourChaqueTour() {
+        for (int i = enMouvements.size() - 1; i >= 0; i--) {
+            if ((enMouvements.get(i) instanceof Ennemi && ((Ennemi) enMouvements.get(i)).estVivant()) && t.dansTerrain(enMouvements.get(i).getY() / 16, enMouvements.get(i).getX() / 16)) {
+                enMouvements.get(i).agir();
+            } else if (enMouvements.get(i) instanceof Balle)
+                enMouvements.get(i).agir();
+            else
+                enMouvements.remove(enMouvements.get(i));
+
+
         }
     }
 
@@ -92,8 +127,19 @@ public class Environnement {
         return bfs;
     }
 
-    public TerrainModele getT () {
-        return t;
+    // Retourne le premier ennemi qui se trouve dans la portée de la défense (nombre de pixel qui sépare la tourelle de n'ennemi)
+
+    public Ennemi chercherDansPortee(int colonne, int ligne, int portee){
+
+        for (Ennemi ennemi : this.getEnnemis()) {
+            if (((colonne-portee) <= ennemi.getX()) && (ennemi.getX()<=(colonne + portee))
+                    && ((ligne- portee) <= ennemi.getY()) && (ennemi.getY() <= ligne + portee)) {
+//                System.out.println("Dans portée");
+                return ennemi;
+            }
+        }
+        return null;
+
     }
 
 }
