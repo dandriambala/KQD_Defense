@@ -10,9 +10,10 @@ import javafx.collections.ObservableList;
 
 public class Environnement {
 
-    private int width, height;
-    private ObservableList<Ennemi> ennemis;
+    private static int pourcentageDifficulte = 6;
+    private GenerateurVague vague;
     private ObservableList<Defense> defenses;
+    private ObservableList<Ennemi> ennemis;
     private IntegerProperty nbToursProperty;
     private TerrainModele t;
     private BFS bfs;
@@ -20,18 +21,21 @@ public class Environnement {
     public Environnement(TerrainModele t) {
         super();
         this.nbToursProperty = new SimpleIntegerProperty();
+
         this.nbToursProperty.setValue(0);
-        this.defenses = FXCollections.observableArrayList();
         this.ennemis = FXCollections.observableArrayList();
+        this.defenses = FXCollections.observableArrayList();
         this.t = t;
+
         this.bfs = new BFS(new Grille(t.getWidth()/16,t.getHeight()/16),new Case(59,10));
+        vague = new GenerateurVague();
     }
 
     public final IntegerProperty nbToursProperty() {
         return this.nbToursProperty;
     }
 
-    public final int getNbToursProperty() {
+    public final int getNbTours() {
         return this.nbToursProperty.getValue();
     }
 
@@ -39,42 +43,44 @@ public class Environnement {
         this.nbToursProperty.setValue(n);
     }
 
-    public ObservableList<Ennemi> getEnnemis() {
-        return ennemis;
-    }
-
     public ObservableList<Defense> getDefense() {
         return defenses;
     }
 
-    public Ennemi getEnnemiID(String id) {
-        for (Ennemi a : this.ennemis) {
-            if (a.getId().equals(id)) {
-                return a;
-            }
-        }
-        return null;
-    }
-
-    public TerrainModele getTerrainModele() {
+    public TerrainModele getTerrainModele(){
         return this.t;
-    }
-
-    public void ajouterEnnemi(Ennemi a) {
-        ennemis.add(a);
     }
 
     public void ajouterDefense(Defense d) {
         defenses.add(d);
     }
 
+    public ObservableList<Ennemi> getEnnemis() {
+        return ennemis;
+    }
+
+    public void ajouterEnnemi(Ennemi a) {
+        ennemis.add(a);
+    }
+
+
     public void unTour() {
+
+        nbToursProperty.setValue(nbToursProperty.getValue() + 1);
+
         for (Defense d : getDefense()) {
             d.attaquer();
         }
-        for (int i = ennemis.size() - 1; i >= 0; i--) {
 
-            if (ennemis.get(i).estVivant() && t.dansTerrain(ennemis.get(i).getY()/16, ennemis.get(i).getX()/16 ) ) {
+        vague.vaguePourChaqueTour(this);
+
+        this.ennemisPourChaqueTour();
+    }
+
+
+    public void ennemisPourChaqueTour(){
+        for (int i = ennemis.size() - 1; i >= 0; i--) {
+            if (ennemis.get(i).estVivant() && t.dansTerrain(ennemis.get(i).getY() / 16, ennemis.get(i).getX() / 16)) {
                 ennemis.get(i).agir();
             } else {
                 ennemis.remove(ennemis.get(i));
@@ -89,5 +95,6 @@ public class Environnement {
     public TerrainModele getT () {
         return t;
     }
+
 }
 

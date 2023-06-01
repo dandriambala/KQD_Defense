@@ -33,8 +33,6 @@
     <bottom>
         <HBox prefHeight="85.0" prefWidth="960.0" spacing="15.0" BorderPane.alignment="CENTER">
             <children>
-                <Button mnemonicParsing="false" onAction="#testEnnemieLent" text="Lent"/>
-                <Button mnemonicParsing="false" onAction="#testEnnemieRapide" text="Rapide"/>
                 <Button fx:id="ajoutTourelle" mnemonicParsing="false" onAction="#testTourelle" text="Tourelle"/>
             </children>
         </HBox>
