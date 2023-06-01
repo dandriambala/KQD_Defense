@@ -1,77 +1,39 @@
 package fr.iut.paris8.towerdefense.modele;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+public class Ennemi extends EnMouvement{
 
-public class Ennemi {
+    private static int compteurEnnemi = 0;
 
-    private String id;
-    private static int compteur = 0;
 
-    private IntegerProperty x;
-    private IntegerProperty y;
-    private int vitesse;
     private int prime; //L'argent que donnera l'ennemi à sa mort
     private int pv;
-    private Environnement env;
 
-
-    public Ennemi(int x, int y, int vitesse, int prime, int pv, Environnement env) {
-        this.env = env;
-        this.x = new SimpleIntegerProperty(x);
-        this.y = new SimpleIntegerProperty(y);
-        this.vitesse = vitesse;
+    public Ennemi(int x, int y, int vitesse, Environnement env, int prime, int pv) {
+      super(x,y,vitesse,env);
         this.prime = prime;
         this.pv = pv;
-        this.id = "E" + compteur;
-        compteur++;
+        setId("E"+ compteurEnnemi);
+        compteurEnnemi++;
     }
+    public int getPv(){return this.pv;}
 
-    public String getId() {
-        return id;
-    }
-
-    public final int getX() {
-        return this.x.getValue();
-    }
-
-    public final IntegerProperty getXProperty() {
-        return this.x;
-    }
-
-    public final int getY() {
-        return this.y.getValue();
-    }
-
-    public final IntegerProperty getYProperty() {
-        return this.y;
-    }
-
-    public boolean estVivant() {
+    public boolean estVivant () {
         return this.pv >= 0;
     }
 
-    public int getPrime() {
+    public int getPrime () {
         return prime;
     }
-
-    public void decrementerPv(int nb) {
-        this.pv -= nb;
+    public void decrementerPv(int nb){
+        this.pv-=nb;
     }
 
     //TODO à enlever lorsque le BFS fonctionnera
-    public void agir() {
-        if (this.getX() < env.getTerrainModele().getWidth()) {
-            this.x.setValue(getX() + this.vitesse);
+    public void agir () {
+        if (this.getPositionXProperty() < getEnv().getTerrainModele().getWidth()) {
+            this.setPositionXProperty(getPositionXProperty() + this.getVitesse());
             //System.out.println("Ennemi :" +this.getX()+ " " +this.getY());
         }
     }
 
-    public int getVitesse() {
-        return this.vitesse;
-    }
-
-    public int getPv() {
-        return this.pv;
-    }
 }

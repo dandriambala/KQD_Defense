@@ -1,9 +1,6 @@
 package fr.iut.paris8.towerdefense.control;
 
-import fr.iut.paris8.towerdefense.modele.Ennemi;
-import fr.iut.paris8.towerdefense.modele.Environnement;
-import fr.iut.paris8.towerdefense.modele.TerrainModele;
-import fr.iut.paris8.towerdefense.modele.TourelleBase;
+import fr.iut.paris8.towerdefense.modele.*;
 import fr.iut.paris8.towerdefense.vue.TerrainVue;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -45,9 +42,8 @@ public class Controleur implements Initializable {
         initTowerDefense();
         gameLoop.play();
 
-        ListChangeListener l1 = new ObservateurEnnemi(pane);
-        this.env.getEnnemis().addListener(l1);
-
+        ListChangeListener l1 = new ObservateurEnMouvement(pane);
+        this.env.getEnMouvements().addListener(l1);
     }
 
     private void initTowerDefense() {
@@ -68,16 +64,15 @@ public class Controleur implements Initializable {
 
     @FXML
     void testEnnemieLent(ActionEvent event) {
-        Ennemi e = new Ennemi(8, 160, 1, 10, 100, env);
+        Ennemi e = new Ennemi(8, 160, 1, env,10, 100 );
         creerSpriteEnnemi(e);
-
         env.ajouterEnnemi(e);
 
     }
 
     @FXML
     void testEnnemieRapide() {
-        Ennemi e = new Ennemi(0, 160, 3, 10, 100, env);
+        Ennemi e = new Ennemi(0, 160, 3,  env, 10, 100);
         creerSpriteEnnemi(e);
         env.ajouterEnnemi(e);
     }
@@ -85,11 +80,11 @@ public class Controleur implements Initializable {
     public void creerSpriteEnnemi(Ennemi ennemi) {
         Circle c = new Circle(8);
         c.setFill(Color.BLACK);
-        c.setTranslateX(ennemi.getX());
-        c.setTranslateY(ennemi.getY());
+        c.setTranslateX(ennemi.getPositionXProperty());
+        c.setTranslateY(ennemi.getPositionYProperty());
         pane.getChildren().add(c);
-        c.translateXProperty().bind(ennemi.getXProperty());
-        c.translateYProperty().bind(ennemi.getYProperty());
+        c.translateXProperty().bind(ennemi.positionXProperty());
+        c.translateYProperty().bind(ennemi.positionYProperty());
         c.setId(ennemi.getId());
 
     }
@@ -103,6 +98,7 @@ public class Controleur implements Initializable {
                     t.setColonne((int) eve.getSceneX());
                     t.setLigne((int) (eve.getSceneY() - Top.getHeight()));
                     System.out.println("Tourelle :" + t.getColonne() + " " + t.getLigne());
+
                 }
         );
 
@@ -118,66 +114,46 @@ public class Controleur implements Initializable {
         c.setTranslateY(t.getLigne());
         c.translateXProperty().bind(t.colonneProperty());
         c.translateYProperty().bind(t.ligneProperty());
+        pane.getChildren().add(c);
         c.setOnMouseExited(e -> {
+
+                    if(defenseBienPlacé(t)) {
+                        env.ajouterDefense(t);
+                        System.out.println("Tourelle ajoutée");
+                    }
+                    else {
+                        System.out.println("Erreur ajout");
+                        pane.getChildren().remove(c);
+                    }
                     ajouterDefenseDansModele(t.getColonne(), t.getLigne());
                     ajusterEmplacementtourelle(t, (Math.round(t.getColonne() / 16)), Math.round(t.getLigne() / 16));
                     afficherTerrain(env.getTerrainModele());
-                    System.out.println(t.colonneProperty().getValue() + " " + t.ligneProperty().getValue());
+                    System.out.println("TourelleX : " + t.colonneProperty().getValue() + " Tourelle Y : " + t.ligneProperty().getValue());
+
 
                 }
         );
-        if (bienPlacé(c)) {
-            env.ajouterDefense(t);
-            pane.getChildren().add(c);
-        }
 
     }
 
-    public void ajouterDefenseDansModele(int colonne, int ligne) {
+    public void ajouterDefenseDansModele( int colonne, int ligne) {
 
 
         int co = Math.round(colonne / 16);
         int li = Math.round(ligne / 16);
 
-//        System.out.println(terrain[li][co]);
-//        System.out.println(this.dansTerrain(co, li));
-        if (env.getTerrainModele().dansTerrain(li, co) && env.getTerrainModele().getTerrain()[li][co] == 0) {
+        if (env.getTerrainModele().dansTerrain(li,co) && env.getTerrainModele().getTerrain()[li][co] == 0) {
             env.getTerrainModele().getTerrain()[li][co] = 3;
-        } else System.out.println("erreur placement");
+        }
     }
 
-    public void ajusterEmplacementtourelle(TourelleBase t, int ligne, int colonne) {
+    public void ajusterEmplacementtourelle(Defense t, int ligne, int colonne) {
         t.setColonne(ligne * 16);
         t.setLigne(colonne * 16);
     }
 
-    private boolean bienPlacé(Circle c1) {
-
-//        double distance;
-//        double sommeRayon;
-//
-//        System.out.println("emplacement");
-//
-//        for (int i = 0 ; i< pane.getChildren().size() ; i++  ){
-//            Node a1  = pane.getChildren().get(i);
-//
-//            System.out.println("dans la boucle");
-//
-//            if (a1 instanceof Circle && a1!=c1) {
-//                Circle a = (Circle) a1;
-//
-//                //formule de distance entre deux points dans un plan
-//                distance = Math.sqrt(Math.pow(a.getCenterX() - c1.getCenterX(), 2)
-//                        + Math.pow(a.getCenterY() - c1.getCenterY(), 2));
-//
-//                sommeRayon = c1.getRadius() + a.getRadius();
-//                System.out.println(distance + " " + sommeRayon);
-//                if (distance < sommeRayon){
-//                    return false;
-//                }
-//            }
-//        }
-        return true;
+    private boolean defenseBienPlacé(Defense d) {
+        return ((d.getColonne() < tilepane.getMaxWidth() && d.getLigne() < tilepane.getHeight()) && env.getTerrainModele().getTerrain()[d.getLigne()/16][d.getColonne()/16] == 0);
     }
 
     public static void afficherTerrain(TerrainModele t) {
