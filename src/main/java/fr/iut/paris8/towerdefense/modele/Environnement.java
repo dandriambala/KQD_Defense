@@ -18,20 +18,19 @@ public class Environnement {
     private IntegerProperty nbToursProperty;
     private TerrainModele t;
     private BFS bfs;
+    private RessourceJeu ressourceJeu;
 
     public Environnement(TerrainModele t) {
         super();
         this.nbToursProperty = new SimpleIntegerProperty();
-
         this.nbToursProperty.setValue(0);
 
         this.enMouvements = FXCollections.observableArrayList();
         this.defenses = FXCollections.observableArrayList();
-
         this.t = t;
-
         this.bfs = new BFS(new Grille(t.getWidth()/16,t.getHeight()/16),new Case(59,10));
         vague = new GenerateurVague();
+        ressourceJeu = new RessourceJeu();
     }
 
     public final IntegerProperty nbToursProperty() {
@@ -118,8 +117,6 @@ public class Environnement {
                 enMouvements.get(i).agir();
             else
                 enMouvements.remove(enMouvements.get(i));
-
-
         }
     }
 
@@ -142,5 +139,32 @@ public class Environnement {
 
     }
 
+    public GenerateurVague getVague() {
+        return vague;
+    }
+
+    public RessourceJeu getRessourceJeu() {
+        return ressourceJeu;
+    }
+
+    //
+//    public void test(String id){
+//        if (getEnnemiID(id) != null){
+//
+//            ressourceJeu.mortDUnEnnemi(getEnnemiID(id).getPrime());
+//        }
+//
+//        for (int i = enMouvements.size() - 1; i >= 0; i--) {
+//            if ((enMouvements.get(i) instanceof Ennemi && ((Ennemi) enMouvements.get(i)).estVivant())) {
+//                enMouvements.get(i).agir();
+//            } else if (enMouvements.get(i) instanceof Balle)
+//                enMouvements.get(i).agir();
+//            else if (!(t.dansTerrain(enMouvements.get(i).getY() / 16, enMouvements.get(i).getX() / 16))){
+//
+//            }
+//            else
+//                enMouvements.remove(enMouvements.get(i));
+//        }
+//    }
 }
 
