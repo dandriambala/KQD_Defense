@@ -114,7 +114,6 @@ public abstract class Ennemi {
     public int getVitesse(){
         return this.vitesse;
     }
-    public int getPv(){return this.pv;}
 
     private void avancerEnX(){
         this.x.setValue(this.x.getValue() + 1);
