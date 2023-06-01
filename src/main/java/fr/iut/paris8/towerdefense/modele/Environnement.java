@@ -115,8 +115,15 @@ public class Environnement {
                 enMouvements.get(i).agir();
             } else if (enMouvements.get(i) instanceof Balle)
                 enMouvements.get(i).agir();
-            else
+
+            else if (enMouvements.get(i) instanceof Ennemi && !((Ennemi) enMouvements.get(i)).estVivant()) {
+                mortParTourelle(enMouvements.get(i).getId());
                 enMouvements.remove(enMouvements.get(i));
+            }
+            else {
+                suppressionParPassageEnBase(enMouvements.get(i).getId());
+                enMouvements.remove(enMouvements.get(i));
+            }
         }
     }
 
@@ -147,24 +154,18 @@ public class Environnement {
         return ressourceJeu;
     }
 
-    //
-//    public void test(String id){
-//        if (getEnnemiID(id) != null){
-//
-//            ressourceJeu.mortDUnEnnemi(getEnnemiID(id).getPrime());
-//        }
-//
-//        for (int i = enMouvements.size() - 1; i >= 0; i--) {
-//            if ((enMouvements.get(i) instanceof Ennemi && ((Ennemi) enMouvements.get(i)).estVivant())) {
-//                enMouvements.get(i).agir();
-//            } else if (enMouvements.get(i) instanceof Balle)
-//                enMouvements.get(i).agir();
-//            else if (!(t.dansTerrain(enMouvements.get(i).getY() / 16, enMouvements.get(i).getX() / 16))){
-//
-//            }
-//            else
-//                enMouvements.remove(enMouvements.get(i));
-//        }
-//    }
+
+    public void mortParTourelle(String id) {
+        if (getEnnemiID(id) != null) {
+            ressourceJeu.mortDUnEnnemi(getEnnemiID(id).getPrime());
+        }
+    }
+
+    public void suppressionParPassageEnBase(String id) {
+        if (getEnnemiID(id) != null) {
+            ressourceJeu.ennemiEntrerDansLaBase(getEnnemiID(id).getPv());
+        }
+    }
+
 }
 

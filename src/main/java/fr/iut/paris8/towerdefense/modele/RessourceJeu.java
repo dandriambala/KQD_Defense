@@ -42,10 +42,12 @@ public class RessourceJeu {
     }
 
     public void ennemiEntrerDansLaBase(int pv){
-        setPv(getPv()+pv);
+
+        setPv(getPv()-pv);
     }
 
-    public boolean partiePerdu(){return getPv() == 0;}
+    //todo trouver meilleur place
+    public boolean partiePerdu(){return getPv() < 0;}
 
 
 
