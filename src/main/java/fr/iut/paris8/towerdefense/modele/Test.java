@@ -16,9 +16,10 @@ public class Test {
 //        affichertab(t);
         System.out.println(Math.round(4.9));
     }
-    public static void affichertab (int[][] t){
-        for (int i =0; i<t.length; i++){
-            for (int j = 0; j<t[i].length; j++ ){
+
+    public static void affichertab(int[][] t) {
+        for (int i = 0; i < t.length; i++) {
+            for (int j = 0; j < t[i].length; j++) {
                 System.out.print(t[i][j]);
             }
             System.out.println();

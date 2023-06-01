@@ -16,9 +16,9 @@ public class ObservateurEnnemi implements ListChangeListener<Ennemi> {
     @Override
     public void onChanged(Change<? extends Ennemi> change) {
 
-        while (change.next()){
+        while (change.next()) {
 
-            for (Ennemi e : change.getRemoved()){
+            for (Ennemi e : change.getRemoved()) {
                 Node node = pane.lookup("#" + e.getId());
                 pane.getChildren().remove(node);
 

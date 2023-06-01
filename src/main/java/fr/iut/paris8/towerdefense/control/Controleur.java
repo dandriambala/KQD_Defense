@@ -133,7 +133,7 @@ public class Controleur implements Initializable {
 
     }
 
-    public void ajouterDefenseDansModele( int colonne, int ligne) {
+    public void ajouterDefenseDansModele(int colonne, int ligne) {
 
 
         int co = Math.round(colonne / 16);
@@ -141,10 +141,9 @@ public class Controleur implements Initializable {
 
 //        System.out.println(terrain[li][co]);
 //        System.out.println(this.dansTerrain(co, li));
-        if (env.getTerrainModele().dansTerrain(li,co) && env.getTerrainModele().getTerrain()[li][co] == 0) {
+        if (env.getTerrainModele().dansTerrain(li, co) && env.getTerrainModele().getTerrain()[li][co] == 0) {
             env.getTerrainModele().getTerrain()[li][co] = 3;
-        }
-        else System.out.println("erreur placement");
+        } else System.out.println("erreur placement");
     }
 
     public void ajusterEmplacementtourelle(TourelleBase t, int ligne, int colonne) {

@@ -37,6 +37,7 @@ public class Environnement {
     public ObservableList<Ennemi> getEnnemis() {
         return ennemis;
     }
+
     public ObservableList<Defense> getDefense() {
         return defenses;
     }
@@ -49,26 +50,28 @@ public class Environnement {
         }
         return null;
     }
-    public TerrainModele getTerrainModele(){
+
+    public TerrainModele getTerrainModele() {
         return this.t;
     }
 
     public void ajouterEnnemi(Ennemi a) {
         ennemis.add(a);
     }
+
     public void ajouterDefense(Defense d) {
         defenses.add(d);
     }
 
-    public void unTour(){
-        for (Defense d : getDefense()){
+    public void unTour() {
+        for (Defense d : getDefense()) {
             d.attaquer();
         }
-        for (int i=ennemis.size()-1; i >= 0; i-- ){
+        for (int i = ennemis.size() - 1; i >= 0; i--) {
 
-            if (ennemis.get(i).estVivant()){
+            if (ennemis.get(i).estVivant()) {
                 ennemis.get(i).agir();
-            }else {
+            } else {
                 ennemis.remove(ennemis.get(i));
             }
         }
