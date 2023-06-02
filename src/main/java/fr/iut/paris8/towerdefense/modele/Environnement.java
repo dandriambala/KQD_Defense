@@ -115,7 +115,7 @@ public class Environnement {
             EnMouvement enMo = enMouvements.get(i);
             if ((enMo instanceof Ennemi && ((Ennemi) enMouvements.get(i)).estVivant()) && t.dansTerrain(enMo.getY() / 16, enMo.getX() / 16)) {
                 enMo.agir();
-            } else if (enMouvements.get(i) instanceof Balle)
+            } else if (enMo instanceof Balle)
                 enMo.agir();
             else if (enMo instanceof Ennemi && !((Ennemi) enMouvements.get(i)).estVivant()) {
                 mortParTourelle(enMo.getId());
