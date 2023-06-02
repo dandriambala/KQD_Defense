@@ -8,9 +8,6 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.util.ArrayList;
-
-
 public class Environnement {
     private static int pourcentageDifficulte = 6;
     private GenerateurVague vague;
@@ -21,7 +18,7 @@ public class Environnement {
     private BFS bfs;
     private RessourceJeu ressourceJeu;
 
-    public Environnement(TerrainModele t) {
+    public Environnement( TerrainModele t) {
         super();
         this.nbToursProperty = new SimpleIntegerProperty();
         this.nbToursProperty.setValue(0);
@@ -78,29 +75,26 @@ public class Environnement {
         return enMouvements;
     }
 
-    public void ajouterDefense(Defense d) {
-        defenses.add(d);
-        Case sommet = new Case();
-        for (Case s : bfs.getParcours()) {
-            if (s.getColonne() == d.getColonne()/16 && s.getLigne() == d.getLigne()/16) {
-                sommet = s;
-                break;
+    public void ajouterDefense( Defense d) {
+        int colonne = d.getColonne();
+        int ligne = d.getLigne();
+        ajusterEmplacementtourelle(d, (colonne / 16), ligne / 16);
+        if (colonne <= 9 && colonne >= 7 && ligne <= 11 && ligne >= 10) {
+            defenses.add(d);
+            Case sommet = new Case();
+            for (Case s : bfs.getParcours()) {
+                if ( s.getColonne() == d.getColonne() / 16 && s.getLigne() == d.getLigne() / 16 ) {
+                    sommet = s;
+                    break;
+                }
             }
+            bfs.getG().deconnecte(sommet);
+            bfs.testBFS();
         }
-        bfs.getG().deconnecte(sommet);
-        bfs.testBFS();
-
-        for (Case s : bfs.getParcours()) {
-            if (s.getColonne() == 0 && s.getLigne() == 10) {
-                sommet = s;
-                break;
-            }
+        else{
+            d.setColonne(0);
+            d.setLigne(0);
         }
-
-        ArrayList<Case> chemin = bfs.cheminVersSource(sommet);
-        System.out.println(chemin);
-
-
     }
 
     public Ennemi getEnnemiID(String id) {
@@ -111,28 +105,21 @@ public class Environnement {
         }
         return null;
     }
-
-
+    
     public void ajouterEnnemi(Ennemi a) {
         enMouvements.add(a);
     }
 
     public void unTour() {
-
         nbToursProperty.setValue(nbToursProperty.getValue() + 1);
-
         for (Defense d : getDefense()) {
             d.agir();
         }
-
         vague.vaguePourChaqueTour(this);
-
         this.ennemisPourChaqueTour();
     }
-
-
+    
     public void ennemisPourChaqueTour() {
-
 
         for (int i = enMouvements.size() - 1; i >= 0; i--) {
             EnMouvement enMo = enMouvements.get(i);
@@ -176,8 +163,7 @@ public class Environnement {
     public RessourceJeu getRessourceJeu() {
         return ressourceJeu;
     }
-
-
+    
     public void mortParTourelle(String id) {
         if (getEnnemiID(id) != null) {
             ressourceJeu.mortDUnEnnemi(getEnnemiID(id).getPrime());
@@ -188,6 +174,11 @@ public class Environnement {
         if (getEnnemiID(id) != null) {
             ressourceJeu.ennemiEntrerDansLaBase(getEnnemiID(id).getPv()/25);
         }
+    }
+
+    public void ajusterEmplacementtourelle(Defense t, int ligne, int colonne) {
+        t.setColonne(ligne * 16 +8);
+        t.setLigne(colonne * 16 +8);
     }
 }
 

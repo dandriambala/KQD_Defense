@@ -28,7 +28,6 @@ public class ObservateurEnMouvement implements ListChangeListener<EnMouvement> {
                 else
                     creerSpriteEnnemi((Ennemi) em);
             }
-
             for (EnMouvement em: change.getRemoved()) {
                 Node node = pane.lookup("#" + em.getId());
                 pane.getChildren().remove(node);

@@ -18,7 +18,6 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -110,11 +109,8 @@ public class Controleur implements Initializable {
         pane.getChildren().add(c);
         c.setOnMouseExited(e -> {
                     ajouterDefenseDansModele(t.getColonne(), t.getLigne());
-                    ajusterEmplacementtourelle(t, (Math.round(t.getColonne() / 16)), Math.round(t.getLigne() / 16));
                     env.ajouterDefense(t);
                     System.out.println("Tourelle ajoutée");
-
-                    env.getBfs().testBFS();
                 }
         );
 
@@ -122,26 +118,13 @@ public class Controleur implements Initializable {
     }
 
     public void ajouterDefenseDansModele(int colonne, int ligne) {
-
-
-        int co = Math.round(colonne / 16);
-        int li = Math.round(ligne / 16);
+        int co = Math.round((colonne / 16));
+        int li = Math.round((ligne / 16));
 
         if (env.getTerrainModele().dansTerrain(li, co) && env.getTerrainModele().getTerrain()[li][co] == 0) {
             env.getTerrainModele().getTerrain()[li][co] = 3;
-
-
         } else System.out.println("erreur placement");
 
-    }
-
-    public void ajusterEmplacementtourelle(Defense t, int ligne, int colonne) {
-        t.setColonne(ligne * 16);
-        t.setLigne(colonne * 16);
-    }
-
-    private boolean defenseBienPlacé(Defense d) {
-        return ((d.getColonne() < tilepane.getMaxWidth() && d.getLigne() < tilepane.getHeight()) && env.getTerrainModele().getTerrain()[d.getLigne() /16][d.getColonne() /16] == 0);
     }
 }
 

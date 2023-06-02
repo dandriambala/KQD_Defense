@@ -20,8 +20,8 @@ public class Case implements Comparable<Case> {
         return this.ligne;
     }
 
-    public int getX(){return this.colonne *16;}
-    public int getY(){return this.ligne *16;}
+    public int getX(){return this.colonne *16 + 8 ;}
+    public int getY(){return this.ligne *16 + 8 ;}
 
     public int hashCode() {
         int result = 1;
@@ -38,14 +38,10 @@ public class Case implements Comparable<Case> {
         } else if (this.getClass() != obj.getClass()) {
             return false;
         } else {
-            Case other = (Case)obj;
-            if (this.colonne != other.colonne ) {
-                return false;
-            } else {
-                return this.ligne == other.ligne;
+            Case that = (Case) obj;
+            return colonne == that.colonne && ligne == that.ligne;
             }
         }
-    }
 
     public String toString() {
         return "Case [" + this.colonne + ", " + this.ligne;
