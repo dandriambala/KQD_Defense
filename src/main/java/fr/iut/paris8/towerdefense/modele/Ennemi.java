@@ -35,7 +35,6 @@ public abstract class Ennemi extends EnMouvement{
         if ( destinationCase == null )
             setDestinationSommet();
 
-//        System.out.println("Pos ennemie " + getId() + "\n X : " + getX() + " Y : " + getY() + "  I : " + getX() / 16 + " J : " + getY() / 16);
 //
 //        System.out.println("Sommet\nX : " + destinationSommet.getX() + " Y : " + destinationSommet.getY());
 //        System.out.println("I : " + destinationSommet.getColonne() + " J : " + destinationSommet.getLigne());

@@ -32,6 +32,11 @@
         <HBox prefHeight="85.0" prefWidth="960.0" spacing="15.0" BorderPane.alignment="CENTER">
             <children>
                 <Button fx:id="ajoutTourelle" mnemonicParsing="false" onAction="#testTourelle" text="Tourelle"/>
+
+                <Button fx:id="ajoutTesla" mnemonicParsing="false" onAction="#testTesla" text="Tesla"/>
+
+                <Button fx:id="ajoutPiege" mnemonicParsing="false" onAction="#testPiege" text="Piege"/>
+
             </children>
         </HBox>
     </bottom>

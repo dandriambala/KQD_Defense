@@ -31,6 +31,8 @@ public class Controleur implements Initializable {
     @FXML
     private Button ajoutTourelle;
     @FXML
+    private Button ajoutPiege;
+    @FXML
     private HBox Top;
     @FXML
     private Label nbPvJoueur;
@@ -38,11 +40,14 @@ public class Controleur implements Initializable {
     private Label nbVague;
     @FXML
     private Label nbArgent;
+    @FXML
+    private Button ajoutTesla;
+    private TerrainModele t1;
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        TerrainModele t1 = new TerrainModele();
+        t1 = new TerrainModele();
         env = new Environnement(t1);
 
         TerrainVue tv = new TerrainVue(t1, tilepane);
@@ -58,6 +63,8 @@ public class Controleur implements Initializable {
 
         this.env.getVague().nbVagueProperty().addListener((obs, old, nouv) -> this.nbVague.setText(String.valueOf(nouv)));
 
+        ListChangeListener l2 = new ObservateurPiege(pane);
+        this.env.getDefense().addListener(l2);
     }
 
     private void initTowerDefense() {
@@ -79,7 +86,7 @@ public class Controleur implements Initializable {
     @FXML
     void testTourelle(ActionEvent event) {
         TourelleBase t = new TourelleBase(env);
-        creerSpriteTourelle(t);
+        creerSpriteDefense(t);
 
         ajoutTourelle.setOnMouseDragged(eve -> {
                     t.setColonne((int) eve.getSceneX());
@@ -97,10 +104,59 @@ public class Controleur implements Initializable {
 
     }
 
+    @FXML
+    void testTesla(ActionEvent event) {
+        Tesla t = new Tesla(env);
+        creerSpriteDefense(t);
 
-    public void creerSpriteTourelle(TourelleBase t) {
+        ajoutTesla.setOnMouseDragged(eve -> {
+            t.setColonne((int) eve.getSceneX());
+            t.setLigne((int) (eve.getSceneY() - Top.getHeight()));
+        }
+        );
+
+
+        Case sommet = new Case();
+        for ( Case s : env.getBfs().getParcours()){
+            if ( s.getColonne() == t.getColonne() && s.getLigne() == t.getLigne() / 16 ) {
+                sommet = s;
+                break;
+            }
+        }
+    }
+
+
+    @FXML
+    void testPiege(ActionEvent event) {
+        Mine t = new Mine(env);
+        creerSpriteMine(t);
+
+        ajoutPiege.setOnMouseDragged(eve -> {
+
+                    t.setColonne((int) eve.getSceneX());
+                    t.setLigne((int) (eve.getSceneY() - Top.getHeight()));
+                }
+        );
+
+
+        Case sommet = new Case();
+        for ( Case s : env.getBfs().getParcours()){
+            if ( s.getColonne() == t.getColonne() && s.getLigne() == t.getLigne() / 16 ) {
+                sommet = s;
+                break;
+            }
+        }
+
+    }
+
+    public void creerSpriteDefense(Defense t) {
+
         Circle c = new Circle(8);
-        c.setFill(Color.RED);
+
+        if (t instanceof Tesla) {
+            c.setFill(Color.ORANGE);
+        } else if (t instanceof TourelleBase)
+            c.setFill(Color.RED);
 
         c.setTranslateX(t.getColonne());
         c.setTranslateY(t.getLigne());
@@ -111,15 +167,30 @@ public class Controleur implements Initializable {
                     ajouterDefenseDansModele(t.getColonne(), t.getLigne());
                     env.ajouterDefense(t);
                     System.out.println("Tourelle ajoutée");
+        });
+    }
+
+    public void creerSpriteMine(Mine m) {
+        Circle c = new Circle(4);
+        c.setFill(Color.BLUE);
+
+        c.setTranslateX(m.getColonne());
+        c.setTranslateY(m.getLigne());
+        c.translateXProperty().bind(m.colonneProperty());
+        c.translateYProperty().bind(m.ligneProperty());
+        c.setId(m.getId());
+        pane.getChildren().add(c);
+        c.setOnMouseExited(e -> {
+                    ajouterDefenseDansModele(m.getColonne(), m.getLigne());
+                    env.ajouterDefense(m);
+                        System.out.println("Mine ajoutée");
                 }
         );
-
-
     }
 
     public void ajouterDefenseDansModele(int colonne, int ligne) {
-        int co = Math.round((colonne / 16));
-        int li = Math.round((ligne / 16));
+        int co = (int) (Math.round(colonne / 16.0));
+        int li = (int) (Math.round(ligne / 16.0));
 
         if (env.getTerrainModele().dansTerrain(li, co) && env.getTerrainModele().getTerrain()[li][co] == 0) {
             env.getTerrainModele().getTerrain()[li][co] = 3;
