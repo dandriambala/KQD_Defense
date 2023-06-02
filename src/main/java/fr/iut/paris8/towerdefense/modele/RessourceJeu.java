@@ -41,9 +41,8 @@ public class RessourceJeu {
         setArgent(getArgent() + prime);
     }
 
-    public void ennemiEntrerDansLaBase(int pv){
-
-        setPv(getPv()-pv);
+    public void ennemiEntrerDansLaBase(int a){
+        setPv(getPv()-a);
     }
 
     //todo trouver meilleur place

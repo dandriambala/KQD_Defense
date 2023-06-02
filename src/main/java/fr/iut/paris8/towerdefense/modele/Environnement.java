@@ -110,19 +110,20 @@ public class Environnement {
 
 
     public void ennemisPourChaqueTour() {
-        for (int i = enMouvements.size() - 1; i >= 0; i--) {
-            if ((enMouvements.get(i) instanceof Ennemi && ((Ennemi) enMouvements.get(i)).estVivant()) && t.dansTerrain(enMouvements.get(i).getY() / 16, enMouvements.get(i).getX() / 16)) {
-                enMouvements.get(i).agir();
-            } else if (enMouvements.get(i) instanceof Balle)
-                enMouvements.get(i).agir();
 
-            else if (enMouvements.get(i) instanceof Ennemi && !((Ennemi) enMouvements.get(i)).estVivant()) {
-                mortParTourelle(enMouvements.get(i).getId());
-                enMouvements.remove(enMouvements.get(i));
+        for (int i = enMouvements.size() - 1; i >= 0; i--) {
+            EnMouvement enMo = enMouvements.get(i);
+            if ((enMo instanceof Ennemi && ((Ennemi) enMouvements.get(i)).estVivant()) && t.dansTerrain(enMo.getY() / 16, enMo.getX() / 16)) {
+                enMo.agir();
+            } else if (enMouvements.get(i) instanceof Balle)
+                enMo.agir();
+            else if (enMo instanceof Ennemi && !((Ennemi) enMouvements.get(i)).estVivant()) {
+                mortParTourelle(enMo.getId());
+                enMouvements.remove(enMo);
             }
             else {
-                suppressionParPassageEnBase(enMouvements.get(i).getId());
-                enMouvements.remove(enMouvements.get(i));
+                suppressionParPassageEnBase(enMo.getId());
+                enMouvements.remove(enMo);
             }
         }
     }
@@ -163,7 +164,7 @@ public class Environnement {
 
     public void suppressionParPassageEnBase(String id) {
         if (getEnnemiID(id) != null) {
-            ressourceJeu.ennemiEntrerDansLaBase(getEnnemiID(id).getPv());
+            ressourceJeu.ennemiEntrerDansLaBase(getEnnemiID(id).getPv()/25);
         }
     }
 

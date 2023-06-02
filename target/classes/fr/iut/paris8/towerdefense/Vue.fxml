@@ -11,7 +11,7 @@
 
              <Label text="PV" />
              <Label fx:id="nbPvJoueur" text="150" prefHeight="33.0" prefWidth="84.0" style="-fx-border-color: red;"/>
-             <Label text="Round" />
+             <Label text="Vague" />
              <Label fx:id="nbVague" text="0" prefHeight="33.0" prefWidth="84.0" style="-fx-border-color: red;"/>
              <Label text="Argent" />
              <Label fx:id="nbArgent" text="150" prefHeight="33.0" prefWidth="84.0" style="-fx-border-color: red;"/>
