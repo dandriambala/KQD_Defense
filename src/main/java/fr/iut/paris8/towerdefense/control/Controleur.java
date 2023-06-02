@@ -97,14 +97,11 @@ public class Controleur implements Initializable {
         c.translateYProperty().bind(t.ligneProperty());
         pane.getChildren().add(c);
         c.setOnMouseExited(e -> {
-
-                    if(defenseBienPlacé(t)) {
-                        env.ajouterDefense(t);
-                        System.out.println("Tourelle ajoutée");
-                    }
-
                     ajouterDefenseDansModele(t.getColonne(), t.getLigne());
                     ajusterEmplacementtourelle(t, (Math.round(t.getColonne() / 16)), Math.round(t.getLigne() / 16));
+                    env.ajouterDefense(t);
+                    System.out.println("Tourelle ajoutée");
+
                     env.getBfs().testBFS();
                 }
         );
@@ -121,14 +118,7 @@ public class Controleur implements Initializable {
         if (env.getTerrainModele().dansTerrain(li, co) && env.getTerrainModele().getTerrain()[li][co] == 0) {
             env.getTerrainModele().getTerrain()[li][co] = 3;
 
-            Case sommet = new Case();
-            for (Case s : env.getBfs().getParcours()) {
-                if (s.getColonne() == co && s.getLigne() == li) {
-                    sommet = s;
-                    break;
-                }
-            }
-            env.getBfs().getG().deconnecte(sommet);
+
         } else System.out.println("erreur placement");
 
     }

@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.ArrayList;
 
 
 public class Environnement {
@@ -80,6 +81,27 @@ public class Environnement {
 
     public void ajouterDefense(Defense d) {
         defenses.add(d);
+        Case sommet = new Case();
+        for (Case s : bfs.getParcours()) {
+            if (s.getColonne() == d.getColonne()/16 && s.getLigne() == d.getLigne()/16) {
+                sommet = s;
+                break;
+            }
+        }
+        bfs.getG().deconnecte(sommet);
+        bfs.testBFS();
+
+        for (Case s : bfs.getParcours()) {
+            if (s.getColonne() == 0 && s.getLigne() == 10) {
+                sommet = s;
+                break;
+            }
+        }
+
+        ArrayList<Case> chemin = bfs.cheminVersSource(sommet);
+        System.out.println(chemin);
+
+
     }
 
     public Ennemi getEnnemiID(String id) {

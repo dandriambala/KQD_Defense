@@ -4,7 +4,7 @@ public class TourelleBase extends Defense{
     private int vitesseAttaque = 10;
 
     public TourelleBase(Environnement env) {
-        super(60, env, 2, 10);
+        super(60, env, 2, 0);
 
     }
     public void agir(){attaquer();}
