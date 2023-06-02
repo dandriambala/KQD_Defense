@@ -1,6 +1,7 @@
 package fr.iut.paris8.towerdefense.modele;
 
 public class TourelleBase extends Defense{
+    //vitesse de déplacement des balles
     private int vitesseAttaque = 10;
 
     public TourelleBase(Environnement env) {

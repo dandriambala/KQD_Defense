@@ -64,6 +64,16 @@ public class Environnement {
         return listeBalles;
     }
 
+    public ObservableList<Piege> getPieges(){
+        ObservableList<Piege> listePiege = FXCollections.observableArrayList();
+        for (Defense d: defenses) {
+            if (d instanceof Piege){
+                listePiege.add((Piege) d);
+            }
+        }
+        return listePiege;
+    }
+
     public ObservableList<Defense> getDefense() {
         return defenses;
     }
@@ -98,18 +108,19 @@ public class Environnement {
     public void unTour() {
 
         nbToursProperty.setValue(nbToursProperty.getValue() + 1);
-
-        for (Defense d : getDefense()) {
+        for (Defense d: defenses) {
             d.agir();
         }
 
         vague.vaguePourChaqueTour(this);
 
-        this.ennemisPourChaqueTour();
+        this.enMouvementsPourChaqueTour();
+
+        piegesPourChaqueTour();
     }
 
 
-    public void ennemisPourChaqueTour() {
+    public void enMouvementsPourChaqueTour() {
 
 
         for (int i = enMouvements.size() - 1; i >= 0; i--) {
@@ -165,6 +176,15 @@ public class Environnement {
     public void suppressionParPassageEnBase(String id) {
         if (getEnnemiID(id) != null) {
             ressourceJeu.ennemiEntrerDansLaBase(getEnnemiID(id).getPv()/25);
+        }
+    }
+
+    /* Vérifie si les pièges sont encores actifs sinon les retire*/
+    public void piegesPourChaqueTour(){
+        for (int i = getPieges().size() - 1; i >= 0; i--) {
+            if (getPieges().get(i).finDeVie()) {
+                defenses.remove(getPieges().get(i));
+            }
         }
     }
 }
