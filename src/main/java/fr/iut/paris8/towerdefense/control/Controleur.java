@@ -83,132 +83,68 @@ public class Controleur implements Initializable {
         );
         gameLoop.getKeyFrames().add(kf);
     }
-
     @FXML
-    void testTourelle(ActionEvent event) {
-        TourelleBase t = new TourelleBase(env);
-        creerSpriteDefense(t);
-
-        ajoutTourelle.setOnMouseDragged(eve -> {
-                    t.setColonne((int) eve.getSceneX());
-                    t.setLigne((int) (eve.getSceneY() - Top.getHeight()));
+    void placementDefense(ActionEvent event){
+        Button b;
+        Defense d;
+        if (ajoutTourelle.isFocused()) {
+            d = new TourelleBase(env);
+            b = ajoutTourelle;
+        }
+        else if (ajoutTesla.isFocused()) {
+            d = new Tesla(env);
+            b = ajoutTesla;
+        }
+        else {
+            d = new Mine(env);
+            b = ajoutPiege;
+        }
+        creerSpriteDefense(d);
+        b.setOnMouseDragged(eve -> {
+                    d.setColonne((int) eve.getSceneX());
+                    d.setLigne((int) (eve.getSceneY() - Top.getHeight()));
                 }
         );
 
-        Case sommet = new Case();
-        for ( Case s : env.getBfs().getParcours()){
-            if ( s.getColonne() == t.getColonne() && s.getLigne() == t.getLigne() / 16 ) {
-                sommet = s;
-                break;
-            }
-        }
-
     }
 
-    @FXML
-    void testTesla(ActionEvent event) {
-        Tesla t = new Tesla(env);
-        creerSpriteDefense(t);
+    public void creerSpriteDefense(Defense d) {
 
-        ajoutTesla.setOnMouseDragged(eve -> {
-            t.setColonne((int) eve.getSceneX());
-            t.setLigne((int) (eve.getSceneY() - Top.getHeight()));
-        }
-        );
+        Circle c;
 
-
-        Case sommet = new Case();
-        for ( Case s : env.getBfs().getParcours()){
-            if ( s.getColonne() == t.getColonne() && s.getLigne() == t.getLigne() / 16 ) {
-                sommet = s;
-                break;
-            }
-        }
-    }
-
-
-    @FXML
-    void testPiege(ActionEvent event) {
-        Mine t = new Mine(env);
-        creerSpriteMine(t);
-
-        ajoutPiege.setOnMouseDragged(eve -> {
-
-                    t.setColonne((int) eve.getSceneX());
-                    t.setLigne((int) (eve.getSceneY() - Top.getHeight()));
-                }
-        );
-
-
-        Case sommet = new Case();
-        for ( Case s : env.getBfs().getParcours()){
-            if ( s.getColonne() == t.getColonne() && s.getLigne() == t.getLigne() / 16 ) {
-                sommet = s;
-                break;
-            }
-        }
-
-    }
-
-    public void creerSpriteDefense(Defense t) {
-
-        Circle c = new Circle(8);
-
-        if (t instanceof Tesla) {
+        if (d instanceof Tesla) {
+            c = new Circle(8);
             c.setFill(Color.ORANGE);
-        } else if (t instanceof TourelleBase)
+        } else if (d instanceof TourelleBase) {
+            c = new Circle(8);
             c.setFill(Color.RED);
+        }
+        else{
+            c = new Circle(4);
+            c.setFill(Color.BLUE);
+        }
 
-        c.setTranslateX(t.getColonne());
-        c.setTranslateY(t.getLigne());
-        c.translateXProperty().bind(t.colonneProperty());
-        c.translateYProperty().bind(t.ligneProperty());
+        c.setTranslateX(d.getColonne());
+        c.setTranslateY(d.getLigne());
+        c.translateXProperty().bind(d.colonneProperty());
+        c.translateYProperty().bind(d.ligneProperty());
         pane.getChildren().add(c);
         c.setOnMouseExited(e -> {
-            if (defenseBienPlacé(t)) {
-                env.ajouterDefense(t);
-                System.out.println("Tourelle ajoutée");
+            if (defenseBienPlacé(d)) {
+                env.ajouterDefense(d);
+                System.out.println("Défense ajoutée");
             }
 //                    else
 //                        pane.getChildren().remove(c);
-            ajouterDefenseDansModele(t.getColonne(), t.getLigne());
-            ajusterEmplacementtourelle(t, (Math.round(t.getColonne() / 16)), Math.round(t.getLigne() / 16));
-            env.ajouterDefense(t);
-            System.out.println("Tourelle ajoutée");
+            ajouterDefenseDansModele(d.getColonne(), d.getLigne());
+            ajusterEmplacementtourelle(d, (Math.round(d.getColonne() / 16)), Math.round(d.getLigne() / 16));
+            env.ajouterDefense(d);
 
             env.getBfs().testBFS();
         });
     }
 
-    public void creerSpriteMine(Mine m) {
-        Circle c = new Circle(4);
-        c.setFill(Color.BLUE);
-
-        c.setTranslateX(m.getColonne());
-        c.setTranslateY(m.getLigne());
-        c.translateXProperty().bind(m.colonneProperty());
-        c.translateYProperty().bind(m.ligneProperty());
-        c.setId(m.getId());
-        pane.getChildren().add(c);
-        c.setOnMouseExited(e -> {
-
-                    if (defenseBienPlacé(m)) {
-                        env.ajouterDefense(m);
-                        System.out.println("Mine ajoutée");
-                    }
-//                    else
-//                        pane.getChildren().remove(c);
-                    ajouterDefenseDansModele(m.getColonne(), m.getLigne());
-                    ajusterEmplacementtourelle(m, (Math.round(m.getColonne() / 16)), Math.round(m.getLigne() / 16));
-                }
-        );
-
-
-    }
-
     public void ajouterDefenseDansModele(int colonne, int ligne) {
-
-
 
         int co = (int) (Math.round(colonne / 16.0));
         int li = (int) (Math.round(ligne / 16.0));
