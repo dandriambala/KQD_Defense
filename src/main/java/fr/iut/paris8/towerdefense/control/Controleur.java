@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
@@ -32,6 +33,12 @@ public class Controleur implements Initializable {
     private Button ajoutTourelle;
     @FXML
     private HBox Top;
+    @FXML
+    private Label nbPvJoueur;
+    @FXML
+    private Label nbVague;
+    @FXML
+    private Label nbArgent;
 
 
     @Override
@@ -46,6 +53,11 @@ public class Controleur implements Initializable {
 
         ListChangeListener l1 = new ObservateurEnMouvement(pane);
         this.env.getEnMouvements().addListener(l1);
+
+        this.env.getRessourceJeu().pvProperty().addListener((obs, old, nouv) -> this.nbPvJoueur.setText(String.valueOf(nouv)));
+        this.env.getRessourceJeu().argentProperty().addListener((obs, old, nouv) -> this.nbArgent.setText(String.valueOf(nouv)));
+
+        this.env.getVague().nbVagueProperty().addListener((obs, old, nouv) -> this.nbVague.setText(String.valueOf(nouv)));
 
     }
 
