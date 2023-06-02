@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.ArrayList;
 
 
 public class Environnement {
@@ -133,18 +134,21 @@ public class Environnement {
         return bfs;
     }
 
-    // Retourne le premier ennemi qui se trouve dans la portée de la défense (nombre de pixel qui sépare la tourelle de n'ennemi)
 
-    public Ennemi chercherDansPortee(int colonne, int ligne, int portee){
+    //retourne une liste d'ennemis selon une limite que la tourelle aura pour toucher un ennemi en même temps
+    public ArrayList<Ennemi> chercherDansPortee(int colonne, int ligne, int portee, int limiteur){
+
+        ArrayList<Ennemi> ennemisDansPortee = new ArrayList<>();
 
         for (Ennemi ennemi : this.getEnnemis()) {
-            if (((colonne-portee) <= ennemi.getX()) && (ennemi.getX()<=(colonne + portee))
-                    && ((ligne- portee) <= ennemi.getY()) && (ennemi.getY() <= ligne + portee)) {
-//                System.out.println("Dans portée");
-                return ennemi;
+            if (ennemisDansPortee.size() < limiteur) {
+                if (((colonne - portee) <= ennemi.getX()) && (ennemi.getX() <= (colonne + portee))
+                        && ((ligne - portee) <= ennemi.getY()) && (ennemi.getY() <= ligne + portee)) {
+                    ennemisDansPortee.add(ennemi);
+                }
             }
         }
-        return null;
+        return ennemisDansPortee;
     }
 
     public GenerateurVague getVague() {
