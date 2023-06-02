@@ -5,6 +5,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public abstract class Ennemi extends EnMouvement{
     private static int compteurEnnemi = 0;
@@ -37,12 +38,14 @@ public abstract class Ennemi extends EnMouvement{
         if ( destinationSommet == null )
             setDestinationSommet();
 
-        System.out.println("Pos ennemie \n X : " + getX() + " Y : " + getY() + "  I : " + getX() / 16 + " J : " + getY() / 16);
 
-        System.out.println("Sommet\nX : " + destinationSommet.getX() + " Y : " + destinationSommet.getY());
-        System.out.println("I : " + destinationSommet.getColonne() + " J : " + destinationSommet.getLigne());
+//        System.out.println("Pos ennemie \n X : " + getX() + " Y : " + getY() + "  I : " + getX() / 16 + " J : " + getY() / 16);
+
+//
+//        System.out.println("Sommet\nX : " + destinationSommet.getX() + " Y : " + destinationSommet.getY());
+//        System.out.println("I : " + destinationSommet.getColonne() + " J : " + destinationSommet.getLigne());
         for (int i = 1; i <= getVitesse(); i++) {
-            if ( getEnv().getTerrainModele().dansTerrainEnnemie(this.getY() / 16, this.getX() / 16) ) {
+            if ( getEnv().getTerrainModele().dansTerrainEnnemie(this.getY() / 16, this.getX() / 16) || this.getX() <= 16 ) {
                 if ( getX() != destinationSommet.getX() ) {
                     if ( destinationSommet.getX() - getX() > 0 ) {
                         avancerEnX();
@@ -71,8 +74,10 @@ public abstract class Ennemi extends EnMouvement{
                     setDestinationSommet();
                 }
              }
-            else
+            else{
+                System.out.println("jfiozfnoznfpoak,dpladpl");
                 avancerEnX();
+            }
         }
     }
 

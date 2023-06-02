@@ -32,6 +32,8 @@ public class Controleur implements Initializable {
     @FXML
     private Button ajoutTourelle;
     @FXML
+    private Button ajoutPiege;
+    @FXML
     private HBox Top;
     @FXML
     private Label nbPvJoueur;
@@ -62,6 +64,8 @@ public class Controleur implements Initializable {
 
         this.env.getVague().nbVagueProperty().addListener((obs, old, nouv) -> this.nbVague.setText(String.valueOf(nouv)));
 
+        ListChangeListener l2 = new ObservateurPiege(pane);
+        this.env.getDefense().addListener(l2);
     }
 
     private void initTowerDefense() {
@@ -107,10 +111,34 @@ public class Controleur implements Initializable {
         creerSpriteDefense(t);
 
         ajoutTesla.setOnMouseDragged(eve -> {
+            t.setColonne((int) eve.getSceneX());
+            t.setLigne((int) (eve.getSceneY() - Top.getHeight()));
+        }
+        );
+
+
+        Case sommet = new Case();
+        for ( Case s : env.getBfs().getParcours()){
+            if ( s.getColonne() == t.getColonne() && s.getLigne() == t.getLigne() / 16 ) {
+                sommet = s;
+                break;
+            }
+        }
+    }
+
+
+    @FXML
+    void testPiege(ActionEvent event) {
+        Mine t = new Mine(env);
+        creerSpriteMine(t);
+
+        ajoutPiege.setOnMouseDragged(eve -> {
+
                     t.setColonne((int) eve.getSceneX());
                     t.setLigne((int) (eve.getSceneY() - Top.getHeight()));
                 }
         );
+
 
         Case sommet = new Case();
         for ( Case s : env.getBfs().getParcours()){
@@ -121,14 +149,14 @@ public class Controleur implements Initializable {
         }
 
     }
+
     public void creerSpriteDefense(Defense t) {
 
         Circle c = new Circle(8);
 
         if (t instanceof Tesla) {
             c.setFill(Color.ORANGE);
-        }
-        else if (t instanceof TourelleBase)
+        } else if (t instanceof TourelleBase)
             c.setFill(Color.RED);
 
         c.setTranslateX(t.getColonne());
@@ -137,36 +165,58 @@ public class Controleur implements Initializable {
         c.translateYProperty().bind(t.ligneProperty());
         pane.getChildren().add(c);
         c.setOnMouseExited(e -> {
+            if (defenseBienPlacé(t)) {
+                env.ajouterDefense(t);
+                System.out.println("Tourelle ajoutée");
+            }
+//                    else
+//                        pane.getChildren().remove(c);
+            ajouterDefenseDansModele(t.getColonne(), t.getLigne());
+            ajusterEmplacementtourelle(t, (Math.round(t.getColonne() / 16)), Math.round(t.getLigne() / 16));
+            env.ajouterDefense(t);
+            System.out.println("Tourelle ajoutée");
 
-                    if(defenseBienPlacé(t)) {
-                        env.ajouterDefense(t);
-                        System.out.println("Tourelle ajoutée");
+            env.getBfs().testBFS();
+        });
+    }
+
+    public void creerSpriteMine(Mine m) {
+        Circle c = new Circle(4);
+        c.setFill(Color.BLUE);
+
+        c.setTranslateX(m.getColonne());
+        c.setTranslateY(m.getLigne());
+        c.translateXProperty().bind(m.colonneProperty());
+        c.translateYProperty().bind(m.ligneProperty());
+        c.setId(m.getId());
+        pane.getChildren().add(c);
+        c.setOnMouseExited(e -> {
+
+                    if (defenseBienPlacé(m)) {
+                        env.ajouterDefense(m);
+                        System.out.println("Mine ajoutée");
                     }
 //                    else
 //                        pane.getChildren().remove(c);
-                    ajouterDefenseDansModele(t.getColonne(), t.getLigne(), env);
-                    ajusterEmplacementtourelle(t, (Math.round(t.getColonne() / 16)), Math.round(t.getLigne() / 16));
-
-                    env.getBfs().testBFS();
+                    ajouterDefenseDansModele(m.getColonne(), m.getLigne());
+                    ajusterEmplacementtourelle(m, (Math.round(m.getColonne() / 16)), Math.round(m.getLigne() / 16));
                 }
         );
-    }
-    public void ajouterDefenseDansModele(int colonne, int ligne, Environnement env) {
 
-        int co = Math.round(colonne / 16);
-        int li = Math.round(ligne / 16);
+
+    }
+
+    public void ajouterDefenseDansModele(int colonne, int ligne) {
+
+
+
+        int co = (int) (Math.round(colonne / 16.0));
+        int li = (int) (Math.round(ligne / 16.0));
 
         if (env.getTerrainModele().dansTerrain(li, co) && env.getTerrainModele().getTerrain()[li][co] == 0) {
             env.getTerrainModele().getTerrain()[li][co] = 3;
 
-            Case sommet = new Case();
-            for (Case s : env.getBfs().getParcours()) {
-                if (s.getColonne() == co && s.getLigne() == li) {
-                    sommet = s;
-                    break;
-                }
-            }
-            env.getBfs().getG().deconnecte(sommet);
+
         } else System.out.println("erreur placement");
 
     }

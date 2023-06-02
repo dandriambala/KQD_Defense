@@ -7,6 +7,8 @@ public class Balle extends EnMouvement{
     private double directionY;
     private double ennemiCibleX;
     private double ennemiCibleY;
+
+    //le rayon dans lequel la balle détectera un ennemi
     private int rayonAction;
 
     public Balle(int positionX, int positionY, int vitesse, Environnement env, double ennemiCibleX, double ennemiCibleY, int rayonAction) {

@@ -65,6 +65,16 @@ public class Environnement {
         return listeBalles;
     }
 
+    public ObservableList<Piege> getPieges(){
+        ObservableList<Piege> listePiege = FXCollections.observableArrayList();
+        for (Defense d: defenses) {
+            if (d instanceof Piege){
+                listePiege.add((Piege) d);
+            }
+        }
+        return listePiege;
+    }
+
     public ObservableList<Defense> getDefense() {
         return defenses;
     }
@@ -80,6 +90,25 @@ public class Environnement {
 
     public void ajouterDefense(Defense d) {
         defenses.add(d);
+        Case sommet = new Case();
+        for (Case s : bfs.getParcours()) {
+            if (s.getColonne() == d.getColonne()/16 && s.getLigne() == d.getLigne()/16) {
+                sommet = s;
+                break;
+            }
+        }
+        bfs.getG().deconnecte(sommet);
+        bfs.testBFS();
+
+        for (Case s : bfs.getParcours()) {
+            if (s.getColonne() == 0 && s.getLigne() == 10) {
+                sommet = s;
+                break;
+            }
+        }
+
+
+
     }
 
     public Ennemi getEnnemiID(String id) {
@@ -99,18 +128,19 @@ public class Environnement {
     public void unTour() {
 
         nbToursProperty.setValue(nbToursProperty.getValue() + 1);
-
-        for (Defense d : getDefense()) {
+        for (Defense d: defenses) {
             d.agir();
         }
 
         vague.vaguePourChaqueTour(this);
 
-        this.ennemisPourChaqueTour();
+        this.enMouvementsPourChaqueTour();
+
+        piegesPourChaqueTour();
     }
 
 
-    public void ennemisPourChaqueTour() {
+    public void enMouvementsPourChaqueTour() {
 
 
         for (int i = enMouvements.size() - 1; i >= 0; i--) {
@@ -169,6 +199,15 @@ public class Environnement {
     public void suppressionParPassageEnBase(String id) {
         if (getEnnemiID(id) != null) {
             ressourceJeu.ennemiEntrerDansLaBase(getEnnemiID(id).getPv()/25);
+        }
+    }
+
+    /* Vérifie si les pièges sont encores actifs sinon les retire*/
+    public void piegesPourChaqueTour(){
+        for (int i = getPieges().size() - 1; i >= 0; i--) {
+            if (getPieges().get(i).finDeVie()) {
+                defenses.remove(getPieges().get(i));
+            }
         }
     }
 }
