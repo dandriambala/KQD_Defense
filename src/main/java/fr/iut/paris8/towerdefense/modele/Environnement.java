@@ -89,10 +89,14 @@ public class Environnement {
     }
 
     public void ajouterDefense ( Defense d ) {
-        int colonne = d.getColonne();
-        int ligne = d.getLigne();
-        ajusterEmplacementtourelle(d, ( colonne / 16 ), ligne / 16);
-        if ( colonne <= 9 && colonne >= 7 && ligne <= 11 && ligne >= 10 ) {
+        int colonne = (d.getColonne() - 8 ) /16 ;
+        int ligne = (d.getLigne() - 8 ) /16;
+
+        if ( colonne <= 2 && colonne >= 1 && ligne <= 11 && ligne >= 9  && d instanceof Tourelle || colonne <= 59 && colonne >= 57 && ligne <= 11 && ligne >= 9  && d instanceof Tourelle) {
+            d.setColonne(0);
+            d.setLigne(0);
+        }
+        else {
             defenses.add(d);
             Case sommet = new Case();
             for (Case s : bfs.getParcours()) {
@@ -103,10 +107,6 @@ public class Environnement {
             }
             bfs.getG().deconnecte(sommet);
             bfs.testBFS();
-        }
-        else {
-            d.setColonne(0);
-            d.setLigne(0);
         }
     }
 
@@ -200,12 +200,6 @@ public class Environnement {
             ressourceJeu.ennemiEntrerDansLaBase(getEnnemiID(id).getPv() / 25);
         }
     }
-
-    public void ajusterEmplacementtourelle ( Defense t, int ligne, int colonne ) {
-        t.setColonne(ligne * 16 + 8);
-        t.setLigne(colonne * 16 + 8);
-    }
-
     /* Vérifie si les pièges sont encores actifs sinon les retire*/
     public void piegesPourChaqueTour () {
         for (int i = getPieges().size() - 1; i >= 0; i--) {
@@ -213,6 +207,8 @@ public class Environnement {
                 defenses.remove(getPieges().get(i));
             }
         }
+
     }
+
 }
 

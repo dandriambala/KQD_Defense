@@ -164,13 +164,16 @@ public class Controleur implements Initializable {
         c.translateYProperty().bind(t.ligneProperty());
         pane.getChildren().add(c);
         c.setOnMouseExited(e -> {
-                    ajouterDefenseDansModele(t.getColonne(), t.getLigne());
-                    env.ajouterDefense(t);
-                    System.out.println("Tourelle ajoutée");
+            if ( defenseBienPlacé(t) ) {
+                ajouterDefenseDansModele(t.getColonne(), t.getLigne());
+                ajusterEmplacementtourelle(t, ( t.getColonne() / 16 ), t.getLigne() / 16);
+                env.ajouterDefense(t);
+                System.out.println("Tourelle ajoutée");
+            }
         });
     }
 
-    public void creerSpriteMine(Mine m) {
+    public void creerSpriteMine ( Mine m ) {
         Circle c = new Circle(4);
         c.setFill(Color.BLUE);
 
@@ -181,9 +184,12 @@ public class Controleur implements Initializable {
         c.setId(m.getId());
         pane.getChildren().add(c);
         c.setOnMouseExited(e -> {
-                    ajouterDefenseDansModele(m.getColonne(), m.getLigne());
-                    env.ajouterDefense(m);
+                    if ( defenseBienPlacé(m) ) {
+                        ajouterDefenseDansModele(m.getColonne(), m.getLigne());
+                        ajusterEmplacementtourelle(m, ( m.getColonne() / 16 ), m.getLigne() / 16);
+                        env.ajouterDefense(m);
                         System.out.println("Mine ajoutée");
+                    }
                 }
         );
     }
@@ -195,7 +201,15 @@ public class Controleur implements Initializable {
         if (env.getTerrainModele().dansTerrain(li, co) && env.getTerrainModele().getTerrain()[li][co] == 0) {
             env.getTerrainModele().getTerrain()[li][co] = 3;
         } else System.out.println("erreur placement");
+    }
 
+    public void ajusterEmplacementtourelle ( Defense t, int colonne, int ligne ) {
+        System.out.println(colonne + " " + ligne);
+        t.setColonne(colonne * 16 + 8);
+        t.setLigne(ligne * 16 + 8);
+    }
+    private boolean defenseBienPlacé(Defense d) {
+        return ((d.getColonne() < tilepane.getMaxWidth() && d.getLigne() < tilepane.getHeight()) && env.getTerrainModele().getTerrain()[d.getLigne() /16][d.getColonne() /16] == 0);
     }
 }
 
