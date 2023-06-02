@@ -114,7 +114,7 @@ public class Environnement {
         for (int i = enMouvements.size() - 1; i >= 0; i--) {
             if ((enMouvements.get(i) instanceof Ennemi && ((Ennemi) enMouvements.get(i)).estVivant()) && t.dansTerrain(enMouvements.get(i).getY() / 16, enMouvements.get(i).getX() / 16)) {
                 enMouvements.get(i).agir();
-            } else if (enMouvements.get(i) instanceof Balle)
+            } else if (enMouvements.get(i) instanceof Balle && !((Balle) enMouvements.get(i)).ennemiAtteint() )
                 enMouvements.get(i).agir();
             else
                 enMouvements.remove(enMouvements.get(i));
@@ -139,8 +139,6 @@ public class Environnement {
             }
         }
         return null;
-
     }
-
 }
 

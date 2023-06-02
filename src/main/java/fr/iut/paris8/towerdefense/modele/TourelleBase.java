@@ -4,7 +4,7 @@ public class TourelleBase extends Defense{
     private int vitesseAttaque = 10;
 
     public TourelleBase(Environnement env) {
-        super(60, env, 2, 10);
+        super(60, env, 2, 1);
 
     }
     public void agir(){attaquer();}
@@ -16,7 +16,7 @@ public class TourelleBase extends Defense{
         }
     }
     public Balle creerBallesDansTourelle(double ennemiCibleX, double ennemiCibleY){
-        Balle b = new Balle(this.getColonne(), this.getLigne(), this.vitesseAttaque, getEnv(),ennemiCibleX,ennemiCibleY);
+        Balle b = new Balle(this.getColonne(), this.getLigne(), this.vitesseAttaque, getEnv(),ennemiCibleX,ennemiCibleY, 5);
         return b;
     }
 

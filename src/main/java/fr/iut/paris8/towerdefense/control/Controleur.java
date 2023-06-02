@@ -102,9 +102,11 @@ public class Controleur implements Initializable {
                         env.ajouterDefense(t);
                         System.out.println("Tourelle ajoutée");
                     }
-
+//                    else
+//                        pane.getChildren().remove(c);
                     ajouterDefenseDansModele(t.getColonne(), t.getLigne());
                     ajusterEmplacementtourelle(t, (Math.round(t.getColonne() / 16)), Math.round(t.getLigne() / 16));
+
                     env.getBfs().testBFS();
                 }
         );
