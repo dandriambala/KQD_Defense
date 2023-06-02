@@ -39,11 +39,14 @@ public class Controleur implements Initializable {
     private Label nbVague;
     @FXML
     private Label nbArgent;
+    @FXML
+    private Button ajoutTesla;
+    private TerrainModele t1;
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        TerrainModele t1 = new TerrainModele();
+        t1 = new TerrainModele();
         env = new Environnement(t1);
 
         TerrainVue tv = new TerrainVue(t1, tilepane);
@@ -80,7 +83,7 @@ public class Controleur implements Initializable {
     @FXML
     void testTourelle(ActionEvent event) {
         TourelleBase t = new TourelleBase(env);
-        creerSpriteTourelle(t);
+        creerSpriteDefense(t);
 
         ajoutTourelle.setOnMouseDragged(eve -> {
                     t.setColonne((int) eve.getSceneX());
@@ -98,10 +101,35 @@ public class Controleur implements Initializable {
 
     }
 
+    @FXML
+    void testTesla(ActionEvent event) {
+        Tesla t = new Tesla(env);
+        creerSpriteDefense(t);
 
-    public void creerSpriteTourelle(TourelleBase t) {
+        ajoutTesla.setOnMouseDragged(eve -> {
+                    t.setColonne((int) eve.getSceneX());
+                    t.setLigne((int) (eve.getSceneY() - Top.getHeight()));
+                }
+        );
+
+        Case sommet = new Case();
+        for ( Case s : env.getBfs().getParcours()){
+            if ( s.getColonne() == t.getColonne() && s.getLigne() == t.getLigne() / 16 ) {
+                sommet = s;
+                break;
+            }
+        }
+
+    }
+    public void creerSpriteDefense(Defense t) {
+
         Circle c = new Circle(8);
-        c.setFill(Color.RED);
+
+        if (t instanceof Tesla) {
+            c.setFill(Color.ORANGE);
+        }
+        else if (t instanceof TourelleBase)
+            c.setFill(Color.RED);
 
         c.setTranslateX(t.getColonne());
         c.setTranslateY(t.getLigne());
@@ -116,18 +144,14 @@ public class Controleur implements Initializable {
                     }
 //                    else
 //                        pane.getChildren().remove(c);
-                    ajouterDefenseDansModele(t.getColonne(), t.getLigne());
+                    ajouterDefenseDansModele(t.getColonne(), t.getLigne(), env);
                     ajusterEmplacementtourelle(t, (Math.round(t.getColonne() / 16)), Math.round(t.getLigne() / 16));
 
                     env.getBfs().testBFS();
                 }
         );
-
-
     }
-
-    public void ajouterDefenseDansModele(int colonne, int ligne) {
-
+    public void ajouterDefenseDansModele(int colonne, int ligne, Environnement env) {
 
         int co = Math.round(colonne / 16);
         int li = Math.round(ligne / 16);
