@@ -1,17 +1,32 @@
 package fr.iut.paris8.towerdefense.modele;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
 public class GenerateurVague {
 
     private static int pourcentageDifficulte = 6;
-    private int nbVague;
+    private IntegerProperty nbVague;
     private int nbEnnemisCreeeDansVague;
     private int nbToursDerniereVagueTerminee; // -1 signifie vague en cours
 
 
     public GenerateurVague() {
-        this.nbVague = 0;
+        this.nbVague = new SimpleIntegerProperty(0);
         this.nbEnnemisCreeeDansVague = 0;
         this.nbToursDerniereVagueTerminee = -1;
+    }
+
+    public int getNbVague() {
+        return nbVague.getValue();
+    }
+
+    public IntegerProperty nbVagueProperty() {
+        return nbVague;
+    }
+
+    public void setNbVague(int nbVague) {
+        this.nbVague.set(nbVague);
     }
 
     public void vaguePourChaqueTour(Environnement env){
@@ -26,7 +41,7 @@ public class GenerateurVague {
                 nbEnnemisCreeeDansVague++;
             }
 
-            if (nbEnnemisCreeeDansVague == nbVague+5) {
+            if (nbEnnemisCreeeDansVague == getNbVague()+5) {
                finDUneVague();
             }
         }
@@ -49,12 +64,12 @@ public class GenerateurVague {
     }
 
     public boolean finPartie(){
-        return nbVague ==50;
+        return getNbVague() ==50;
     }
 
     public void finDUneVague(){
+        setNbVague(getNbVague() + 1);
         pourcentageDifficulte +=6;
-        nbVague++;
         nbEnnemisCreeeDansVague = 0;
         nbToursDerniereVagueTerminee = -1;
     }

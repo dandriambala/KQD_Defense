@@ -8,9 +8,13 @@
    <top>
       <HBox fx:id="Top" alignment="CENTER_LEFT" prefHeight="63.0" prefWidth="960.0" spacing="20.0" BorderPane.alignment="CENTER">
          <children>
-            <Label text="Vie" />
-            <Label text="20" />
-            <Label text="\$" />
+
+             <Label text="PV" />
+             <Label fx:id="nbPvJoueur" text="150" prefHeight="33.0" prefWidth="84.0" style="-fx-border-color: red;"/>
+             <Label text="Vague" />
+             <Label fx:id="nbVague" text="0" prefHeight="33.0" prefWidth="84.0" style="-fx-border-color: red;"/>
+             <Label text="Argent" />
+             <Label fx:id="nbArgent" text="150" prefHeight="33.0" prefWidth="84.0" style="-fx-border-color: red;"/>
          </children>
       </HBox>
    </top>

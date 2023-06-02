@@ -9,7 +9,6 @@ import java.util.Map;
 
 public abstract class Ennemi extends EnMouvement{
     private static int compteurEnnemi = 0;
-
     private int prime; //L'argent que donnera l'ennemi à sa mort
     private int pv;
     private Case destinationSommet;
