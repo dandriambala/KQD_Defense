@@ -5,6 +5,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public abstract class Ennemi extends EnMouvement{
     private static int compteurEnnemi = 0;

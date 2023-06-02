@@ -28,21 +28,21 @@ public class Grille {
         for (i = 0; i < this.w; ++i) {
             for (j = 0; j < this.h; ++j) {
                 Case s = new Case(i, j);
-                if ( this.dansGrille(i - 1, j) ) {
-                    ( (Set) this.listeAdj.get(s) ).add(new Case(i - 1, j));
-                }
-
-                if ( this.dansGrille(i + 1, j) ) {
-                    ( (Set) this.listeAdj.get(s) ).add(new Case(i + 1, j));
-                }
-
-                if ( this.dansGrille(i, j + 1) ) {
-                    ( (Set) this.listeAdj.get(s) ).add(new Case(i, j + 1));
-                }
 
                 if ( this.dansGrille(i, j - 1) ) {
                     ( (Set) this.listeAdj.get(s) ).add(new Case(i, j - 1));
                 }
+                if ( this.dansGrille(i, j + 1) ) {
+                    ( (Set) this.listeAdj.get(s) ).add(new Case(i, j + 1));
+                }
+                if ( this.dansGrille(i + 1, j) ) {
+                    ( (Set) this.listeAdj.get(s) ).add(new Case(i + 1, j));
+                }
+                if ( this.dansGrille(i - 1, j) ) {
+                    ( (Set) this.listeAdj.get(s) ).add(new Case(i - 1, j));
+                }
+
+
             }
         }
 
