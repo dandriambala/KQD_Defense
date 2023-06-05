@@ -30,7 +30,9 @@ public class Controleur implements Initializable {
     @FXML
     private Button ajoutTourelle;
     @FXML
-    private Button ajoutPiege;
+    private Button ajoutMine;
+    @FXML
+    private Button ajoutRalentisseur;
     @FXML
     private HBox Top;
     @FXML
@@ -93,9 +95,13 @@ public class Controleur implements Initializable {
             d = new Tesla(env);
             b = ajoutTesla;
         }
+        else if (ajoutRalentisseur.isFocused()){
+            d = new NuageRalentisseur(env);
+            b = ajoutRalentisseur;
+        }
         else {
             d = new Mine(env);
-            b = ajoutPiege;
+            b = ajoutMine;
         }
 
         Circle c = creerSpriteDefense(d);
@@ -130,14 +136,16 @@ public class Controleur implements Initializable {
             c = new Circle(8);
             c.setFill(Color.RED);
         }
+        else if (d instanceof NuageRalentisseur){
+            c = new Circle(8);
+            c.setFill(Color.WHITE);
+            c.setId(((Piege)d).getId());
+        }
         else{
             c = new Circle(4);
             c.setFill(Color.BLUE);
             c.setId(((Piege)d).getId());
         }
-
-        c.setTranslateX(d.getColonne());
-        c.setTranslateY(d.getLigne());
         c.translateXProperty().bind(d.colonneProperty());
         c.translateYProperty().bind(d.ligneProperty());
         pane.getChildren().add(c);

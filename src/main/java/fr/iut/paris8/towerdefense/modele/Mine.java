@@ -1,5 +1,7 @@
 package fr.iut.paris8.towerdefense.modele;
 
+import javafx.collections.ObservableList;
+
 import java.util.ArrayList;
 
 public class Mine extends Piege{
@@ -15,7 +17,7 @@ public class Mine extends Piege{
         exploser();
     }
     private void exploser(){
-       ArrayList<Ennemi> ennemis = this.getEnv().chercherDansPortee(getColonne(),getLigne(),getPortee(), 1);
+       ObservableList<Ennemi> ennemis = this.getEnv().chercherDansPortee(getColonne(),getLigne(),getPortee(), 1);
         if(!ennemis.isEmpty()) {
             for (int i =0; i< ennemis.size(); i++) {
                 ennemis.get(i).decrementerPv(this.getDegats());

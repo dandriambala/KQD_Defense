@@ -35,7 +35,9 @@
 
                 <Button fx:id="ajoutTesla" mnemonicParsing="false" onAction="#placementDefense" text="Tesla"/>
 
-                <Button fx:id="ajoutPiege" mnemonicParsing="false" onAction="#placementDefense" text="Piege"/>
+                <Button fx:id="ajoutMine" mnemonicParsing="false" onAction="#placementDefense" text="Mine"/>
+
+                <Button fx:id="ajoutRalentisseur" mnemonicParsing="false" onAction="#placementDefense" text="Nuage"/>
 
             </children>
         </HBox>

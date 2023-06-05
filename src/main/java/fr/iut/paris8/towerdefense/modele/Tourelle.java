@@ -1,5 +1,7 @@
 package fr.iut.paris8.towerdefense.modele;
 
+import javafx.collections.ObservableList;
+
 import java.util.ArrayList;
 
 public class Tourelle extends Defense {
@@ -19,7 +21,7 @@ public class Tourelle extends Defense {
     }
 
     public void attaquer(){
-        ArrayList<Ennemi> ennemis = getEnv().chercherDansPortee(this.getColonne(), this.getLigne(),this.getPortee(), nbCible);
+        ObservableList<Ennemi> ennemis = getEnv().chercherDansPortee(this.getColonne(), this.getLigne(),this.getPortee(), nbCible);
 
         if (!ennemis.isEmpty()) {
             for (int i = 0; i < ennemis.size(); i++) {

@@ -128,11 +128,13 @@ public class Environnement {
 
     public void unTour () {
         nbToursProperty.setValue(nbToursProperty.getValue() + 1);
+
+        vague.vaguePourChaqueTour(this);
+        this.ennemisPourChaqueTour();
+
         for (Defense d : defenses) {
             d.agir();
         }
-        vague.vaguePourChaqueTour(this);
-        this.ennemisPourChaqueTour();
     }
 
     public void ennemisPourChaqueTour () {
@@ -169,9 +171,9 @@ public class Environnement {
 
 
     //retourne une liste d'ennemis selon une limite que la tourelle aura pour toucher un ennemi en même temps
-    public ArrayList<Ennemi> chercherDansPortee ( int colonne, int ligne, int portee, int limiteur ) {
+    public ObservableList<Ennemi> chercherDansPortee ( int colonne, int ligne, int portee, int limiteur ) {
 
-        ArrayList<Ennemi> ennemisDansPortee = new ArrayList<>();
+        ObservableList<Ennemi> ennemisDansPortee = FXCollections.observableArrayList();
 
         for (Ennemi ennemi : this.getEnnemis()) {
             if ( ennemisDansPortee.size() < limiteur ) {
