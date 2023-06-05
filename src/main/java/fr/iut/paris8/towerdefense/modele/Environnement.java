@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 
 public class Environnement {
-    private static int pourcentageDifficulte = 6;
     private GenerateurVague vague;
     private ObservableList<Defense> defenses;
     private ObservableList<EnMouvement> enMouvements;

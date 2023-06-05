@@ -69,10 +69,10 @@ public class LanceMissile extends Defense {
         ArrayList<Ennemi> ennemis = getEnv().chercherDansPortee(this.getColonne(), this.getLigne(), this.getPortee(), 1);
 
         if (!ennemis.isEmpty() && balleActuelle == null) {
-            ArrayList<Ennemi> degatEnChaine = getEnv().chercherDansPortee(ennemis.get(0).getX(), ennemis.get(0).getY(), 5, 5);
+            ArrayList<Ennemi> degatEnChaine = getEnv().chercherDansPortee(ennemis.get(0).getX(), ennemis.get(0).getY(), 32, 5);
 
             if (!degatEnChaine.isEmpty()) {
-                balleActuelle = creerBallesDansTourelle(degatEnChaine.get(0).getX(), degatEnChaine.get(0).getY());
+                balleActuelle = creerBallesDansTourelle(ennemis.get(0).getX(), ennemis.get(0).getY());
 
                 for (int j = 0; j < degatEnChaine.size(); j++) {
                     degatEnChaine.get(j).decrementerPv(this.getDegats());
@@ -82,7 +82,7 @@ public class LanceMissile extends Defense {
     }
 
     public Balle creerBallesDansTourelle(double ennemiCibleX, double ennemiCibleY) {
-        Balle b = new Balle(this.getColonne(), this.getLigne(), 2, getEnv(), ennemiCibleX, ennemiCibleY, 25);
+        Balle b = new Balle(this.getColonne(), this.getLigne(), 3, getEnv(), ennemiCibleX, ennemiCibleY, 15);
         getEnv().getEnMouvements().add(b);
         return b;
     }
