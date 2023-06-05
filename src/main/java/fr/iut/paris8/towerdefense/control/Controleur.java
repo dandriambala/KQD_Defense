@@ -41,6 +41,8 @@ public class Controleur implements Initializable {
     private Label nbArgent;
     @FXML
     private Button ajoutTesla;
+    @FXML
+    private Button ajoutLanceMissile;
     private TerrainModele t1;
 
 
@@ -90,6 +92,9 @@ public class Controleur implements Initializable {
         else if (ajoutTesla.isFocused()) {
             b = ajoutTesla;
         }
+        else if (ajoutLanceMissile.isFocused()){
+            b = ajoutLanceMissile;
+        }
         else {
             b = ajoutPiege;
         }
@@ -99,13 +104,16 @@ public class Controleur implements Initializable {
                     c.setTranslateX((int) e1.getSceneX());
                     c.setTranslateY((int) (e1.getSceneY() - Top.getHeight()));
 
-                    b.setOnMouseReleased(e3 -> {
+                    b.setOnMouseReleased(e2 -> {
                         Defense d;
                         if (defenseBienPlacé(c)) {
                             if (b.equals(ajoutTourelle))
                                 d = new TourelleBase(env);
                             else if (b.equals(ajoutTesla)) {
                                 d = new Tesla(env);
+                            }
+                            else if (b.equals(ajoutLanceMissile)) {
+                                d = new LanceMissile(env);
                             }
                             else {
                                 d = new Mine(env);
@@ -135,13 +143,19 @@ public class Controleur implements Initializable {
         if (b.equals(ajoutTourelle)) {
             c = new Circle(8);
             c.setFill(Color.RED);
+
         } else if (b.equals(ajoutTesla)) {
             c = new Circle(8);
             c.setFill(Color.ORANGE);
         }
+        else if (b.equals(ajoutLanceMissile)) {
+            c = new Circle(8);
+            c.setFill(Color.WHITE);
+        }
         else{
             c = new Circle(4);
             c.setFill(Color.BLUE);
+
         }
 
         pane.getChildren().add(c);
@@ -163,7 +177,7 @@ public class Controleur implements Initializable {
         c.setTranslateY(ligne * 16 + 8);
     }
     private boolean defenseBienPlacé(Circle c) {
-        return ((c.getTranslateX() < tilepane.getMaxWidth() && c.getTranslateY() < tilepane.getMaxHeight()) && (c.getTranslateX() > tilepane.getMinWidth() && c.getTranslateY() > tilepane.getMinHeight()) && env.getTerrainModele().getTerrain()[(int) c.getTranslateX() /16][(int) c.getTranslateY() /16] == 0);
+        return ((c.getTranslateX() < tilepane.getMaxWidth() && c.getTranslateY() < tilepane.getMaxHeight()) && (c.getTranslateX() > tilepane.getMinWidth() && c.getTranslateY() > tilepane.getMinHeight()) && env.getTerrainModele().getTerrain()[(int) c.getTranslateY() /16][(int) c.getTranslateX() /16] == 0);
     }
 }
 

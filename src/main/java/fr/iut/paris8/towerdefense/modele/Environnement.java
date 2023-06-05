@@ -11,7 +11,6 @@ import javafx.collections.ObservableList;
 import java.util.ArrayList;
 
 public class Environnement {
-    private static int pourcentageDifficulte = 6;
     private GenerateurVague vague;
     private ObservableList<Defense> defenses;
     private ObservableList<EnMouvement> enMouvements;
@@ -126,21 +125,28 @@ public class Environnement {
         enMouvements.add(a);
     }
 
-    public void unTour () {
-        nbToursProperty.setValue(nbToursProperty.getValue() + 1);
-        for (Defense d : defenses) {
-            d.agir();
+
+
+    public void unTour() {
+
+        if (!vague.finPartie() && !ressourceJeu.partiePerdu()) {
+            nbToursProperty.setValue(nbToursProperty.getValue() + 1);
+
+
+            for (Defense d : defenses) {
+                d.agir();
+            }
+
+            vague.vaguePourChaqueTour(this);
+
+            this.enMouvementsPourChaqueTour();
+
+            piegesPourChaqueTour();
         }
-        vague.vaguePourChaqueTour(this);
-        this.ennemisPourChaqueTour();
+
+
     }
 
-    public void ennemisPourChaqueTour () {
-
-        this.enMouvementsPourChaqueTour();
-
-        piegesPourChaqueTour();
-    }
 
 
     public void enMouvementsPourChaqueTour () {
