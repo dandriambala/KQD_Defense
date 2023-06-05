@@ -84,82 +84,86 @@ public class Controleur implements Initializable {
     @FXML
     void placementDefense(ActionEvent event){
         Button b;
-        Defense d;
         if (ajoutTourelle.isFocused()) {
-            d = new TourelleBase(env);
             b = ajoutTourelle;
         }
         else if (ajoutTesla.isFocused()) {
-            d = new Tesla(env);
             b = ajoutTesla;
         }
         else {
-            d = new Mine(env);
             b = ajoutPiege;
         }
 
-        Circle c = creerSpriteDefense(d);
-        b.setOnMouseDragged(eve -> {
-                    d.setColonne((int) eve.getSceneX());
-                    d.setLigne((int) (eve.getSceneY() - Top.getHeight()));
-                b.setOnMouseReleased(e -> {
+        Circle c = creerSpriteDefense(b);
+        b.setOnMouseDragged(e1 -> {
+                    c.setTranslateX((int) e1.getSceneX());
+                    c.setTranslateY((int) (e1.getSceneY() - Top.getHeight()));
 
-                    if (defenseBienPlacé(d)) {
-                        env.ajouterDefense(d);
-                        System.out.println("Défense ajoutée");
-                    }
-                    else
-                        pane.getChildren().remove(c);
-                    ajouterDefenseDansModele(d.getColonne(), d.getLigne());
-                    ajusterEmplacementtourelle(d, (Math.round(d.getColonne() / 16)), Math.round(d.getLigne() / 16));
+                    b.setOnMouseReleased(e3 -> {
+                        Defense d;
+                        if (defenseBienPlacé(c)) {
+                            if (b.equals(ajoutTourelle))
+                                d = new TourelleBase(env);
+                            else if (b.equals(ajoutTesla)) {
+                                d = new Tesla(env);
+                            }
+                            else {
+                                d = new Mine(env);
+                                c.setId(((Piege)d).getId());
+                            }
+                            ajouterDefenseDansModele(c.getTranslateX(), c.getTranslateY());
+                            ajusterEmplacementDefense(c, (int) (c.getTranslateX() / 16), (int) (c.getTranslateY() / 16));
+                            d.setColonne((int) c.getTranslateX());
+                            d.setLigne((int) c.getTranslateY());
+                            env.ajouterDefense(d);
+                            System.out.println("Défense ajoutée");
+                        }
+                        else
+                            pane.getChildren().remove(c);
 
-                    env.getBfs().testBFS();
-                });}
-        );
+
+                        env.getBfs().testBFS();
+                    });
+        });
 
     }
 
-    public Circle creerSpriteDefense(Defense d) {
+    public Circle creerSpriteDefense(Button b) {
 
         Circle c;
 
-        if (d instanceof Tesla) {
-            c = new Circle(8);
-            c.setFill(Color.ORANGE);
-        } else if (d instanceof TourelleBase) {
+        if (b.equals(ajoutTourelle)) {
             c = new Circle(8);
             c.setFill(Color.RED);
+        } else if (b.equals(ajoutTesla)) {
+            c = new Circle(8);
+            c.setFill(Color.ORANGE);
         }
         else{
             c = new Circle(4);
             c.setFill(Color.BLUE);
-            c.setId(((Piege)d).getId());
         }
 
-        c.setTranslateX(d.getColonne());
-        c.setTranslateY(d.getLigne());
-        c.translateXProperty().bind(d.colonneProperty());
-        c.translateYProperty().bind(d.ligneProperty());
         pane.getChildren().add(c);
-    return c;
+        return c;
     }
 
-    public void ajouterDefenseDansModele(int colonne, int ligne) {
-        int co = (int) (Math.round(colonne / 16.0));
-        int li = (int) (Math.round(ligne / 16.0));
+    public void ajouterDefenseDansModele(double colonne, double ligne) {
+        int co = (int) Math.round(colonne / 16);
+        int li = (int) Math.round(ligne / 16);
 
         if (env.getTerrainModele().dansTerrain(li, co) && env.getTerrainModele().getTerrain()[li][co] == 0) {
             env.getTerrainModele().getTerrain()[li][co] = 3;
         } else System.out.println("erreur placement");
     }
 
-    public void ajusterEmplacementtourelle ( Defense t, int colonne, int ligne ) {
+    public void ajusterEmplacementDefense(Circle c, double colonne, double ligne ) {
         System.out.println(colonne + " " + ligne);
-        t.setColonne(colonne * 16 + 8);
-        t.setLigne(ligne * 16 + 8);
+        c.setTranslateX(colonne * 16 + 8);
+        c.setTranslateY(ligne * 16 + 8);
     }
-    private boolean defenseBienPlacé(Defense d) {
-        return ((d.getColonne() < tilepane.getMaxWidth() && d.getLigne() < tilepane.getMaxHeight()) && (d.getColonne() > tilepane.getMinWidth() && d.getLigne() > tilepane.getMinHeight()) && env.getTerrainModele().getTerrain()[d.getLigne() /16][d.getColonne() /16] == 0);
+    private boolean defenseBienPlacé(Circle c) {
+        return ((c.getTranslateX() < tilepane.getMaxWidth() && c.getTranslateY() < tilepane.getMaxHeight()) && (c.getTranslateX() > tilepane.getMinWidth() && c.getTranslateY() > tilepane.getMinHeight()) && env.getTerrainModele().getTerrain()[(int) c.getTranslateX() /16][(int) c.getTranslateY() /16] == 0);
     }
 }
 
