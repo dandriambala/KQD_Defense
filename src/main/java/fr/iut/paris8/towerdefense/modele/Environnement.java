@@ -127,16 +127,20 @@ public class Environnement {
 
     public void unTour() {
 
+        if (!vague.finPartie() && !ressourceJeu.partiePerdu()) {
         nbToursProperty.setValue(nbToursProperty.getValue() + 1);
-        for (Defense d: defenses) {
-            d.agir();
+
+
+            for (Defense d : defenses) {
+                d.agir();
+            }
+
+            vague.vaguePourChaqueTour(this);
+
+            this.enMouvementsPourChaqueTour();
+
+            piegesPourChaqueTour();
         }
-
-        vague.vaguePourChaqueTour(this);
-
-        this.enMouvementsPourChaqueTour();
-
-        piegesPourChaqueTour();
     }
 
 

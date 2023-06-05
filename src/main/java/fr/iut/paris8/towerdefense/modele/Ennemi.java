@@ -75,7 +75,6 @@ public abstract class Ennemi extends EnMouvement{
                 }
              }
             else{
-                System.out.println("jfiozfnoznfpoak,dpladpl");
                 avancerEnX();
             }
         }

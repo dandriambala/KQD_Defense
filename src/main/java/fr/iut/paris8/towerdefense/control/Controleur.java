@@ -43,6 +43,8 @@ public class Controleur implements Initializable {
     private Label nbArgent;
     @FXML
     private Button ajoutTesla;
+    @FXML
+    private Button ajoutLanceMissile;
     private TerrainModele t1;
 
 
@@ -150,6 +152,29 @@ public class Controleur implements Initializable {
 
     }
 
+    @FXML
+    void testMissile(ActionEvent event) {
+        LanceMissile t = new LanceMissile(env);
+        creerSpriteDefense(t);
+
+        ajoutLanceMissile.setOnMouseDragged(eve -> {
+
+                    t.setColonne((int) eve.getSceneX());
+                    t.setLigne((int) (eve.getSceneY() - Top.getHeight()));
+                }
+        );
+
+
+        Case sommet = new Case();
+        for ( Case s : env.getBfs().getParcours()){
+            if ( s.getColonne() == t.getColonne() && s.getLigne() == t.getLigne() / 16 ) {
+                sommet = s;
+                break;
+            }
+        }
+
+    }
+
     public void creerSpriteDefense(Defense t) {
 
         Circle c = new Circle(8);
@@ -158,6 +183,9 @@ public class Controleur implements Initializable {
             c.setFill(Color.ORANGE);
         } else if (t instanceof TourelleBase)
             c.setFill(Color.RED);
+        else {
+            c.setFill(Color.WHITE);
+        }
 
         c.setTranslateX(t.getColonne());
         c.setTranslateY(t.getLigne());

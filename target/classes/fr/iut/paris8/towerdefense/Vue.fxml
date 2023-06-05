@@ -37,6 +37,8 @@
 
                 <Button fx:id="ajoutPiege" mnemonicParsing="false" onAction="#testPiege" text="Piege"/>
 
+                <Button fx:id="ajoutLanceMissile" mnemonicParsing="false" onAction="#testMissile" text="Missile"/>
+
             </children>
         </HBox>
     </bottom>
