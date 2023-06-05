@@ -1,17 +1,14 @@
 package fr.iut.paris8.towerdefense.modele;
 
 import fr.iut.paris8.towerdefense.BFS.Case;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public abstract class Ennemi extends EnMouvement{
     private static int compteurEnnemi = 0;
     private int prime; //L'argent que donnera l'ennemi à sa mort
     private int pv;
-    private Case destinationSommet;
+    private Case destinationCase;
 
     public Ennemi(int x, int y, int vitesse,  int prime, int pv, Environnement env) {
       super(x,y,vitesse,env);
@@ -35,38 +32,35 @@ public abstract class Ennemi extends EnMouvement{
 
 
     public void agir () {
-        if ( destinationSommet == null )
+        if ( destinationCase == null )
             setDestinationSommet();
-
-
-//        System.out.println("Pos ennemie \n X : " + getX() + " Y : " + getY() + "  I : " + getX() / 16 + " J : " + getY() / 16);
 
 //
 //        System.out.println("Sommet\nX : " + destinationSommet.getX() + " Y : " + destinationSommet.getY());
-//        System.out.println("I : " + destinationSommet.getColonne() + " J : " + destinationSommet.getLigne());
+//        System.out.println("I : " + destinationCase.getColonne() + " J : " + destinationCase.getLigne());
         for (int i = 1; i <= getVitesse(); i++) {
             if ( getEnv().getTerrainModele().dansTerrainEnnemie(this.getY() / 16, this.getX() / 16) || this.getX() <= 16 ) {
-                if ( getX() != destinationSommet.getX() ) {
-                    if ( destinationSommet.getX() - getX() > 0 ) {
+                if ( getX() != destinationCase.getX() ) {
+                    if ( destinationCase.getX() - getX() > 0 ) {
                         avancerEnX();
-                        if ( destinationSommet.getX() - getX() < 0 )
+                        if ( destinationCase.getX() - getX() < 0 )
                             setDestinationSommet();
                     }
                     else {
                         reculerEnX();
-                        if ( destinationSommet.getX() - getX() > 0 )
+                        if ( destinationCase.getX() - getX() > 0 )
                             setDestinationSommet();
                     }
                 }
-                else if ( getY() != destinationSommet.getY() ) {
-                    if ( destinationSommet.getY() - getY() > 0 ) {
+                else if ( getY() != destinationCase.getY() ) {
+                    if ( destinationCase.getY() - getY() > 0 ) {
                         descendreEnY();
-                        if ( destinationSommet.getY() - getY() < 0 )
+                        if ( destinationCase.getY() - getY() < 0 )
                             setDestinationSommet();
                     }
                     else {
                         monterEnY();
-                        if ( destinationSommet.getY() - getY() > 0 )
+                        if ( destinationCase.getY() - getY() > 0 )
                             setDestinationSommet();
                     }
                 }
@@ -109,9 +103,9 @@ public abstract class Ennemi extends EnMouvement{
         for (int i = 0; i < chemin.size(); i++) {
             if ( chemin.get(i) == sommet ) {
                 if ( chemin.get(i) != chemin.get(chemin.size() - 1) )
-                    destinationSommet = chemin.get(i + 1);
+                    destinationCase = chemin.get(i + 1);
                 else
-                    destinationSommet = getEnv().getBfs().getSource();
+                    destinationCase = getEnv().getBfs().getSource();
                 break;
             }
         }

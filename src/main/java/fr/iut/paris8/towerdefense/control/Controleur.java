@@ -1,7 +1,6 @@
 package fr.iut.paris8.towerdefense.control;
 
 
-import fr.iut.paris8.towerdefense.BFS.Case;
 import fr.iut.paris8.towerdefense.modele.*;
 import fr.iut.paris8.towerdefense.vue.TerrainVue;
 import javafx.animation.KeyFrame;
@@ -18,7 +17,6 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -85,177 +83,93 @@ public class Controleur implements Initializable {
         );
         gameLoop.getKeyFrames().add(kf);
     }
-
     @FXML
-    void testTourelle(ActionEvent event) {
-        TourelleBase t = new TourelleBase(env);
-        creerSpriteDefense(t);
-
-        ajoutTourelle.setOnMouseDragged(eve -> {
-                    t.setColonne((int) eve.getSceneX());
-                    t.setLigne((int) (eve.getSceneY() - Top.getHeight()));
-                }
-        );
-
-        Case sommet = new Case();
-        for ( Case s : env.getBfs().getParcours()){
-            if ( s.getColonne() == t.getColonne() && s.getLigne() == t.getLigne() / 16 ) {
-                sommet = s;
-                break;
-            }
+    void placementDefense(ActionEvent event){
+        Button b;
+        Defense d;
+        if (ajoutTourelle.isFocused()) {
+            d = new TourelleBase(env);
+            b = ajoutTourelle;
         }
-
-    }
-
-    @FXML
-    void testTesla(ActionEvent event) {
-        Tesla t = new Tesla(env);
-        creerSpriteDefense(t);
-
-        ajoutTesla.setOnMouseDragged(eve -> {
-            t.setColonne((int) eve.getSceneX());
-            t.setLigne((int) (eve.getSceneY() - Top.getHeight()));
+        else if (ajoutTesla.isFocused()) {
+            d = new Tesla(env);
+            b = ajoutTesla;
         }
-        );
-
-
-        Case sommet = new Case();
-        for ( Case s : env.getBfs().getParcours()){
-            if ( s.getColonne() == t.getColonne() && s.getLigne() == t.getLigne() / 16 ) {
-                sommet = s;
-                break;
-            }
+        else if (ajoutLanceMissile.isFocused()){
+            d = new LanceMissile(env);
+            b = ajoutLanceMissile;
         }
-    }
-
-
-    @FXML
-    void testPiege(ActionEvent event) {
-        Mine t = new Mine(env);
-        creerSpriteMine(t);
-
-        ajoutPiege.setOnMouseDragged(eve -> {
-
-                    t.setColonne((int) eve.getSceneX());
-                    t.setLigne((int) (eve.getSceneY() - Top.getHeight()));
-                }
-        );
-
-
-        Case sommet = new Case();
-        for ( Case s : env.getBfs().getParcours()){
-            if ( s.getColonne() == t.getColonne() && s.getLigne() == t.getLigne() / 16 ) {
-                sommet = s;
-                break;
-            }
-        }
-
-    }
-
-    @FXML
-    void testMissile(ActionEvent event) {
-        LanceMissile t = new LanceMissile(env);
-        creerSpriteDefense(t);
-
-        ajoutLanceMissile.setOnMouseDragged(eve -> {
-
-                    t.setColonne((int) eve.getSceneX());
-                    t.setLigne((int) (eve.getSceneY() - Top.getHeight()));
-                }
-        );
-
-
-        Case sommet = new Case();
-        for ( Case s : env.getBfs().getParcours()){
-            if ( s.getColonne() == t.getColonne() && s.getLigne() == t.getLigne() / 16 ) {
-                sommet = s;
-                break;
-            }
-        }
-
-    }
-
-    public void creerSpriteDefense(Defense t) {
-
-        Circle c = new Circle(8);
-
-        if (t instanceof Tesla) {
-            c.setFill(Color.ORANGE);
-        } else if (t instanceof TourelleBase)
-            c.setFill(Color.RED);
         else {
-            c.setFill(Color.WHITE);
+            d = new Mine(env);
+            b = ajoutPiege;
         }
 
-        c.setTranslateX(t.getColonne());
-        c.setTranslateY(t.getLigne());
-        c.translateXProperty().bind(t.colonneProperty());
-        c.translateYProperty().bind(t.ligneProperty());
-        pane.getChildren().add(c);
-        c.setOnMouseExited(e -> {
-            if (defenseBienPlacé(t)) {
-                env.ajouterDefense(t);
-                System.out.println("Tourelle ajoutée");
-            }
-//                    else
-//                        pane.getChildren().remove(c);
-            ajouterDefenseDansModele(t.getColonne(), t.getLigne());
-            ajusterEmplacementtourelle(t, (Math.round(t.getColonne() / 16)), Math.round(t.getLigne() / 16));
-            env.ajouterDefense(t);
-            System.out.println("Tourelle ajoutée");
+        Circle c = creerSpriteDefense(d);
+        b.setOnMouseDragged(eve -> {
+                    d.setColonne((int) eve.getSceneX());
+                    d.setLigne((int) (eve.getSceneY() - Top.getHeight()));
+                b.setOnMouseReleased(e -> {
 
-            env.getBfs().testBFS();
-        });
-    }
-
-    public void creerSpriteMine(Mine m) {
-        Circle c = new Circle(4);
-        c.setFill(Color.BLUE);
-
-        c.setTranslateX(m.getColonne());
-        c.setTranslateY(m.getLigne());
-        c.translateXProperty().bind(m.colonneProperty());
-        c.translateYProperty().bind(m.ligneProperty());
-        c.setId(m.getId());
-        pane.getChildren().add(c);
-        c.setOnMouseExited(e -> {
-
-                    if (defenseBienPlacé(m)) {
-                        env.ajouterDefense(m);
-                        System.out.println("Mine ajoutée");
+                    if (defenseBienPlacé(d)) {
+                        env.ajouterDefense(d);
+                        System.out.println("Défense ajoutée");
                     }
-//                    else
-//                        pane.getChildren().remove(c);
-                    ajouterDefenseDansModele(m.getColonne(), m.getLigne());
-                    ajusterEmplacementtourelle(m, (Math.round(m.getColonne() / 16)), Math.round(m.getLigne() / 16));
-                }
+                    else
+                        pane.getChildren().remove(c);
+                    ajouterDefenseDansModele(d.getColonne(), d.getLigne());
+                    ajusterEmplacementtourelle(d, (Math.round(d.getColonne() / 16)), Math.round(d.getLigne() / 16));
+
+                    env.getBfs().testBFS();
+                });}
         );
 
+    }
 
+
+    public Circle creerSpriteDefense(Defense d) {
+
+        Circle c;
+
+        if (d instanceof Tesla) {
+            c = new Circle(8);
+            c.setFill(Color.ORANGE);
+        } else if (d instanceof TourelleBase) {
+            c = new Circle(8);
+            c.setFill(Color.RED);
+        } else if (d instanceof LanceMissile) {
+            c = new Circle(8);
+            c.setFill(Color.WHITE);
+        } else {
+            c = new Circle(4);
+            c.setFill(Color.BLUE);
+            c.setId(((Piege) d).getId());
+
+        }
+
+        c.setTranslateX(d.getColonne());
+        c.setTranslateY(d.getLigne());
+        c.translateXProperty().bind(d.colonneProperty());
+        c.translateYProperty().bind(d.ligneProperty());
+        pane.getChildren().add(c);
+    return c;
     }
 
     public void ajouterDefenseDansModele(int colonne, int ligne) {
-
-
-
         int co = (int) (Math.round(colonne / 16.0));
         int li = (int) (Math.round(ligne / 16.0));
 
         if (env.getTerrainModele().dansTerrain(li, co) && env.getTerrainModele().getTerrain()[li][co] == 0) {
             env.getTerrainModele().getTerrain()[li][co] = 3;
-
-
         } else System.out.println("erreur placement");
-
     }
 
-    public void ajusterEmplacementtourelle(Defense t, int ligne, int colonne) {
-        t.setColonne(ligne * 16);
-        t.setLigne(colonne * 16);
+    public void ajusterEmplacementtourelle ( Defense t, int colonne, int ligne ) {
+        System.out.println(colonne + " " + ligne);
+        t.setColonne(colonne * 16 + 8);
+        t.setLigne(ligne * 16 + 8);
     }
-
     private boolean defenseBienPlacé(Defense d) {
-        return ((d.getColonne() < tilepane.getMaxWidth() && d.getLigne() < tilepane.getHeight()) && env.getTerrainModele().getTerrain()[d.getLigne() /16][d.getColonne() /16] == 0);
+        return ((d.getColonne() < tilepane.getMaxWidth() && d.getLigne() < tilepane.getMaxHeight()) && (d.getColonne() > tilepane.getMinWidth() && d.getLigne() > tilepane.getMinHeight()) && env.getTerrainModele().getTerrain()[d.getLigne() /16][d.getColonne() /16] == 0);
     }
 }
 

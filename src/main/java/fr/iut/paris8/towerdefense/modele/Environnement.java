@@ -10,7 +10,6 @@ import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
 
-
 public class Environnement {
     private GenerateurVague vague;
     private ObservableList<Defense> defenses;
@@ -20,7 +19,7 @@ public class Environnement {
     private BFS bfs;
     private RessourceJeu ressourceJeu;
 
-    public Environnement(TerrainModele t) {
+    public Environnement ( TerrainModele t ) {
         super();
         this.nbToursProperty = new SimpleIntegerProperty();
         this.nbToursProperty.setValue(0);
@@ -28,106 +27,110 @@ public class Environnement {
         this.enMouvements = FXCollections.observableArrayList();
         this.defenses = FXCollections.observableArrayList();
         this.t = t;
-        this.bfs = new BFS(new Grille(t.getWidth()/16,t.getHeight()/16),new Case(59,10));
+        this.bfs = new BFS(new Grille(t.getWidth() / 16, t.getHeight() / 16), new Case(59, 10));
         vague = new GenerateurVague();
         ressourceJeu = new RessourceJeu();
     }
 
-    public final IntegerProperty nbToursProperty() {
+    public final IntegerProperty nbToursProperty () {
         return this.nbToursProperty;
     }
 
-    public final int getNbTours() {
+    public final int getNbTours () {
         return this.nbToursProperty.getValue();
     }
 
-    public final void setNbToursProperty(int n) {
+    public final void setNbToursProperty ( int n ) {
         this.nbToursProperty.setValue(n);
     }
 
-    public ObservableList<Ennemi> getEnnemis(){
-            ObservableList<Ennemi> listeEnnemis = FXCollections.observableArrayList();
-        for (EnMouvement em: enMouvements) {
-            if (em instanceof Ennemi){
+    public ObservableList<Ennemi> getEnnemis () {
+        ObservableList<Ennemi> listeEnnemis = FXCollections.observableArrayList();
+        for (EnMouvement em : enMouvements) {
+            if ( em instanceof Ennemi ) {
                 listeEnnemis.add((Ennemi) em);
             }
         }
         return listeEnnemis;
     }
-    public ObservableList<Balle> getBalles(){
+
+    public ObservableList<Balle> getBalles () {
         ObservableList<Balle> listeBalles = FXCollections.observableArrayList();
-        for (EnMouvement em: enMouvements) {
-            if (em instanceof Balle){
+        for (EnMouvement em : enMouvements) {
+            if ( em instanceof Balle ) {
                 listeBalles.add((Balle) em);
             }
         }
         return listeBalles;
     }
 
-    public ObservableList<Piege> getPieges(){
+    public ObservableList<Piege> getPieges () {
         ObservableList<Piege> listePiege = FXCollections.observableArrayList();
-        for (Defense d: defenses) {
-            if (d instanceof Piege){
+        for (Defense d : defenses) {
+            if ( d instanceof Piege ) {
                 listePiege.add((Piege) d);
             }
         }
         return listePiege;
     }
 
-    public ObservableList<Defense> getDefense() {
+    public ObservableList<Defense> getDefense () {
         return defenses;
     }
 
 
-    public TerrainModele getTerrainModele(){
+    public TerrainModele getTerrainModele () {
         return this.t;
     }
 
-    public ObservableList<EnMouvement> getEnMouvements() {
+    public ObservableList<EnMouvement> getEnMouvements () {
         return enMouvements;
     }
 
-    public void ajouterDefense(Defense d) {
-        defenses.add(d);
-        Case sommet = new Case();
-        for (Case s : bfs.getParcours()) {
-            if (s.getColonne() == d.getColonne()/16 && s.getLigne() == d.getLigne()/16) {
-                sommet = s;
-                break;
+    public void ajouterDefense ( Defense d ) {
+        if(d instanceof Tourelle) {
+            int colonne = (d.getColonne() - 8) / 16;
+            int ligne = (d.getLigne() - 8) / 16;
+
+            if (colonne <= 2 && colonne >= 1 && ligne <= 11 && ligne >= 9 && d instanceof Tourelle || colonne <= 59 && colonne >= 57 && ligne <= 11 && ligne >= 9 && d instanceof Tourelle) {
+                d.setColonne(0);
+                d.setLigne(0);
+            } else {
+                defenses.add(d);
+                Case sommet = new Case();
+                for (Case s : bfs.getParcours()) {
+                    if (s.getColonne() == d.getColonne() / 16 && s.getLigne() == d.getLigne() / 16) {
+                        sommet = s;
+                        break;
+                    }
+                }
+                bfs.getG().deconnecte(sommet);
+                bfs.testBFS();
             }
         }
-        bfs.getG().deconnecte(sommet);
-        bfs.testBFS();
-
-        for (Case s : bfs.getParcours()) {
-            if (s.getColonne() == 0 && s.getLigne() == 10) {
-                sommet = s;
-                break;
-            }
-        }
-
-
-
+        else
+            defenses.add(d);
     }
 
-    public Ennemi getEnnemiID(String id) {
+    public Ennemi getEnnemiID ( String id ) {
         for (Ennemi a : this.getEnnemis()) {
-            if (a.getId().equals(id)) {
+            if ( a.getId().equals(id) ) {
                 return a;
             }
         }
         return null;
     }
 
-
-    public void ajouterEnnemi(Ennemi a) {
+    public void ajouterEnnemi ( Ennemi a ) {
         enMouvements.add(a);
     }
+
+
 
     public void unTour() {
 
         if (!vague.finPartie() && !ressourceJeu.partiePerdu()) {
-        nbToursProperty.setValue(nbToursProperty.getValue() + 1);
+            nbToursProperty.setValue(nbToursProperty.getValue() + 1);
 
 
             for (Defense d : defenses) {
@@ -140,19 +143,22 @@ public class Environnement {
 
             piegesPourChaqueTour();
         }
+
+
     }
 
 
-    public void enMouvementsPourChaqueTour() {
 
+    public void enMouvementsPourChaqueTour () {
 
         for (int i = enMouvements.size() - 1; i >= 0; i--) {
             EnMouvement enMo = enMouvements.get(i);
-            if ((enMo instanceof Ennemi && ((Ennemi) enMouvements.get(i)).estVivant()) && t.dansTerrain(enMo.getY() / 16, enMo.getX() / 16)) {
+            if ( ( enMo instanceof Ennemi && ( (Ennemi) enMouvements.get(i) ).estVivant() ) && t.dansTerrain(enMo.getY() / 16, enMo.getX() / 16) ) {
                 enMo.agir();
-            } else if (enMo instanceof Balle && !((Balle) enMouvements.get(i)).ennemiAtteint())
+            }
+            else if ( enMo instanceof Balle && !( (Balle) enMouvements.get(i) ).ennemiAtteint() )
                 enMo.agir();
-            else if (enMo instanceof Ennemi && !((Ennemi) enMouvements.get(i)).estVivant()) {
+            else if ( enMo instanceof Ennemi && !( (Ennemi) enMouvements.get(i) ).estVivant() ) {
                 mortParTourelle(enMo.getId());
                 enMouvements.remove(enMo);
             }
@@ -169,14 +175,14 @@ public class Environnement {
 
 
     //retourne une liste d'ennemis selon une limite que la tourelle aura pour toucher un ennemi en même temps
-    public ArrayList<Ennemi> chercherDansPortee(int colonne, int ligne, int portee, int limiteur){
+    public ArrayList<Ennemi> chercherDansPortee ( int colonne, int ligne, int portee, int limiteur ) {
 
         ArrayList<Ennemi> ennemisDansPortee = new ArrayList<>();
 
         for (Ennemi ennemi : this.getEnnemis()) {
-            if (ennemisDansPortee.size() < limiteur) {
-                if (((colonne - portee) <= ennemi.getX()) && (ennemi.getX() <= (colonne + portee))
-                        && ((ligne - portee) <= ennemi.getY()) && (ennemi.getY() <= ligne + portee)) {
+            if ( ennemisDansPortee.size() < limiteur ) {
+                if ( ( ( colonne - portee ) <= ennemi.getX() ) && ( ennemi.getX() <= ( colonne + portee ) )
+                        && ( ( ligne - portee ) <= ennemi.getY() ) && ( ennemi.getY() <= ligne + portee ) ) {
                     ennemisDansPortee.add(ennemi);
                 }
             }
@@ -184,34 +190,34 @@ public class Environnement {
         return ennemisDansPortee;
     }
 
-    public GenerateurVague getVague() {
+    public GenerateurVague getVague () {
         return vague;
     }
 
-    public RessourceJeu getRessourceJeu() {
+    public RessourceJeu getRessourceJeu () {
         return ressourceJeu;
     }
 
-
-    public void mortParTourelle(String id) {
-        if (getEnnemiID(id) != null) {
+    public void mortParTourelle ( String id ) {
+        if ( getEnnemiID(id) != null ) {
             ressourceJeu.mortDUnEnnemi(getEnnemiID(id).getPrime());
         }
     }
 
-    public void suppressionParPassageEnBase(String id) {
-        if (getEnnemiID(id) != null) {
-            ressourceJeu.ennemiEntrerDansLaBase(getEnnemiID(id).getPv()/25);
+    public void suppressionParPassageEnBase ( String id ) {
+        if ( getEnnemiID(id) != null ) {
+            ressourceJeu.ennemiEntrerDansLaBase(getEnnemiID(id).getPv() / 25);
         }
     }
-
     /* Vérifie si les pièges sont encores actifs sinon les retire*/
-    public void piegesPourChaqueTour(){
+    public void piegesPourChaqueTour () {
         for (int i = getPieges().size() - 1; i >= 0; i--) {
-            if (getPieges().get(i).finDeVie()) {
+            if ( getPieges().get(i).finDeVie() ) {
                 defenses.remove(getPieges().get(i));
             }
         }
+
     }
+
 }
 
