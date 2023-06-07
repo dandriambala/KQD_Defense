@@ -18,7 +18,6 @@ public class ObservateurPiege implements ListChangeListener<Piege>{
         while (change.next()) {
 
             for (Piege p : change.getRemoved()) {
-                System.out.println("AAA");
                     Node node = pane.lookup("#" + p.getId());
                     pane.getChildren().remove(node);
             }

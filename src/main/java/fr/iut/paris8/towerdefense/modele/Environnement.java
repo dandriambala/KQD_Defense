@@ -125,8 +125,6 @@ public class Environnement {
         enMouvements.add(a);
     }
 
-
-
     public void unTour() {
 
         if (!vague.finPartie() && !ressourceJeu.partiePerdu()) {
@@ -143,11 +141,7 @@ public class Environnement {
 
             piegesPourChaqueTour();
         }
-
-
     }
-
-
 
     public void enMouvementsPourChaqueTour () {
 
