@@ -23,7 +23,7 @@ public class Tourelle extends Defense {
 
         if (!ennemis.isEmpty()) {
             for (int i = 0; i < ennemis.size(); i++) {
-                getEnv().getEnMouvements().add(creerBallesDansTourelle(ennemis.get(i).getX(), ennemis.get(i).getY()));
+                creerBallesDansTourelle(ennemis.get(i).getX(), ennemis.get(i).getY());
                 ennemis.get(i).decrementerPv(this.getDegats());
             }
         }
@@ -31,7 +31,12 @@ public class Tourelle extends Defense {
 
     public Balle creerBallesDansTourelle(double ennemiCibleX, double ennemiCibleY){
         Balle b = new Balle(this.getColonne(), this.getLigne(), this.vitesseAttaque, getEnv(),ennemiCibleX,ennemiCibleY, 5);
+        getEnv().getEnMouvements().add(b);
         return b;
+    }
+
+    public int getNbCible() {
+        return nbCible;
     }
 
     public void agir(){attaquer();}
