@@ -2,6 +2,7 @@ package fr.iut.paris8.towerdefense.control;
 
 
 import fr.iut.paris8.towerdefense.modele.*;
+import fr.iut.paris8.towerdefense.vue.DefenseVue;
 import fr.iut.paris8.towerdefense.vue.TerrainVue;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -11,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
@@ -104,7 +106,9 @@ public class Controleur implements Initializable {
             b = ajoutPiege;
         }
 
-        Circle c = creerSpriteDefense(d);
+        DefenseVue defVue = new DefenseVue(pane);
+        ImageView c = defVue.creerSpriteDefense(d);
+
         b.setOnMouseDragged(eve -> {
                     d.setColonne((int) eve.getSceneX());
                     d.setLigne((int) (eve.getSceneY() - Top.getHeight()));
@@ -117,43 +121,14 @@ public class Controleur implements Initializable {
                     else
                         pane.getChildren().remove(c);
                     ajouterDefenseDansModele(d.getColonne(), d.getLigne());
-                    ajusterEmplacementtourelle(d, (Math.round(d.getColonne() / 16)), Math.round(d.getLigne() / 16));
+                    ajusterEmplacementtourelle(d, (d.getColonne() / 16),d.getLigne() / 16);
 
                     env.getBfs().testBFS();
                 });}
         );
 
     }
-
-
-    public Circle creerSpriteDefense(Defense d) {
-
-        Circle c;
-
-        if (d instanceof Tesla) {
-            c = new Circle(8);
-            c.setFill(Color.ORANGE);
-        } else if (d instanceof TourelleBase) {
-            c = new Circle(8);
-            c.setFill(Color.RED);
-        } else if (d instanceof LanceMissile) {
-            c = new Circle(8);
-            c.setFill(Color.WHITE);
-        } else {
-            c = new Circle(4);
-            c.setFill(Color.BLUE);
-            c.setId(((Piege) d).getId());
-
-        }
-
-        c.setTranslateX(d.getColonne());
-        c.setTranslateY(d.getLigne());
-        c.translateXProperty().bind(d.colonneProperty());
-        c.translateYProperty().bind(d.ligneProperty());
-        pane.getChildren().add(c);
-    return c;
-    }
-
+//todo changer de place les 3 methodes
     public void ajouterDefenseDansModele(int colonne, int ligne) {
         int co = (int) (Math.round(colonne / 16.0));
         int li = (int) (Math.round(ligne / 16.0));
