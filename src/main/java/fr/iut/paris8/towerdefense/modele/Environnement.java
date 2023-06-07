@@ -11,7 +11,6 @@ import javafx.collections.ObservableList;
 import java.util.ArrayList;
 
 public class Environnement {
-    private static int pourcentageDifficulte = 6;
     private GenerateurVague vague;
     private ObservableList<Defense> defenses;
     private ObservableList<EnMouvement> enMouvements;
@@ -126,24 +125,23 @@ public class Environnement {
         enMouvements.add(a);
     }
 
-    public void unTour () {
-        nbToursProperty.setValue(nbToursProperty.getValue() + 1);
+    public void unTour() {
 
-        vague.vaguePourChaqueTour(this);
-        this.ennemisPourChaqueTour();
+        if (!vague.finPartie() && !ressourceJeu.partiePerdu()) {
+            nbToursProperty.setValue(nbToursProperty.getValue() + 1);
 
-        for (Defense d : defenses) {
-            d.agir();
+
+            for (Defense d : defenses) {
+                d.agir();
+            }
+
+            vague.vaguePourChaqueTour(this);
+
+            this.enMouvementsPourChaqueTour();
+
+            piegesPourChaqueTour();
         }
     }
-
-    public void ennemisPourChaqueTour () {
-
-        this.enMouvementsPourChaqueTour();
-
-        piegesPourChaqueTour();
-    }
-
 
     public void enMouvementsPourChaqueTour () {
 
@@ -171,9 +169,9 @@ public class Environnement {
 
 
     //retourne une liste d'ennemis selon une limite que la tourelle aura pour toucher un ennemi en même temps
-    public ObservableList<Ennemi> chercherDansPortee ( int colonne, int ligne, int portee, int limiteur ) {
+    public ArrayList<Ennemi> chercherDansPortee ( int colonne, int ligne, int portee, int limiteur ) {
 
-        ObservableList<Ennemi> ennemisDansPortee = FXCollections.observableArrayList();
+        ArrayList<Ennemi> ennemisDansPortee = new ArrayList<>();
 
         for (Ennemi ennemi : this.getEnnemis()) {
             if ( ennemisDansPortee.size() < limiteur ) {

@@ -9,7 +9,7 @@ public class Mine extends Piege{
 
     //La durée de vie à 1 n'a pas d'impact
     public Mine (Environnement env){
-        super(25,env,0,200,1);
+        super(25,env,1,200,1);
         setId("M" + compteurMine);
         compteurMine++;
     }
@@ -17,7 +17,7 @@ public class Mine extends Piege{
         exploser();
     }
     private void exploser(){
-       ObservableList<Ennemi> ennemis = this.getEnv().chercherDansPortee(getColonne(),getLigne(),getPortee(), 1);
+       ArrayList<Ennemi> ennemis = this.getEnv().chercherDansPortee(getColonne(),getLigne(),getPortee(), 1);
         if(!ennemis.isEmpty()) {
             for (int i =0; i< ennemis.size(); i++) {
                 ennemis.get(i).decrementerPv(this.getDegats());

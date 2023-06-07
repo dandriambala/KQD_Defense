@@ -1,37 +1,62 @@
 package fr.iut.paris8.towerdefense.modele;
 
-import fr.iut.paris8.towerdefense.control.ObservateurPiege;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
-
 import java.util.ArrayList;
 
-public class NuageRalentisseur extends Piege{
+public class NuageRalentisseur extends Piege {
     private static int compteurRalentisseur = 0;
-    private double ralentissment = 0.7;
+    private ArrayList <Ennemi> ennemisDansZone;
+    private static double ralentissement = 0.4;
+    private long tempsDebut;
 
-    //La durée de vie à 1 n'a pas d'impact
-    public NuageRalentisseur (Environnement env){
-        super(40,env,3,0,10);
+    public NuageRalentisseur(Environnement env) {
+        super(40, env, 3, 0, 20000);
         setId("NR" + compteurRalentisseur);
+
+        ennemisDansZone = new ArrayList<>();
+        tempsDebut = System.currentTimeMillis();
         compteurRalentisseur++;
     }
-    public void agir(){
-        ralentir();
-    }
-    private void ralentir(){
 
-        ObservableList<Ennemi> ennemisaRalentir = this.getEnv().chercherDansPortee(getColonne(),getLigne(),getPortee(), 10);
-        ArrayList<Ennemi> ennemisaAccelerer = new ArrayList<>();
-        if(!ennemisaRalentir.isEmpty()) {
+    public void agir() {
+        ralentir();
+
+        long tempsActuel = System.currentTimeMillis();
+        long dureeEcoulee = tempsActuel - tempsDebut;
+        if (dureeEcoulee > getDureeDeVie()) {
+            accélerer();
+            setDureeDeVie(0);
+        }
+    }
+
+    private void ralentir() {
+
+        ArrayList<Ennemi> ennemisaRalentir = this.getEnv().chercherDansPortee(getColonne(), getLigne(), getPortee(), 10);
+
+        if (!ennemisaRalentir.isEmpty()) {
             for (int i = 0; i < ennemisaRalentir.size(); i++) {
-                ennemisaRalentir.get(i).setVitesse(ennemisaRalentir.get(i).getVitesse() * 0.7);
-                if (Math.abs(this.getColonne() - ennemisaRalentir.get(i).getX()) < getPortee() && Math.abs(this.getLigne() - ennemisaRalentir.get(i).getY()) < getPortee())
-                    ennemisaAccelerer.add(ennemisaRalentir.get(i));
+
+                if (!ennemisDansZone.contains(ennemisaRalentir.get(i))) {
+                    ennemisaRalentir.get(i).setVitesse(ennemisaRalentir.get(i).getVitesse() * ralentissement);
+                    ennemisDansZone.add(ennemisaRalentir.get(i));
+                }
             }
         }
-//        ArrayList<Ennemi> ennemisHorsPortee = ennemisaRalentir;
-
+        if (!ennemisDansZone.isEmpty()) {
+            for (int i = ennemisDansZone.size() - 1; i >= 0; i--) {
+                if (!ennemisDansZone.get(i).estVivant())
+                    ennemisDansZone.remove(ennemisDansZone.get(i));
+                else if (this.getColonne() + getPortee() < ennemisDansZone.get(i).getX() || this.getLigne() + getPortee() < ennemisDansZone.get(i).getY()) {
+                    ennemisDansZone.get(i).setVitesse(ennemisDansZone.get(i).getVitesse() * (1/ralentissement));
+                    ennemisDansZone.remove(ennemisDansZone.get(i));
+                }
+            }
+        }
     }
-
+    private void accélerer(){
+        if (!ennemisDansZone.isEmpty()) {
+            for (int i = 0; i < ennemisDansZone.size(); i++) {
+                ennemisDansZone.get(i).setVitesse(ennemisDansZone.get(i).getVitesse() * (1/ralentissement));
+            }
+        }
+    }
 }

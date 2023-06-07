@@ -21,7 +21,7 @@ public class Tourelle extends Defense {
     }
 
     public void attaquer(){
-        ObservableList<Ennemi> ennemis = getEnv().chercherDansPortee(this.getColonne(), this.getLigne(),this.getPortee(), nbCible);
+        ArrayList<Ennemi> ennemis = getEnv().chercherDansPortee(this.getColonne(), this.getLigne(),this.getPortee(), nbCible);
 
         if (!ennemis.isEmpty()) {
             for (int i = 0; i < ennemis.size(); i++) {

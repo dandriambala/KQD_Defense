@@ -39,6 +39,8 @@
 
                 <Button fx:id="ajoutRalentisseur" mnemonicParsing="false" onAction="#placementDefense" text="Nuage"/>
 
+                <Button fx:id="ajoutLanceMissile" mnemonicParsing="false" onAction="#placementDefense" text="Missile"/>
+
             </children>
         </HBox>
     </bottom>
