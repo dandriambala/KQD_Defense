@@ -21,14 +21,6 @@ public class Case implements Comparable<Case> {
     }
 
     public int getX(){return this.colonne *16 + 8 ;}
-    public int getY(){return this.ligne *16 + 8 ;}
-
-    public int hashCode() {
-        int result = 1;
-        result = 31 * result + this.colonne;
-        result = 31 * result + this.ligne;
-        return result;
-    }
 
     public boolean equals(Object obj) {
         if (this == obj) {
