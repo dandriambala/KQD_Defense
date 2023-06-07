@@ -2,6 +2,7 @@ package fr.iut.paris8.towerdefense.vue;
 
 import fr.iut.paris8.towerdefense.Main1;
 import fr.iut.paris8.towerdefense.modele.*;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -39,30 +40,27 @@ public class DefenseVue {
     }
 
 
-    public ImageView creerSpriteDefense(Defense d) {
+    public ImageView creerSpriteDefense(int numeroButton) {
 
         ImageView c = new ImageView();
 
-        if (d instanceof Tesla) {
-            c = new ImageView(imgTesla);
-        } else if (d instanceof TourelleBase) {
-            c = new ImageView(imgTourelleBase);
-        } else if (d instanceof LanceMissile) {
-           c = new ImageView(imgMissile);
-        } else if (d instanceof Mine) {
-            c = new ImageView(imgMine);
-            c.setId(((Piege) d).getId());
+        switch (numeroButton){
+            case 1:
+                c = new ImageView(imgTourelleBase);
+                break;
+            case 2:
+                c = new ImageView(imgTesla);
+                break;
+            case 3:
+                c = new ImageView(imgNuage);
+                break;
+            case 4:
+                c = new ImageView(imgMissile);
+                break;
+            default:
+                c = new ImageView(imgMine);
+                break;
         }
-        else {
-            c = new ImageView(imgNuage);
-            c.setId(((Piege) d).getId());
-        }
-
-        c.setTranslateX(d.getColonne());
-        c.setTranslateY(d.getLigne());
-
-        c.translateXProperty().bind(d.colonneProperty());
-        c.translateYProperty().bind(d.ligneProperty());
 
         pane.getChildren().add(c);
 

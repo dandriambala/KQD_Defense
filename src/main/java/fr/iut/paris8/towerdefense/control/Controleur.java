@@ -30,7 +30,9 @@ public class Controleur implements Initializable {
     @FXML
     private Button ajoutTourelle;
     @FXML
-    private Button ajoutPiege;
+    private Button ajoutMine;
+    @FXML
+    private Button ajoutRalentisseur;
     @FXML
     private HBox Top;
     @FXML
@@ -76,7 +78,7 @@ public class Controleur implements Initializable {
 
         KeyFrame kf = new KeyFrame(
 
-                Duration.seconds(0.05),
+                Duration.seconds(0.08),
                 (ev -> {
                     env.unTour();
                 })
@@ -86,55 +88,78 @@ public class Controleur implements Initializable {
     @FXML
     void placementDefense(ActionEvent event){
         Button b;
-        Defense d;
+        int numeroButton;
+
         if (ajoutTourelle.isFocused()) {
-            d = new TourelleBase(env);
             b = ajoutTourelle;
+            numeroButton = 1;
         }
         else if (ajoutTesla.isFocused()) {
-            d = new Tesla(env);
             b = ajoutTesla;
+            numeroButton = 2;
+        }
+        else if (ajoutRalentisseur.isFocused()){
+            b = ajoutRalentisseur;
+            numeroButton = 3;
         }
         else if (ajoutLanceMissile.isFocused()){
-            d = new LanceMissile(env);
             b = ajoutLanceMissile;
+            numeroButton = 4;
         }
         else {
-            d = new Mine(env);
-            b = ajoutPiege;
+                b = ajoutMine;
+                numeroButton = 5;
         }
 
         DefenseVue defVue = new DefenseVue(pane);
-        ImageView c = defVue.creerSpriteDefense(d);
+        ImageView c = defVue.creerSpriteDefense(numeroButton);
 
-        b.setOnMouseDragged(eve -> {
-                    d.setColonne((int) eve.getSceneX());
-                    d.setLigne((int) (eve.getSceneY() - Top.getHeight()));
-                b.setOnMouseReleased(e -> {
+        b.setOnMouseDragged(e1 -> {
+            c.setTranslateX((int) e1.getSceneX());
+            c.setTranslateY((int) (e1.getSceneY() - Top.getHeight()));
 
-                    if (defenseBienPlacé(d)) {
-                        env.ajouterDefense(d);
-                        System.out.println("Défense ajoutée");
+            b.setOnMouseReleased(e2 -> {
+                Defense d;
+                if (defenseBienPlacé(c)) {
+                    if (b.equals(ajoutTourelle))
+                        d = new TourelleBase(env);
+                    else if (b.equals(ajoutTesla)) {
+                        d = new Tesla(env);
                     }
-                    else
-                        pane.getChildren().remove(c);
-                    t1.ajouterDefenseDansModele(d.getColonne(), d.getLigne());
-                   // ajusterEmplacementTourelle(d, (d.getColonne() / 16),d.getLigne() / 16);
+                    else if (b.equals(ajoutLanceMissile)) {
+                        d = new LanceMissile(env);
+                    }
+                    else if (b.equals(ajoutRalentisseur)) {
+                        d = new NuageRalentisseur(env);
+                        c.setId(((Piege)d).getId());
+                    }
 
-                    env.getBfs().testBFS();
-                });}
-        );
+                    else {
+                        d = new Mine(env);
+                        c.setId(((Piege)d).getId());
+                    }
+                    t1.ajouterDefenseDansModele(c.getTranslateX(), c.getTranslateY());
+                    t1.ajusterEmplacementDefense(c, (int) (c.getTranslateX() / 16), (int) (c.getTranslateY() / 16));
+                    d.setColonne((int) c.getTranslateX());
+                    d.setLigne((int) c.getTranslateY());
+                    env.ajouterDefense(d);
+                    System.out.println("Défense ajoutée");
+                }
+                else
+                    pane.getChildren().remove(c);
+
+
+                env.getBfs().testBFS();
+            });
+        });
+
 
     }
 
-    public void ajusterEmplacementTourelle(Defense t, int colonne, int ligne ) {
-        System.out.println(colonne + " " + ligne);
-        t.setColonne(colonne * 16);
-        t.setLigne(ligne * 16);
+    private boolean defenseBienPlacé(ImageView c) {
+        return ((c.getTranslateX() < tilepane.getMaxWidth() && c.getTranslateY() < tilepane.getMaxHeight()) && (c.getTranslateX() > tilepane.getMinWidth() && c.getTranslateY() > tilepane.getMinHeight()) && env.getTerrainModele().getTerrain()[(int) c.getTranslateY() /16][(int) c.getTranslateX() /16] == 0);
     }
-    private boolean defenseBienPlacé(Defense d) {
-        return ((d.getColonne() < tilepane.getMaxWidth() && d.getLigne() < tilepane.getMaxHeight()) && (d.getColonne() > tilepane.getMinWidth() && d.getLigne() > tilepane.getMinHeight()) && env.getTerrainModele().getTerrain()[d.getLigne() /16][d.getColonne() /16] == 0);
-    }
+
 }
 
 

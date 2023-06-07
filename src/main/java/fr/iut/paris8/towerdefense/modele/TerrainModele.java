@@ -1,5 +1,8 @@
 package fr.iut.paris8.towerdefense.modele;
 
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.TilePane;
+
 public class TerrainModele {
 
     private int[][] terrain;
@@ -45,13 +48,19 @@ public class TerrainModele {
         return ligne*pixel;
     }
 
-    public void ajouterDefenseDansModele(int colonne, int ligne) {
+    public void ajouterDefenseDansModele(double colonne, double ligne) {
         int co = (int) (Math.round(colonne / 16.0));
         int li = (int) (Math.round(ligne / 16.0));
 
         if (dansTerrain(li, co) && getTerrain()[li][co] == 0) {
             getTerrain()[li][co] = 3;
         } else System.out.println("erreur placement");
+    }
+
+    public void ajusterEmplacementDefense(ImageView c, double colonne, double ligne ) {
+        System.out.println(colonne + " " + ligne);
+        c.setTranslateX(colonne * 16 );
+        c.setTranslateY(ligne * 16 );
     }
 
 }
