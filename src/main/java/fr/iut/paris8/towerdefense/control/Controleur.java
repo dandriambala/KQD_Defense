@@ -90,6 +90,8 @@ public class Controleur implements Initializable {
         Button b;
         int numeroButton;
 
+        int nbDefenseAncien = env.getDefense().size();
+
         if (ajoutTourelle.isFocused()) {
             b = ajoutTourelle;
             numeroButton = 1;
@@ -143,7 +145,11 @@ public class Controleur implements Initializable {
                     d.setColonne((int) c.getTranslateX());
                     d.setLigne((int) c.getTranslateY());
                     env.ajouterDefense(d);
-                    System.out.println("Défense ajoutée");
+
+                int nbDefenseCourant = env.getDefense().size();
+                if (nbDefenseAncien == nbDefenseCourant){
+                    pane.getChildren().remove(c);
+                    }
                 }
                 else
                     pane.getChildren().remove(c);
