@@ -16,8 +16,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -120,28 +118,19 @@ public class Controleur implements Initializable {
                     }
                     else
                         pane.getChildren().remove(c);
-                    ajouterDefenseDansModele(d.getColonne(), d.getLigne());
-                    ajusterEmplacementtourelle(d, (d.getColonne() / 16),d.getLigne() / 16);
+                    t1.ajouterDefenseDansModele(d.getColonne(), d.getLigne());
+                   // ajusterEmplacementTourelle(d, (d.getColonne() / 16),d.getLigne() / 16);
 
                     env.getBfs().testBFS();
                 });}
         );
 
     }
-//todo changer de place les 3 methodes
-    public void ajouterDefenseDansModele(int colonne, int ligne) {
-        int co = (int) (Math.round(colonne / 16.0));
-        int li = (int) (Math.round(ligne / 16.0));
 
-        if (env.getTerrainModele().dansTerrain(li, co) && env.getTerrainModele().getTerrain()[li][co] == 0) {
-            env.getTerrainModele().getTerrain()[li][co] = 3;
-        } else System.out.println("erreur placement");
-    }
-
-    public void ajusterEmplacementtourelle ( Defense t, int colonne, int ligne ) {
+    public void ajusterEmplacementTourelle(Defense t, int colonne, int ligne ) {
         System.out.println(colonne + " " + ligne);
-        t.setColonne(colonne * 16 + 8);
-        t.setLigne(ligne * 16 + 8);
+        t.setColonne(colonne * 16);
+        t.setLigne(ligne * 16);
     }
     private boolean defenseBienPlacé(Defense d) {
         return ((d.getColonne() < tilepane.getMaxWidth() && d.getLigne() < tilepane.getMaxHeight()) && (d.getColonne() > tilepane.getMinWidth() && d.getLigne() > tilepane.getMinHeight()) && env.getTerrainModele().getTerrain()[d.getLigne() /16][d.getColonne() /16] == 0);

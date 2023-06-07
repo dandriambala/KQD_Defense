@@ -5,8 +5,6 @@ import fr.iut.paris8.towerdefense.modele.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 import java.net.URL;
 
@@ -35,6 +33,9 @@ public class DefenseVue {
         URL urlMine = Main1.class.getResource("mine.png");
         imgMine = new Image(String.valueOf(urlMine));
 
+        URL urlNuage = Main1.class.getResource("nuage.png");
+        imgNuage = new Image(String.valueOf(urlNuage));
+
     }
 
 
@@ -50,6 +51,10 @@ public class DefenseVue {
            c = new ImageView(imgMissile);
         } else if (d instanceof Mine) {
             c = new ImageView(imgMine);
+            c.setId(((Piege) d).getId());
+        }
+        else {
+            c = new ImageView(imgNuage);
             c.setId(((Piege) d).getId());
         }
 

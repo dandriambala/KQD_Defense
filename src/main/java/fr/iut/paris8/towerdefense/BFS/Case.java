@@ -20,8 +20,8 @@ public class Case implements Comparable<Case> {
         return this.ligne;
     }
 
-    public int getX(){return this.colonne *16 + 8 ;}
-    public int getY(){return this.ligne *16 + 8 ;}
+    public int getX(){return this.colonne *16 ;}
+    public int getY(){return this.ligne *16 ;}
 
     public int hashCode() {
         int result = 1;
