@@ -92,13 +92,7 @@ public abstract class Ennemi extends EnMouvement{
     public void setDestinationSommet(){
         ArrayList<Case> Sommets = getEnv().getBfs().getParcours();
 
-        Case sommet = new Case();
-        for (Case s : Sommets) {
-            if ( s.getColonne() == getX() / 16 && s.getLigne() == getY() / 16 ) {
-                sommet = s;
-                break;
-            }
-        }
+        Case sommet = new Case(getX()/16,getY()/16);
 
         ArrayList<Case> chemin = getEnv().getBfs().cheminVersSource(sommet);
 

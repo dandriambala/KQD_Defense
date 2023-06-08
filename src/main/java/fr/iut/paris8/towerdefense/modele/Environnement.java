@@ -90,9 +90,8 @@ public class Environnement {
 
     public void ajouterDefense ( Defense d ) {
 
-        //instance of tourelle
-        int colonne = ( d.getColonne() - 8 ) / 16;
-        int ligne = ( d.getLigne() - 8 ) / 16;
+        int colonne = ( d.getColonne() ) / 16;
+        int ligne = ( d.getLigne() ) / 16;
         defenses.add(d);
 
         bfs.getG().deconnecte(new Case(colonne,ligne));
