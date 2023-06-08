@@ -1,5 +1,7 @@
 package fr.iut.paris8.towerdefense.modele;
 
+import javafx.collections.ObservableList;
+
 import java.util.ArrayList;
 
 public class Mine extends Piege{

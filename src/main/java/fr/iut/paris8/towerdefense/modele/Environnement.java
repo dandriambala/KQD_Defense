@@ -89,6 +89,8 @@ public class Environnement {
     }
 
     public void ajouterDefense ( Defense d ) {
+
+        //instance of tourelle
         int colonne = ( d.getColonne() - 8 ) / 16;
         int ligne = ( d.getLigne() - 8 ) / 16;
         defenses.add(d);
@@ -110,22 +112,23 @@ public class Environnement {
         enMouvements.add(a);
     }
 
-    public void unTour () {
-        nbToursProperty.setValue(nbToursProperty.getValue() + 1);
-        for (Defense d : defenses) {
-            d.agir();
+    public void unTour() {
+
+        if (!vague.finPartie() && !ressourceJeu.partiePerdu()) {
+            nbToursProperty.setValue(nbToursProperty.getValue() + 1);
+
+
+            for (Defense d : defenses) {
+                d.agir();
+            }
+
+            vague.vaguePourChaqueTour(this);
+
+            this.enMouvementsPourChaqueTour();
+
+            piegesPourChaqueTour();
         }
-        vague.vaguePourChaqueTour(this);
-        this.ennemisPourChaqueTour();
     }
-
-    public void ennemisPourChaqueTour () {
-
-        this.enMouvementsPourChaqueTour();
-
-        piegesPourChaqueTour();
-    }
-
 
     public void enMouvementsPourChaqueTour () {
 

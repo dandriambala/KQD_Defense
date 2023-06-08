@@ -45,8 +45,8 @@ public class RessourceJeu {
         setPv(getPv()-a);
     }
 
-    //todo trouver meilleur place
-    public boolean partiePerdu(){return getPv() < 0;}
+
+    public boolean partiePerdu(){return getPv() <= 0;}
 
 
 

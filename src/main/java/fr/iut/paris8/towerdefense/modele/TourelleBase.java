@@ -8,7 +8,7 @@ public class TourelleBase extends Tourelle{
 
 
     public TourelleBase(Environnement env) {
-        super(60, env, 2, 0,10,1);
+        super(60, env, 2, 2,10,1);
     }
 
 }

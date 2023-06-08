@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 public abstract class EnMouvement {
     private IntegerProperty positionXProperty;
     private IntegerProperty positionYProperty;
-    private int vitesse;
+    private double vitesse;
     private Environnement env;
     private String id;
 
@@ -40,7 +40,7 @@ public abstract class EnMouvement {
         return positionYProperty;
     }
 
-    public int getVitesse() {
+    public double getVitesse() {
         return vitesse;
     }
 
@@ -56,7 +56,7 @@ public abstract class EnMouvement {
         this.positionYProperty.set(positionYProperty);
     }
 
-    public void setVitesse(int vitesse) {
+    public void setVitesse(double vitesse) {
         this.vitesse = vitesse;
     }
 
