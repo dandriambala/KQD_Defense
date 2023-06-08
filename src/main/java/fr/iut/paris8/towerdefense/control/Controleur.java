@@ -21,7 +21,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -38,7 +37,9 @@ public class Controleur implements Initializable {
     @FXML
     private Button ajoutTourelle;
     @FXML
-    private Button ajoutPiege;
+    private Button ajoutMine;
+    @FXML
+    private Button ajoutRalentisseur;
     @FXML
     private HBox Top;
     @FXML
@@ -93,50 +94,6 @@ public class Controleur implements Initializable {
     }
 
     @FXML
-    void testTourelle ( ActionEvent event ) {
-        TourelleBase t = new TourelleBase(env);
-        creerSpriteDefense(t);
-        BFS bfsSecondaire = new BFS(new Grille(env.getTerrainModele().getWidth() / 16, env.getTerrainModele().getHeight() / 16), new Case(59, 10));
-        Case c = new Case(1, 10);
-        Case caseTourelle = new Case();
-
-        for (Defense defense : env.getDefense())
-            if ( defense instanceof Tourelle )
-                bfsSecondaire.getG().deconnecte(new Case(defense.getColonne() / 16, defense.getLigne() / 16));
-        bfsSecondaire.testBFS();
-        ArrayList<Case> chemin = bfsSecondaire.cheminVersSource(c);
-        ArrayList<Circle> listSprite;
-
-        listSprite = affichageChemin(bfsSecondaire);
-
-        ajoutTourelle.setOnMouseDragged(eve -> {
-                    t.setColonne((int) eve.getSceneX());
-                    t.setLigne((int) ( eve.getSceneY() - Top.getHeight() ));
-                    caseTourelle.setColonne(t.getColonne() / 16);
-                    caseTourelle.setLigne(t.getLigne() / 16);
-                    if ( chemin.contains(caseTourelle) ) {
-                        if ( !bfsSecondaire.getG().estDeconnecte(caseTourelle) ) {
-                            bfsSecondaire.getG().deconnecte(caseTourelle);
-                            System.out.println("case deconnecter");
-                            effacerChemin(listSprite);
-                            affichageChemin(bfsSecondaire);
-                        }
-                    }
-                    else {
-                        if ( bfsSecondaire.getG().estDeconnecte(caseTourelle) ) {
-                            bfsSecondaire.getG().reconnecte(caseTourelle);
-                            System.out.println("recvonnecter");
-                            effacerChemin(listSprite);
-                            affichageChemin(bfsSecondaire);
-                        }
-                    }
-                }
-        );
-
-
-    }
-
-    @FXML
     void placementDefense(ActionEvent event){
         Button b;
         int numeroButton;
@@ -165,9 +122,46 @@ public class Controleur implements Initializable {
         DefenseVue defVue = new DefenseVue(pane);
         ImageView c = defVue.creerSpriteDefense(numeroButton);
 
+        BFS bfsSecondaire = new BFS(new Grille(env.getTerrainModele().getWidth() / 16, env.getTerrainModele().getHeight() / 16), new Case(59, 10));
+        Case caseDentree = new Case(1, 10);
+        Case caseTourelle = new Case();
+
+        for (Defense defense : env.getDefense())
+            if ( defense instanceof Tourelle )
+                bfsSecondaire.getG().deconnecte(new Case(defense.getColonne() / 16, defense.getLigne() / 16));
+        bfsSecondaire.testBFS();
+
+        ArrayList<Case> chemin = bfsSecondaire.cheminVersSource(caseDentree);
+        ArrayList<Circle> listSprite;
+
+        listSprite = affichageChemin(bfsSecondaire);
+
         b.setOnMouseDragged(e1 -> {
             c.setTranslateX((int) e1.getSceneX());
             c.setTranslateY((int) (e1.getSceneY() - Top.getHeight()));
+
+            caseTourelle.setColonne((int) (e1.getSceneX()/ 16));
+            caseTourelle.setLigne((int) ((e1.getSceneY() - Top.getHeight())/ 16));
+
+            if ( chemin.contains(caseTourelle) ) {
+                if ( !bfsSecondaire.getG().estDeconnecte(caseTourelle) ) {
+                    bfsSecondaire.getG().deconnecte(caseTourelle);
+                    System.out.println("case deconnecter");
+                    effacerChemin(listSprite);
+                    affichageChemin(bfsSecondaire);
+                }
+            }
+            else {
+                if ( bfsSecondaire.getG().estDeconnecte(caseTourelle) ) {
+                    bfsSecondaire.getG().reconnecte(caseTourelle);
+                    System.out.println("recvonnecter");
+                    effacerChemin(listSprite);
+                    affichageChemin(bfsSecondaire);
+                }
+            }
+
+
+
 
             b.setOnMouseReleased(e2 -> {
                 Defense d;
@@ -198,9 +192,8 @@ public class Controleur implements Initializable {
                 }
                 else
                     pane.getChildren().remove(c);
-
-
                 env.getBfs().testBFS();
+                effacerChemin(listSprite);
             });
         });
 
@@ -221,10 +214,10 @@ public class Controleur implements Initializable {
 //        System.out.println(chemin);
 
         for ( Case c : chemin){
-            Circle circle = new Circle(5);
+            Circle circle = new Circle(3);
             circle.setFill(Color.CYAN);
-            circle.setCenterX(c.getX());
-            circle.setCenterY(c.getY());
+            circle.setCenterX(c.getX()+8);
+            circle.setCenterY(c.getY()+8);
             circle.setId("chemin"+compteur);
             pane.getChildren().add(circle);
             compteur++;
