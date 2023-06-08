@@ -1,0 +1,37 @@
+/*@font-face{
+    src: url("/fr/iut/pairs8/towerdefense/BungeeSpice-Regular.ttf");
+}*/
+
+.root{
+    -fx-background-image:url('foret.jpg');
+}
+
+.label {
+    -fx-border-color : black;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+   /* -fx-font-family: "Bungee Spice";*/
+}
+
+.button {
+    -fx-display: inline-block;
+    -fx-padding: 10px 20px;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-align: center;
+    -fx-text-decoration: none;
+    -fx-color: black;
+    -fx-background-color: #8B4513;
+    -fx-border-radius: 5px;
+    -fx-border: none;
+    -fx-transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    -fx-background-color: #87CEFA;
+}
+
+.button:active {
+    -fx-background-color: #3e8e41;
+}

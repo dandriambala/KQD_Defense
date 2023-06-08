@@ -146,9 +146,9 @@ public class Controleur implements Initializable {
                     d.setLigne((int) c.getTranslateY());
                     env.ajouterDefense(d);
 
-                int nbDefenseCourant = env.getDefense().size();
-                if (nbDefenseAncien == nbDefenseCourant){
-                    pane.getChildren().remove(c);
+                    int nbDefenseCourant = env.getDefense().size();
+                    if (nbDefenseAncien == nbDefenseCourant){
+                        pane.getChildren().remove(c);
                     }
                 }
                 else

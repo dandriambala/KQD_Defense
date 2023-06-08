@@ -4,17 +4,36 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import java.net.URL?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.iut.paris8.towerdefense.control.Controleur">
    <top>
-      <HBox fx:id="Top" alignment="CENTER_LEFT" prefHeight="63.0" prefWidth="960.0" spacing="20.0" BorderPane.alignment="CENTER">
-         <children>
+       <HBox fx:id="Top" alignment="CENTER" prefHeight="63.0" prefWidth="960.0" spacing="20.0"
+             BorderPane.alignment="CENTER">
+           <children>
 
-             <Label text="PV" />
-             <Label fx:id="nbPvJoueur" text="150" prefHeight="33.0" prefWidth="84.0" style="-fx-border-color: red;"/>
-             <Label text="Vague" />
-             <Label fx:id="nbVague" text="0" prefHeight="33.0" prefWidth="84.0" style="-fx-border-color: red;"/>
-             <Label text="Argent" />
-             <Label fx:id="nbArgent" text="150" prefHeight="33.0" prefWidth="84.0" style="-fx-border-color: red;"/>
+               <ImageView fitHeight="20" fitWidth="20">
+                   <image>
+                       <Image url="@coeur.png"/>
+                   </image>
+               </ImageView>
+               <Label fx:id="nbPvJoueur" text="150" prefHeight="33.0" prefWidth="84.0"/>
+
+
+               <ImageView fitHeight="20" fitWidth="20">
+                   <image>
+                       <Image url="@vague.png"/>
+                   </image>
+               </ImageView>
+
+             <Label fx:id="nbVague" text="0" prefHeight="33.0" prefWidth="84.0"/>
+               <ImageView fitHeight="20" fitWidth="20">
+                   <image>
+                       <Image url="@argent.png"/>
+                   </image>
+               </ImageView>
+             <Label fx:id="nbArgent" text="150" prefHeight="33.0" prefWidth="84.0"/>
          </children>
       </HBox>
    </top>
@@ -29,7 +48,7 @@
    </center>
 
     <bottom>
-        <HBox prefHeight="85.0" prefWidth="960.0" spacing="15.0" BorderPane.alignment="CENTER">
+        <HBox prefHeight="125.0" prefWidth="960.0" spacing="15.0" BorderPane.alignment="CENTER" alignment="CENTER">
             <children>
                 <Button fx:id="ajoutTourelle" mnemonicParsing="false" onAction="#placementDefense" text="Tourelle"/>
 
@@ -45,6 +64,9 @@
         </HBox>
     </bottom>
 
+    <stylesheets>
+        <URL value="@styles.css"/>
+    </stylesheets>
 
 
 </BorderPane>
