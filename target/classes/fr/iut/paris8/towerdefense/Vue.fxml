@@ -51,14 +51,39 @@
         <HBox prefHeight="125.0" prefWidth="960.0" spacing="15.0" BorderPane.alignment="CENTER" alignment="CENTER">
             <children>
                 <Button fx:id="ajoutTourelle" mnemonicParsing="false" onAction="#placementDefense" text="Tourelle"/>
+                <ImageView fitHeight="20" fitWidth="20" fx:id="imTourelle">
+                    <image>
+                        <Image url="@tourelleViolet.png"/>
+                    </image>
+                </ImageView>
 
                 <Button fx:id="ajoutTesla" mnemonicParsing="false" onAction="#placementDefense" text="Tesla"/>
+                <ImageView fitHeight="20" fitWidth="20" fx:id="imTesla">
+                    <image>
+                        <Image url="@teslaBleu.png"/>
+                    </image>
+                </ImageView>
 
                 <Button fx:id="ajoutMine" mnemonicParsing="false" onAction="#placementDefense" text="Mine"/>
+                <ImageView fitHeight="20" fitWidth="20">
+                    <image>
+                        <Image url="@mine.png"/>
+                    </image>
+                </ImageView>
 
                 <Button fx:id="ajoutRalentisseur" mnemonicParsing="false" onAction="#placementDefense" text="Nuage"/>
+                <ImageView fitHeight="20" fitWidth="20" fx:id="imNuage">
+                    <image>
+                        <Image url="@nuage.png"/>
+                    </image>
+                </ImageView>
 
                 <Button fx:id="ajoutLanceMissile" mnemonicParsing="false" onAction="#placementDefense" text="Missile"/>
+                <ImageView fitHeight="20" fitWidth="20" fx:id="imMissile">
+                    <image>
+                        <Image url="@missile.png"/>
+                    </image>
+                </ImageView>
 
             </children>
         </HBox>

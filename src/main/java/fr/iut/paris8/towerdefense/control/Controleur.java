@@ -1,6 +1,7 @@
 package fr.iut.paris8.towerdefense.control;
 
 
+import fr.iut.paris8.towerdefense.Main1;
 import fr.iut.paris8.towerdefense.modele.*;
 import fr.iut.paris8.towerdefense.vue.DefenseVue;
 import fr.iut.paris8.towerdefense.vue.TerrainVue;
@@ -12,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -48,6 +50,17 @@ public class Controleur implements Initializable {
     private TerrainModele t1;
 
 
+    @FXML
+    private ImageView imNuage;
+    @FXML
+    private ImageView imTourelle;
+    @FXML
+    private ImageView imMine;
+    @FXML
+    private ImageView imTesla;
+    @FXML
+    private ImageView imMissile;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         t1 = new TerrainModele();
@@ -68,7 +81,51 @@ public class Controleur implements Initializable {
 
         ListChangeListener l2 = new ObservateurPiege(pane);
         this.env.getDefense().addListener(l2);
+
+
+        imNuage.setOnMouseClicked(e -> {
+            URL urlNuage = Main1.class.getResource("nuage.png");
+            ImageView imgNuage = new ImageView(String.valueOf(urlNuage));
+
+            pane.getChildren().add(imgNuage);
+
+            imgNuage.setOnMouseDragged(e1 -> {
+                System.out.println("drag");
+                imgNuage.setTranslateX(e1.getSceneX());
+                imgNuage.setTranslateY(e1.getSceneY() - Top.getHeight());
+
+            });
+        pane.setOnMouseReleased(
+                e2-> {
+                    int nbDefenseAncien = env.getDefense().size();
+                    Defense d;
+                    if (defenseBienPlacé(imgNuage)) {
+                        d = new NuageRalentisseur(env);
+                        imNuage.setId(((Piege) d).getId());
+
+
+                        t1.ajouterDefenseDansModele(imgNuage.getTranslateX(), imgNuage.getTranslateY());
+                        t1.ajusterEmplacementDefense(imgNuage, (int) (imgNuage.getTranslateX() / 16), (int) (imgNuage.getTranslateY() / 16));
+                        d.setColonne((int) imgNuage.getTranslateX());
+                        d.setLigne((int) imgNuage.getTranslateY());
+                        env.ajouterDefense(d);
+
+                        env.getBfs().testBFS();
+
+                        int nbDefenseCourant = env.getDefense().size();
+                        if (nbDefenseAncien == nbDefenseCourant) {
+                            pane.getChildren().remove(imgNuage);
+                        }
+                    } else
+                            pane.getChildren().remove(imgNuage);
+
+
+                }  );
+
+    });
+
     }
+
 
     private void initTowerDefense() {
 
