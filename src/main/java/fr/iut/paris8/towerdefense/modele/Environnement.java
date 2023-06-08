@@ -89,25 +89,12 @@ public class Environnement {
     }
 
     public void ajouterDefense ( Defense d ) {
-        int colonne = (d.getColonne() - 8 ) /16 ;
-        int ligne = (d.getLigne() - 8 ) /16;
+        int colonne = ( d.getColonne() - 8 ) / 16;
+        int ligne = ( d.getLigne() - 8 ) / 16;
+        defenses.add(d);
 
-        if ( colonne <= 2 && colonne >= 1 && ligne <= 11 && ligne >= 9  && d instanceof Tourelle || colonne <= 59 && colonne >= 57 && ligne <= 11 && ligne >= 9  && d instanceof Tourelle) {
-            d.setColonne(0);
-            d.setLigne(0);
-        }
-        else {
-            defenses.add(d);
-            Case sommet = new Case();
-            for (Case s : bfs.getParcours()) {
-                if ( s.getColonne() == d.getColonne() / 16 && s.getLigne() == d.getLigne() / 16 ) {
-                    sommet = s;
-                    break;
-                }
-            }
-            bfs.getG().deconnecte(sommet);
-            bfs.testBFS();
-        }
+        bfs.getG().deconnecte(new Case(colonne,ligne));
+        bfs.testBFS();
     }
 
     public Ennemi getEnnemiID ( String id ) {

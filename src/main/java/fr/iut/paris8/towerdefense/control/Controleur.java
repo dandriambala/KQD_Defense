@@ -1,7 +1,9 @@
 package fr.iut.paris8.towerdefense.control;
 
 
+import fr.iut.paris8.towerdefense.BFS.BFS;
 import fr.iut.paris8.towerdefense.BFS.Case;
+import fr.iut.paris8.towerdefense.BFS.Grille;
 import fr.iut.paris8.towerdefense.modele.*;
 import fr.iut.paris8.towerdefense.vue.TerrainVue;
 import javafx.animation.KeyFrame;
@@ -17,8 +19,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class Controleur implements Initializable {
@@ -47,6 +52,7 @@ public class Controleur implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+//        cheminBFS = new CheminBFS(env);
         t1 = new TerrainModele();
         env = new Environnement(t1);
 
@@ -54,6 +60,7 @@ public class Controleur implements Initializable {
         tv.afficherTuile();
         initTowerDefense();
         gameLoop.play();
+//        pane.getChildren().add(cheminBFS);
 
         ListChangeListener l1 = new ObservateurEnMouvement(pane);
         this.env.getEnMouvements().addListener(l1);
@@ -78,6 +85,7 @@ public class Controleur implements Initializable {
                 Duration.seconds(0.05),
                 (ev -> {
                     env.unTour();
+
                 })
         );
         gameLoop.getKeyFrames().add(kf);
@@ -87,20 +95,43 @@ public class Controleur implements Initializable {
     void testTourelle(ActionEvent event) {
         TourelleBase t = new TourelleBase(env);
         creerSpriteDefense(t);
+        BFS bfsSecondaire = new BFS(new Grille(env.getTerrainModele().getWidth()/16,env.getTerrainModele().getHeight()/16),new Case(59,10));
+        Case c = new Case(1,10);
+        Case caseTourelle = new Case();
+
+        for (Defense defense : env.getDefense())
+            if ( defense instanceof Tourelle)
+                bfsSecondaire.getG().deconnecte(new Case(defense.getColonne()/16, defense.getLigne()/16));
+        bfsSecondaire.testBFS();
+        ArrayList<Case> chemin = bfsSecondaire.cheminVersSource(c);
+        ArrayList<Circle> listSprite;
+
+        listSprite = affichageChemin(bfsSecondaire);
 
         ajoutTourelle.setOnMouseDragged(eve -> {
                     t.setColonne((int) eve.getSceneX());
                     t.setLigne((int) (eve.getSceneY() - Top.getHeight()));
-                }
+                    caseTourelle.setColonne(t.getColonne() / 16);
+                    caseTourelle.setLigne(t.getLigne() / 16);
+                    if ( chemin.contains(caseTourelle)){
+                        if (!bfsSecondaire.getG().estDeconnecte(caseTourelle)) {
+                            bfsSecondaire.getG().deconnecte(caseTourelle);
+                            System.out.println("case deconnecter");
+                            effacerChemin(listSprite);
+                            affichageChemin(bfsSecondaire);
+                        }
+                    }
+                    else {
+                        if ( bfsSecondaire.getG().estDeconnecte(caseTourelle) ) {
+                            bfsSecondaire.getG().reconnecte(caseTourelle);
+                            System.out.println("recvonnecter");
+                            effacerChemin(listSprite);
+                            affichageChemin(bfsSecondaire);
+                        }
+                    }
+        }
         );
 
-        Case sommet = new Case();
-        for ( Case s : env.getBfs().getParcours()){
-            if ( s.getColonne() == t.getColonne() && s.getLigne() == t.getLigne() / 16 ) {
-                sommet = s;
-                break;
-            }
-        }
 
     }
 
@@ -115,16 +146,7 @@ public class Controleur implements Initializable {
         }
         );
 
-
-        Case sommet = new Case();
-        for ( Case s : env.getBfs().getParcours()){
-            if ( s.getColonne() == t.getColonne() && s.getLigne() == t.getLigne() / 16 ) {
-                sommet = s;
-                break;
-            }
-        }
     }
-
 
     @FXML
     void testPiege(ActionEvent event) {
@@ -137,16 +159,6 @@ public class Controleur implements Initializable {
                     t.setLigne((int) (eve.getSceneY() - Top.getHeight()));
                 }
         );
-
-
-        Case sommet = new Case();
-        for ( Case s : env.getBfs().getParcours()){
-            if ( s.getColonne() == t.getColonne() && s.getLigne() == t.getLigne() / 16 ) {
-                sommet = s;
-                break;
-            }
-        }
-
     }
 
     public void creerSpriteDefense(Defense t) {
@@ -169,7 +181,10 @@ public class Controleur implements Initializable {
                 ajusterEmplacementtourelle(t, ( t.getColonne() / 16 ), t.getLigne() / 16);
                 env.ajouterDefense(t);
                 System.out.println("Tourelle ajoutée");
+
             }
+            else
+                pane.getChildren().remove(c);
         });
     }
 
@@ -209,9 +224,38 @@ public class Controleur implements Initializable {
         t.setLigne(ligne * 16 + 8);
     }
     private boolean defenseBienPlacé(Defense d) {
-        return ((d.getColonne() < tilepane.getMaxWidth() && d.getLigne() < tilepane.getHeight()) && env.getTerrainModele().getTerrain()[d.getLigne() /16][d.getColonne() /16] == 0);
+        int colonne = d.getColonne();
+        int ligne = d.getLigne();
+        return ((d.getColonne() < tilepane.getMaxWidth() && d.getLigne() < tilepane.getHeight()) && env.getTerrainModele().getTerrain()[d.getLigne() /16][d.getColonne() /16] == 0 &&  !(colonne <= 2 && colonne >= 1 && ligne <= 11 && ligne >= 9  && d instanceof Tourelle || colonne <= 59 && colonne >= 57 && ligne <= 11 && ligne >= 9  && d instanceof Tourelle));
+    }
+
+    private ArrayList<Circle> affichageChemin(BFS bfsSecondaire){
+        int compteur = 0;
+        bfsSecondaire.testBFS();
+        ArrayList<Case> chemin = bfsSecondaire.cheminVersSource(new Case(0,10));
+        ArrayList<Circle> list = new ArrayList<>();
+
+//        System.out.println(chemin);
+
+        for ( Case c : chemin){
+            Circle circle = new Circle(5);
+            circle.setFill(Color.CYAN);
+            circle.setCenterX(c.getX());
+            circle.setCenterY(c.getY());
+            circle.setId("chemin"+compteur);
+            pane.getChildren().add(circle);
+            compteur++;
+            list.add(circle);
+        }
+        return list;
+    }
+
+    public void effacerChemin(ArrayList<Circle> list){
+        int compteur = 0;
+
+        for ( Circle circle : list){
+            pane.getChildren().remove(pane.lookup("#chemin"+compteur));
+            compteur++;
+        }
     }
 }
-
-
-
