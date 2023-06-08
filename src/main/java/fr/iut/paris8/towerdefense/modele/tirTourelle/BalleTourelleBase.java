@@ -1,7 +1,10 @@
-package fr.iut.paris8.towerdefense.modele;
+package fr.iut.paris8.towerdefense.modele.tirTourelle;
+
+import fr.iut.paris8.towerdefense.modele.EnMouvement;
+import fr.iut.paris8.towerdefense.modele.Environnement;
 
 // Classe représentant les balles tirées par les tourelles
-public class Balle extends EnMouvement{
+public class BalleTourelleBase extends EnMouvement {
     private static int compteurBalle = 0;
     private double directionX;
     private double directionY;
@@ -11,8 +14,8 @@ public class Balle extends EnMouvement{
     //le rayon dans lequel la balle détectera un ennemi
     private int rayonAction;
 
-    public Balle(int positionX, int positionY, int vitesse, Environnement env, double ennemiCibleX, double ennemiCibleY, int rayonAction) {
-        super(positionX, positionY, vitesse, env);
+    public BalleTourelleBase(int positionX, int positionY, int vitesse, Environnement env, double ennemiCibleX, double ennemiCibleY, int rayonAction) {
+        super(positionX + 8, positionY + 8, vitesse, env);
         this.ennemiCibleX = ennemiCibleX;
         this.ennemiCibleY = ennemiCibleY;
         directionX = Math.cos(directionPourCible(ennemiCibleX,ennemiCibleY));

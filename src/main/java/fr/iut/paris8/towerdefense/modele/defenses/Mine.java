@@ -1,10 +1,11 @@
-package fr.iut.paris8.towerdefense.modele;
+package fr.iut.paris8.towerdefense.modele.defenses;
 
-import javafx.collections.ObservableList;
+import fr.iut.paris8.towerdefense.modele.Environnement;
+import fr.iut.paris8.towerdefense.modele.ennemis.Ennemi;
 
 import java.util.ArrayList;
 
-public class Mine extends Piege{
+public class Mine extends Piege {
     private static int compteurMine = 0;
 
     //La durée de vie à 1 n'a pas d'impact
@@ -17,7 +18,7 @@ public class Mine extends Piege{
         exploser();
     }
     private void exploser(){
-       ArrayList<Ennemi> ennemis = this.getEnv().chercherDansPortee(getColonne(),getLigne(),getPortee(), 1);
+       ArrayList<Ennemi> ennemis = this.getEnv().chercherEnnemisDansPortee(getColonne(),getLigne(),getPortee(), 1);
         if(!ennemis.isEmpty()) {
             for (int i =0; i< ennemis.size(); i++) {
                 ennemis.get(i).decrementerPv(this.getDegats());

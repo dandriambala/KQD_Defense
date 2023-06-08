@@ -1,4 +1,7 @@
-package fr.iut.paris8.towerdefense.modele;
+package fr.iut.paris8.towerdefense.modele.defenses;
+
+import fr.iut.paris8.towerdefense.modele.Environnement;
+import fr.iut.paris8.towerdefense.modele.ennemis.Ennemi;
 
 import java.util.ArrayList;
 
@@ -30,7 +33,7 @@ public class NuageRalentisseur extends Piege {
 
     private void ralentir() {
 
-        ArrayList<Ennemi> ennemisaRalentir = this.getEnv().chercherDansPortee(getColonne(), getLigne(), getPortee(), 10);
+        ArrayList<Ennemi> ennemisaRalentir = this.getEnv().chercherEnnemisDansPortee(getColonne(), getLigne(), getPortee(), 10);
 
         if (!ennemisaRalentir.isEmpty()) {
             for (int i = 0; i < ennemisaRalentir.size(); i++) {

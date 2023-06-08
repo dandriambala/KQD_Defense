@@ -2,6 +2,7 @@ package fr.iut.paris8.towerdefense.control;
 
 
 import fr.iut.paris8.towerdefense.modele.*;
+import fr.iut.paris8.towerdefense.modele.defenses.*;
 import fr.iut.paris8.towerdefense.vue.DefenseVue;
 import fr.iut.paris8.towerdefense.vue.TerrainVue;
 import javafx.animation.KeyFrame;
@@ -66,7 +67,7 @@ public class Controleur implements Initializable {
 
         this.env.getVague().nbVagueProperty().addListener((obs, old, nouv) -> this.nbVague.setText(String.valueOf(nouv)));
 
-        ListChangeListener l2 = new ObservateurPiege(pane);
+        ListChangeListener l2 = new ObservateurDefenses(pane);
         this.env.getDefense().addListener(l2);
     }
 
@@ -131,13 +132,12 @@ public class Controleur implements Initializable {
                     }
                     else if (b.equals(ajoutRalentisseur)) {
                         d = new NuageRalentisseur(env);
-                        c.setId(((Piege)d).getId());
                     }
-
                     else {
                         d = new Mine(env);
-                        c.setId(((Piege)d).getId());
                     }
+                    c.setId(d.getId());
+
                     t1.ajouterDefenseDansModele(c.getTranslateX(), c.getTranslateY());
                     t1.ajusterEmplacementDefense(c, (int) (c.getTranslateX() / 16), (int) (c.getTranslateY() / 16));
                     d.setColonne((int) c.getTranslateX());

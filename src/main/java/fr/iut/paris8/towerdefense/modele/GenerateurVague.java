@@ -1,5 +1,9 @@
 package fr.iut.paris8.towerdefense.modele;
 
+import fr.iut.paris8.towerdefense.modele.ennemis.Eclaireur;
+import fr.iut.paris8.towerdefense.modele.ennemis.EnnemiBase;
+import fr.iut.paris8.towerdefense.modele.ennemis.Mastodonte;
+import fr.iut.paris8.towerdefense.modele.ennemis.Tank;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
@@ -51,9 +55,9 @@ public class GenerateurVague {
     //todo ajouter un limiteur lorsqu'on aura des ennemis plus forts : boss
     public void genererUnElementDeLaVague(Environnement env){
             if (!reussitProba(pourcentageDifficulte)) {
-                env.ajouterEnnemi(new EnnemiSimple(env));
+                env.ajouterEnnemi(new EnnemiBase(env));
             } else {
-                env.ajouterEnnemi(new EnnemiRapide(env));
+                env.ajouterEnnemi(new Tank(env));
             }
     }
 

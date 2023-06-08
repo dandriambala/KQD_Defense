@@ -1,17 +1,19 @@
-package fr.iut.paris8.towerdefense.modele;
+package fr.iut.paris8.towerdefense.modele.ennemis;
 
 import fr.iut.paris8.towerdefense.BFS.Case;
+import fr.iut.paris8.towerdefense.modele.EnMouvement;
+import fr.iut.paris8.towerdefense.modele.Environnement;
 
 import java.util.ArrayList;
 
-public abstract class Ennemi extends EnMouvement{
+public abstract class Ennemi extends EnMouvement {
     private static int compteurEnnemi = 0;
     private int prime; //L'argent que donnera l'ennemi à sa mort
     private int pv;
     private Case destinationCase;
 
-    public Ennemi(int x, int y, int vitesse,  int prime, int pv, Environnement env) {
-      super(x,y,vitesse,env);
+    public Ennemi( int vitesse,  int prime, int pv, Environnement env) {
+      super(0,160,vitesse,env);
         this.prime = prime;
         this.pv = pv;
         setId("E"+ compteurEnnemi);
