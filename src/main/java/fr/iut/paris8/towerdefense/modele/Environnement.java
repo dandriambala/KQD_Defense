@@ -25,10 +25,8 @@ public class Environnement {
     private RessourceJeu ressourceJeu;
 
     public Environnement ( TerrainModele t ) {
-        super();
         this.nbToursProperty = new SimpleIntegerProperty();
         this.nbToursProperty.setValue(0);
-
         this.enMouvements = FXCollections.observableArrayList();
         this.defenses = FXCollections.observableArrayList();
         this.t = t;
@@ -194,7 +192,7 @@ public class Environnement {
     public Defense chercherDefenseDansPorteeEnnemi(int x, int y, int portee) {
 
         for (Tourelle t : this.getTourelle()) {
-            if ((( x + portee) >= t.getColonne() ) &&  ( t.getLigne() == y ) ) {
+            if ((( x + portee) >= t.getColonne() ) && (x<=t.getColonne()) && ( t.getLigne() == y ) ) {
                 return t;
             }
         }
@@ -221,12 +219,18 @@ public class Environnement {
         }
     }
     public void enleverDefense (Defense d) {
+        t.caseAZero(d.getColonne()/16,d.getLigne()/16);
         this.defenses.remove(d);
+
+        Case sommet = new Case(d.getColonne()/16, d.getLigne()/16);
+        bfs.getG().reconnecte(sommet);
+        this.getBfs().testBFS();
     }
     /* Vérifie si les pièges sont encores actifs sinon les retire*/
     public void piegesPourChaqueTour () {
         for (int i = getPieges().size() - 1; i >= 0; i--) {
             if ( getPieges().get(i).finDeVie() ) {
+                getTerrainModele().caseAZero(getPieges().get(i).getColonne()/16, getPieges().get(i).getLigne()/16);
                 defenses.remove(getPieges().get(i));
             }
         }

@@ -48,6 +48,10 @@ public class TerrainModele {
         return ligne*pixel;
     }
 
+    public void caseAZero(double colonne, double ligne){
+        getTerrain()[(int)ligne][(int)colonne] = 0;
+    }
+
     public void ajouterDefenseDansModele(double colonne, double ligne) {
         int co = (int) (Math.round(colonne / 16.0));
         int li = (int) (Math.round(ligne / 16.0));

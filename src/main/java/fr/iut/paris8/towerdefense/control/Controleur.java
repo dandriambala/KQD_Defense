@@ -144,9 +144,12 @@ public class Controleur implements Initializable {
                     d.setLigne((int) c.getTranslateY());
                     env.ajouterDefense(d);
                     System.out.println("Défense ajoutée");
+
                 }
-                else
+                else {
+                    System.out.println("Erreur");
                     pane.getChildren().remove(c);
+                }
 
 
                 env.getBfs().testBFS();
