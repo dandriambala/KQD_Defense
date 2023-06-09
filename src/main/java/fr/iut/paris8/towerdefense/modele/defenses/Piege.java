@@ -1,7 +1,9 @@
-package fr.iut.paris8.towerdefense.modele;
+package fr.iut.paris8.towerdefense.modele.defenses;
 
-public abstract class Piege extends Defense{
-    private String id;
+import fr.iut.paris8.towerdefense.modele.Environnement;
+import fr.iut.paris8.towerdefense.modele.defenses.Defense;
+
+public abstract class Piege extends Defense {
     private int dureeDeVie;
 
     public Piege (int cout, Environnement env, int portee, int degats, int dureeDeVie){
@@ -14,16 +16,8 @@ public abstract class Piege extends Defense{
         return this.dureeDeVie == 0;
     }
 
-    public String getId() {
-        return id;
-    }
-
     public int getDureeDeVie() {
         return dureeDeVie;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public void setDureeDeVie(int dureeDeVie) {

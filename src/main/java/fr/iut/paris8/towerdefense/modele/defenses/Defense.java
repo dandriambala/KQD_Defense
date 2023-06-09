@@ -1,5 +1,6 @@
-package fr.iut.paris8.towerdefense.modele;
+package fr.iut.paris8.towerdefense.modele.defenses;
 
+import fr.iut.paris8.towerdefense.modele.Environnement;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
@@ -12,7 +13,7 @@ public abstract class Defense {
     private IntegerProperty ligne;
     private int portee;
     private Environnement env;
-
+    private String id;
     private int degats;
     private int cout;
 
@@ -72,6 +73,12 @@ public abstract class Defense {
 
     public Environnement getEnv() {
         return env;
+    }
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
     }
 
     // Les défenses mettront des dégâts aux ennemis

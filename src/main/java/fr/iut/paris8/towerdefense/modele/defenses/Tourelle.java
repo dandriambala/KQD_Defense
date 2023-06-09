@@ -1,6 +1,8 @@
-package fr.iut.paris8.towerdefense.modele;
+package fr.iut.paris8.towerdefense.modele.defenses;
 
-import javafx.collections.ObservableList;
+import fr.iut.paris8.towerdefense.modele.tirTourelle.BalleTourelleBase;
+import fr.iut.paris8.towerdefense.modele.Environnement;
+import fr.iut.paris8.towerdefense.modele.ennemis.Ennemi;
 
 import java.util.ArrayList;
 
@@ -8,11 +10,13 @@ public class Tourelle extends Defense {
 
     private int nbCible;
     private int vitesseAttaque;
-
+    private static int compteurTourelle = 0;
     public Tourelle(int cout, Environnement env, int portee, int degats, int vitesseAttaque, int nbCible) {
         super(cout, env, portee, degats);
         this.vitesseAttaque = vitesseAttaque;
         this.nbCible = nbCible;
+        this.setId("T" + compteurTourelle);
+        compteurTourelle++;
     }
 
     public Tourelle(int cout, Environnement env, int portee, int degat, int colonne, int ligne, int nbCible) {
@@ -21,7 +25,7 @@ public class Tourelle extends Defense {
     }
 
     public void attaquer(){
-        ArrayList<Ennemi> ennemis = getEnv().chercherDansPortee(this.getColonne(), this.getLigne(),this.getPortee(), nbCible);
+        ArrayList<Ennemi> ennemis = getEnv().chercherEnnemisDansPortee(this.getColonne(), this.getLigne(),this.getPortee(), nbCible);
 
         if (!ennemis.isEmpty()) {
             for (int i = 0; i < ennemis.size(); i++) {
@@ -31,8 +35,8 @@ public class Tourelle extends Defense {
         }
     }
 
-    public Balle creerBallesDansTourelle(double ennemiCibleX, double ennemiCibleY){
-        Balle b = new Balle(this.getColonne(), this.getLigne(), this.vitesseAttaque, getEnv(),ennemiCibleX,ennemiCibleY, 5);
+    public BalleTourelleBase creerBallesDansTourelle(double ennemiCibleX, double ennemiCibleY){
+        BalleTourelleBase b = new BalleTourelleBase(this.getColonne(), this.getLigne(), this.vitesseAttaque, getEnv(),ennemiCibleX,ennemiCibleY, 5);
         getEnv().getEnMouvements().add(b);
         return b;
     }

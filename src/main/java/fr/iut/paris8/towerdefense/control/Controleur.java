@@ -34,12 +34,6 @@ public class Controleur implements Initializable {
     private Environnement env;
     private Timeline gameLoop;
     @FXML
-    private Button ajoutTourelle;
-    @FXML
-    private Button ajoutMine;
-    @FXML
-    private Button ajoutRalentisseur;
-    @FXML
     private HBox Top;
     @FXML
     private Label nbPvJoueur;
@@ -47,11 +41,20 @@ public class Controleur implements Initializable {
     private Label nbVague;
     @FXML
     private Label nbArgent;
+
+    private TerrainModele t1;
     @FXML
-    private Button ajoutTesla;
+    private ImageView imNuage;
     @FXML
     private Button ajoutLanceMissile;
-    private TerrainModele t1;
+
+    private ImageView imTourelle;
+    @FXML
+    private ImageView imMine;
+    @FXML
+    private ImageView imTesla;
+    @FXML
+    private ImageView imMissile;
 
     @Override
     public void initialize ( URL url, ResourceBundle resourceBundle ) {
@@ -71,54 +74,39 @@ public class Controleur implements Initializable {
 
         this.env.getVague().nbVagueProperty().addListener(( obs, old, nouv ) -> this.nbVague.setText(String.valueOf(nouv)));
 
-        ListChangeListener l2 = new ObservateurPiege(pane);
+        ListChangeListener l2 = new ObservateurDefenses(pane);
         this.env.getDefense().addListener(l2);
+
+
+        imTourelle.setOnMouseClicked(e -> dragEtReleasedImageView(imTourelle, 1));
+        imTesla.setOnMouseClicked(e -> dragEtReleasedImageView(imTesla, 2));
+        imNuage.setOnMouseClicked(e -> dragEtReleasedImageView(imNuage, 3));
+        imMissile.setOnMouseClicked(e -> dragEtReleasedImageView(imMissile, 4));
+        imMine.setOnMouseClicked(e -> dragEtReleasedImageView(imMine, 5));
+
     }
 
-    private void initTowerDefense () {
 
-        gameLoop = new Timeline();
-        gameLoop.setCycleCount(Timeline.INDEFINITE);
+    public void dragEtReleasedImageView ( ImageView iW, int numeroDef ) {
+
+        //creation de la copie de l'image qu'on va drag à partir de l'image View de base
+        ImageView copie = new ImageView(iW.getImage());
+        copie.setTranslateX(90);
+        copie.setTranslateY(360);
 
 
-        KeyFrame kf = new KeyFrame(
-
-                Duration.seconds(0.08),
-                ( ev -> {
-                    env.unTour();
-                } )
-        );
-        gameLoop.getKeyFrames().add(kf);
-    }
-
-    @FXML
-    void placementDefense(ActionEvent event){
-        Button b;
-        int numeroButton;
-
-        if (ajoutTourelle.isFocused()) {
-            b = ajoutTourelle;
-            numeroButton = 1;
-        }
-        else if (ajoutTesla.isFocused()) {
-            b = ajoutTesla;
-            numeroButton = 2;
-        }
-        else if (ajoutRalentisseur.isFocused()){
-            b = ajoutRalentisseur;
-            numeroButton = 3;
-        }
-        else if (ajoutLanceMissile.isFocused()){
-            b = ajoutLanceMissile;
-            numeroButton = 4;
+        if ( numeroDef == 3 ) {
+            copie.setFitWidth(48);
+            copie.setFitHeight(48);
+            copie.setPreserveRatio(true);
         }
         else {
-                b = ajoutMine;
-                numeroButton = 5;
+            copie.setFitWidth(iW.getFitWidth());
+            copie.setFitHeight(iW.getFitHeight());
+            copie.setPreserveRatio(iW.isPreserveRatio());
         }
 
-        DefenseVue defVue = new DefenseVue(pane);
-        ImageView c = defVue.creerSpriteDefense(numeroButton);
+        pane.getChildren().add(copie);
 
         BFS bfsSecondaire = new BFS(new Grille(env.getTerrainModele().getWidth() / 16, env.getTerrainModele().getHeight() / 16), new Case(59, 10));
         Case caseDentree = new Case(1, 10);
@@ -135,13 +123,11 @@ public class Controleur implements Initializable {
 
         affichageChemin(bfsSecondaire, listSprite);
 
-        b.setOnMouseDragged(e1 -> {
-            c.setTranslateX((int) e1.getSceneX());
-            c.setTranslateY((int) (e1.getSceneY() - Top.getHeight()));
-
-
-            caseTourelle.setColonne((int) (e1.getSceneX()/ 16));
-            caseTourelle.setLigne((int) ((e1.getSceneY() - Top.getHeight())/ 16));
+        copie.setOnMouseDragged(e1 -> {
+            copie.setTranslateX(e1.getSceneX());
+            copie.setTranslateY(e1.getSceneY() - Top.getHeight());
+            caseTourelle.setColonne((int) ( e1.getSceneX() / 16 ));
+            caseTourelle.setLigne((int) ( ( e1.getSceneY() - Top.getHeight() ) / 16 ));
 
             if ( chemin.contains(caseTourelle) ) {
                 if ( !bfsSecondaire.getG().estDeconnecte(caseTourelle) ) {
@@ -153,11 +139,11 @@ public class Controleur implements Initializable {
                     effacerChemin(listSprite);
                     affichageChemin(bfsSecondaire, listSprite);
                 }
-                else{
-                    if (!caseTourelle.equals(premier)){
+                else {
+                    if ( !caseTourelle.equals(premier) ) {
                         System.out.println(caseTourelle + " " + premier);
                         effacerChemin(listSprite);
-                        affichageChemin(bfsSecondaire,listSprite);
+                        affichageChemin(bfsSecondaire, listSprite);
                         premier.setColonne(caseTourelle.getColonne());
                         premier.setLigne(caseTourelle.getLigne());
                     }
@@ -172,40 +158,66 @@ public class Controleur implements Initializable {
                 }
             }
 
-            b.setOnMouseReleased(e2 -> {
-                Defense d;
-                if (defenseBienPlacé(c)) {
-                    if (b.equals(ajoutTourelle))
-                        d = new TourelleBase(env);
-                    else if (b.equals(ajoutTesla)) {
-                        d = new Tesla(env);
-                    }
-                    else if (b.equals(ajoutLanceMissile)) {
-                        d = new LanceMissile(env);
-                    }
-                    else if (b.equals(ajoutRalentisseur)) {
-                        d = new NuageRalentisseur(env);
-                        c.setId(((Piege)d).getId());
-                    }
-
-                    else {
-                        d = new Mine(env);
-                        c.setId(((Piege)d).getId());
-                    }
-                    t1.ajouterDefenseDansModele(c.getTranslateX(), c.getTranslateY());
-                    t1.ajusterEmplacementDefense(c, (int) (c.getTranslateX() / 16), (int) (c.getTranslateY() / 16));
-                    d.setColonne((int) c.getTranslateX());
-                    d.setLigne((int) c.getTranslateY());
-                    env.ajouterDefense(d);
-                    System.out.println("Défense ajoutée");
-                    env.getBfs().testBFS();
-                }
-                else
-                    pane.getChildren().remove(c);
-
-                effacerChemin(listSprite);
-            });
         });
+
+        pane.setOnMouseReleased(e2 -> {
+            int nbDefenseAncien = env.getDefense().size();
+            Defense d;
+
+            if ( defenseBienPlacé(copie) ) {
+
+                switch ( numeroDef ) {
+                    case 1:
+                        d = new TourelleBase(env);
+                        break;
+                    case 2:
+                        d = new Tesla(env);
+                        break;
+                    case 3:
+                        d = new NuageRalentisseur(env);
+                        copie.setId(( (Piege) d ).getId());
+                        break;
+                    case 4:
+                        d = new LanceMissile(env);
+                        break;
+                    default:
+                        d = new Mine(env);
+                        copie.setId(( (Piege) d ).getId());
+                        break;
+                }
+
+                t1.ajouterDefenseDansModele(copie.getTranslateX(), copie.getTranslateY());
+                t1.ajusterEmplacementDefense(copie, (int) ( copie.getTranslateX() / 16 ), (int) ( copie.getTranslateY() / 16 ));
+                d.setColonne((int) copie.getTranslateX());
+                d.setLigne((int) copie.getTranslateY());
+                env.ajouterDefense(d);
+
+                env.getBfs().testBFS();
+
+                int nbDefenseCourant = env.getDefense().size();
+                if ( nbDefenseAncien == nbDefenseCourant ) {
+                    pane.getChildren().remove(copie);
+                }
+            }
+            else
+                pane.getChildren().remove(copie);
+        });
+    }
+
+    private void initTowerDefense() {
+
+        gameLoop = new Timeline();
+        gameLoop.setCycleCount(Timeline.INDEFINITE);
+
+
+        KeyFrame kf = new KeyFrame(
+
+                Duration.seconds(0.08),
+                (ev -> {
+                    env.unTour();
+                })
+        );
+        gameLoop.getKeyFrames().add(kf);
     }
 
     private boolean defenseBienPlacé(ImageView c) {
@@ -218,7 +230,6 @@ public class Controleur implements Initializable {
         bfsSecondaire.testBFS();
         ArrayList<Case> chemin = bfsSecondaire.cheminVersSource(new Case(0,10));
 
-//        System.out.println(chemin);
 
         for ( Case c : chemin){
             Circle circle = new Circle(3);

@@ -1,8 +1,9 @@
-package fr.iut.paris8.towerdefense.modele;
+package fr.iut.paris8.towerdefense.modele.defenses;
 
-import java.util.ArrayList;
+import fr.iut.paris8.towerdefense.modele.Environnement;
+import fr.iut.paris8.towerdefense.modele.defenses.Tourelle;
 
-public class Tesla extends Tourelle{
+public class Tesla extends Tourelle {
 
     public Tesla(Environnement env) {
         super(150, env, 5, 1, 10,5);

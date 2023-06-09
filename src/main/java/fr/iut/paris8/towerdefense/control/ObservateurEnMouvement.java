@@ -2,6 +2,8 @@ package fr.iut.paris8.towerdefense.control;
 
 import fr.iut.paris8.towerdefense.Main1;
 import fr.iut.paris8.towerdefense.modele.*;
+import fr.iut.paris8.towerdefense.modele.ennemis.*;
+import fr.iut.paris8.towerdefense.modele.tirTourelle.BalleTourelleBase;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -26,16 +28,16 @@ public class ObservateurEnMouvement implements ListChangeListener<EnMouvement> {
 
         this.pane = pane;
 
-        URL urlEnnemi1 = Main1.class.getResource("ennemi1.png");
+        URL urlEnnemi1 = Main1.class.getResource("ennemiBase.png");
         imgEnnemi1 = new Image(String.valueOf(urlEnnemi1));
 
-        URL urlEnnemi2 = Main1.class.getResource("eclaireur.png");
+        URL urlEnnemi2 = Main1.class.getResource("éclaireur.png");
         imgEnnemi2 = new Image(String.valueOf(urlEnnemi2));
 
-        URL ennemi3 = Main1.class.getResource("ennemi3.png");
-        imgEnnemi2 = new Image(String.valueOf(ennemi3));
+        URL ennemi3 = Main1.class.getResource("mastodonte.png");
+        imgEnnemi3 = new Image(String.valueOf(ennemi3));
 
-        URL urlEnnemi4 = Main1.class.getResource("ennemi4.png");
+        URL urlEnnemi4 = Main1.class.getResource("tank.png");
         imgEnnemi4 = new Image(String.valueOf(urlEnnemi4));
     }
 
@@ -45,8 +47,8 @@ public class ObservateurEnMouvement implements ListChangeListener<EnMouvement> {
         while (change.next()) {
 
             for (EnMouvement em : change.getAddedSubList()){
-                if(em instanceof Balle)
-                    creerSpriteBalle((Balle) em);
+                if(em instanceof BalleTourelleBase)
+                    creerSpriteBalle((BalleTourelleBase) em);
                 else
                     creerSpriteEnnemi((Ennemi) em);
             }
@@ -56,7 +58,7 @@ public class ObservateurEnMouvement implements ListChangeListener<EnMouvement> {
             }
         }
     }
-    public void creerSpriteBalle(Balle b) {
+    public void creerSpriteBalle(BalleTourelleBase b) {
         Circle c = new Circle(1);
         c.setFill(Color.YELLOW);
         c.setTranslateX(b.getX());
@@ -71,13 +73,18 @@ public class ObservateurEnMouvement implements ListChangeListener<EnMouvement> {
 
         ImageView c = new ImageView();
 
-        if (ennemi instanceof EnnemiSimple){
-            c = new ImageView(imgEnnemi2);
-        }
-        else if (ennemi instanceof EnnemiRapide){
+        if (ennemi instanceof EnnemiBase){
             c = new ImageView(imgEnnemi1);
         }
-
+        else if (ennemi instanceof Eclaireur){
+            c = new ImageView(imgEnnemi2);
+        }
+        else if (ennemi instanceof Mastodonte) {
+            c = new ImageView(imgEnnemi3);
+        }
+        else if (ennemi instanceof Tank) {
+            c = new ImageView(imgEnnemi4);
+        }
 
         c.setTranslateX(ennemi.getX());
         c.setTranslateY(ennemi.getY());
