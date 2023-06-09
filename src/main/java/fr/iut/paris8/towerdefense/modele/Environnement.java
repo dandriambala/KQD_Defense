@@ -95,28 +95,31 @@ public class Environnement {
     }
 
     public void ajouterDefense ( Defense d ) {
-        if(d instanceof Tourelle) {
-            int colonne = (d.getColonne() - 8) / 16;
-            int ligne = (d.getLigne() - 8) / 16;
 
-            if (colonne <= 2 && colonne >= 1 && ligne <= 11 && ligne >= 9 && d instanceof Tourelle || colonne <= 59 && colonne >= 57 && ligne <= 11 && ligne >= 9 && d instanceof Tourelle) {
-                d.setColonne(0);
-                d.setLigne(0);
-            } else {
-                defenses.add(d);
-                Case sommet = new Case();
-                for (Case s : bfs.getParcours()) {
-                    if (s.getColonne() == d.getColonne() / 16 && s.getLigne() == d.getLigne() / 16) {
-                        sommet = s;
-                        break;
+        if (getRessourceJeu().peutEncoreAcheter(d.getCout())) {
+            getRessourceJeu().achatTourelle(d.getCout());
+            if (d instanceof Tourelle) {
+                int colonne = (d.getColonne() - 8) / 16;
+                int ligne = (d.getLigne() - 8) / 16;
+
+                if (colonne <= 2 && colonne >= 1 && ligne <= 11 && ligne >= 9 && d instanceof Tourelle || colonne <= 59 && colonne >= 57 && ligne <= 11 && ligne >= 9 && d instanceof Tourelle) {
+                    d.setColonne(0);
+                    d.setLigne(0);
+                } else {
+                    defenses.add(d);
+                    Case sommet = new Case();
+                    for (Case s : bfs.getParcours()) {
+                        if (s.getColonne() == d.getColonne() / 16 && s.getLigne() == d.getLigne() / 16) {
+                            sommet = s;
+                            break;
+                        }
                     }
+                    bfs.getG().deconnecte(sommet);
+                    bfs.testBFS();
                 }
-                bfs.getG().deconnecte(sommet);
-                bfs.testBFS();
-            }
+            } else
+                defenses.add(d);
         }
-        else
-            defenses.add(d);
     }
 
     public Ennemi getEnnemiID ( String id ) {
@@ -174,8 +177,12 @@ public class Environnement {
         return bfs;
     }
 
+
     //retourne une liste d'ennemis selon une limite que la tourelle aura pour toucher un ennemi en même temps
     public ArrayList<Ennemi> chercherEnnemisDansPortee(int colonne, int ligne, int portee, int limiteur ) {
+
+
+    //retourne une liste d'ennemis selon une limite que la tourelle aura pour toucher plusieurs ennemis en même temps
 
         ArrayList<Ennemi> ennemisDansPortee = new ArrayList<>();
 
