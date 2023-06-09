@@ -197,6 +197,7 @@ public class Controleur implements Initializable {
             }
             else
                 pane.getChildren().remove(copie);
+            effacerChemin(listSprite);
         });
     }
 
