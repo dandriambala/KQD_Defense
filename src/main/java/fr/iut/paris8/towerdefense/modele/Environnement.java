@@ -104,23 +104,25 @@ public class Environnement {
 
     public void ajouterDefense ( Defense d ) {
 
-        if (getRessourceJeu().peutEncoreAcheter(d.getCout())) {
+        if ( getRessourceJeu().peutEncoreAcheter(d.getCout()) ) {
             getRessourceJeu().achatTourelle(d.getCout());
-            if (d instanceof Tourelle) {
-                int colonne = (d.getColonne() - 8) / 16;
-                int ligne = (d.getLigne() - 8) / 16;
-
-                if (colonne <= 2 && colonne >= 1 && ligne <= 11 && ligne >= 9 && d instanceof Tourelle || colonne <= 59 && colonne >= 57 && ligne <= 11 && ligne >= 9 && d instanceof Tourelle) {
+            if ( d instanceof Tourelle ) {
+                int colonne = ( d.getColonne() - 8 ) / 16;
+                int ligne = ( d.getLigne() - 8 ) / 16;
+                if ( colonne <= 2 && colonne >= 1 && ligne <= 11 && ligne >= 9 && d instanceof Tourelle || colonne <= 59 && colonne >= 57 && ligne <= 11 && ligne >= 9 && d instanceof Tourelle ) {
                     d.setColonne(0);
                     d.setLigne(0);
                 }
-                bfs.getG().deconnecte(new Case(colonne,ligne));
-                bfs.testBFS();
+                else {
+                    defenses.add(d);
+                    bfs.getG().deconnecte(new Case(colonne+1, ligne+1));
+                    bfs.testBFS();
                 }
-            } else
+            }
+            else
                 defenses.add(d);
         }
-
+    }
     public Ennemi getEnnemiID ( String id ) {
         for (Ennemi a : this.getEnnemis()) {
             if ( a.getId().equals(id) ) {

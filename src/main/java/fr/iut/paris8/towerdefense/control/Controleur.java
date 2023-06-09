@@ -1,16 +1,14 @@
 package fr.iut.paris8.towerdefense.control;
 
-
 import fr.iut.paris8.towerdefense.BFS.BFS;
 import fr.iut.paris8.towerdefense.BFS.Case;
 import fr.iut.paris8.towerdefense.BFS.Grille;
 import fr.iut.paris8.towerdefense.modele.*;
-import fr.iut.paris8.towerdefense.vue.DefenseVue;
+import fr.iut.paris8.towerdefense.modele.defenses.*;
 import fr.iut.paris8.towerdefense.vue.TerrainVue;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.ListChangeListener;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -46,8 +44,6 @@ public class Controleur implements Initializable {
     @FXML
     private ImageView imNuage;
     @FXML
-    private Button ajoutLanceMissile;
-
     private ImageView imTourelle;
     @FXML
     private ImageView imMine;
@@ -232,8 +228,8 @@ public class Controleur implements Initializable {
 
 
         for ( Case c : chemin){
-            Circle circle = new Circle(3);
-            circle.setFill(Color.CYAN);
+            Circle circle = new Circle(2);
+            circle.setFill(Color.WHITE);
             circle.setCenterX(c.getX()+8);
             circle.setCenterY(c.getY()+8);
             circle.setId("chemin"+compteur);
