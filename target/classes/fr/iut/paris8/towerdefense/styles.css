@@ -1,6 +1,4 @@
-/*@font-face{
-    src: url("/fr/iut/pairs8/towerdefense/BungeeSpice-Regular.ttf");
-}*/
+
 
 .root{
     -fx-background-image:url('foret.jpg');
@@ -11,7 +9,6 @@
     -fx-background-radius: 5px;
     -fx-border-radius: 5px;
     -fx-padding: 5px;
-   /* -fx-font-family: "Bungee Spice";*/
 }
 
 .button {
