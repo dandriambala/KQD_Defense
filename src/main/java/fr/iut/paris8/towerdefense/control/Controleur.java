@@ -22,7 +22,6 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -53,7 +52,6 @@ public class Controleur implements Initializable {
     @FXML
     private Button ajoutLanceMissile;
     private TerrainModele t1;
-
 
     @Override
     public void initialize ( URL url, ResourceBundle resourceBundle ) {
@@ -125,6 +123,7 @@ public class Controleur implements Initializable {
         BFS bfsSecondaire = new BFS(new Grille(env.getTerrainModele().getWidth() / 16, env.getTerrainModele().getHeight() / 16), new Case(59, 10));
         Case caseDentree = new Case(1, 10);
         Case caseTourelle = new Case();
+        Case premier = new Case();
 
         for (Defense defense : env.getDefense())
             if ( defense instanceof Tourelle )
@@ -132,36 +131,46 @@ public class Controleur implements Initializable {
         bfsSecondaire.testBFS();
 
         ArrayList<Case> chemin = bfsSecondaire.cheminVersSource(caseDentree);
-        ArrayList<Circle> listSprite;
+        ArrayList<Circle> listSprite = new ArrayList<>();
 
-        listSprite = affichageChemin(bfsSecondaire);
+        affichageChemin(bfsSecondaire, listSprite);
 
         b.setOnMouseDragged(e1 -> {
             c.setTranslateX((int) e1.getSceneX());
             c.setTranslateY((int) (e1.getSceneY() - Top.getHeight()));
+
 
             caseTourelle.setColonne((int) (e1.getSceneX()/ 16));
             caseTourelle.setLigne((int) ((e1.getSceneY() - Top.getHeight())/ 16));
 
             if ( chemin.contains(caseTourelle) ) {
                 if ( !bfsSecondaire.getG().estDeconnecte(caseTourelle) ) {
+                    premier.setColonne(caseTourelle.getColonne());
+                    premier.setLigne(caseTourelle.getLigne());
+
                     bfsSecondaire.getG().deconnecte(caseTourelle);
                     System.out.println("case deconnecter");
                     effacerChemin(listSprite);
-                    affichageChemin(bfsSecondaire);
+                    affichageChemin(bfsSecondaire, listSprite);
+                }
+                else{
+                    if (!caseTourelle.equals(premier)){
+                        System.out.println(caseTourelle + " " + premier);
+                        effacerChemin(listSprite);
+                        affichageChemin(bfsSecondaire,listSprite);
+                        premier.setColonne(caseTourelle.getColonne());
+                        premier.setLigne(caseTourelle.getLigne());
+                    }
                 }
             }
             else {
                 if ( bfsSecondaire.getG().estDeconnecte(caseTourelle) ) {
                     bfsSecondaire.getG().reconnecte(caseTourelle);
-                    System.out.println("recvonnecter");
+                    System.out.println("reconnecter");
                     effacerChemin(listSprite);
-                    affichageChemin(bfsSecondaire);
+                    affichageChemin(bfsSecondaire, listSprite);
                 }
             }
-
-
-
 
             b.setOnMouseReleased(e2 -> {
                 Defense d;
@@ -189,27 +198,25 @@ public class Controleur implements Initializable {
                     d.setLigne((int) c.getTranslateY());
                     env.ajouterDefense(d);
                     System.out.println("Défense ajoutée");
+                    env.getBfs().testBFS();
                 }
                 else
                     pane.getChildren().remove(c);
-                env.getBfs().testBFS();
+
                 effacerChemin(listSprite);
             });
         });
-
-
     }
 
     private boolean defenseBienPlacé(ImageView c) {
+        System.out.println(env.getTerrainModele().getTerrain()[(int) c.getTranslateY() /16][(int) c.getTranslateX() /16]);
         return ((c.getTranslateX() < tilepane.getMaxWidth() && c.getTranslateY() < tilepane.getMaxHeight()) && (c.getTranslateX() > tilepane.getMinWidth() && c.getTranslateY() > tilepane.getMinHeight()) && env.getTerrainModele().getTerrain()[(int) c.getTranslateY() /16][(int) c.getTranslateX() /16] == 0);
     }
 
-
-    private ArrayList<Circle> affichageChemin(BFS bfsSecondaire){
+    private void affichageChemin(BFS bfsSecondaire, ArrayList<Circle> list){
         int compteur = 0;
         bfsSecondaire.testBFS();
         ArrayList<Case> chemin = bfsSecondaire.cheminVersSource(new Case(0,10));
-        ArrayList<Circle> list = new ArrayList<>();
 
 //        System.out.println(chemin);
 
@@ -223,7 +230,6 @@ public class Controleur implements Initializable {
             compteur++;
             list.add(circle);
         }
-        return list;
     }
 
     public void effacerChemin(ArrayList<Circle> list){

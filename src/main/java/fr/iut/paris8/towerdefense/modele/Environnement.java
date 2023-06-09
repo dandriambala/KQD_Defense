@@ -90,6 +90,8 @@ public class Environnement {
 
     public void ajouterDefense ( Defense d ) {
 
+
+
         int colonne = ( d.getColonne() ) / 16;
         int ligne = ( d.getLigne() ) / 16;
         defenses.add(d);

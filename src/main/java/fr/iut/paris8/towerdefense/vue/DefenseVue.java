@@ -42,7 +42,7 @@ public class DefenseVue {
 
     public ImageView creerSpriteDefense(int numeroButton) {
 
-        ImageView c = new ImageView();
+        ImageView c;
 
         switch (numeroButton){
             case 1:
