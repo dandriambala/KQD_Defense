@@ -37,10 +37,6 @@ public abstract class Ennemi extends EnMouvement {
         if ( destinationCase == null )
             setDestinationSommet();
 
-
-//
-//        System.out.println("Sommet\nX : " + destinationSommet.getX() + " Y : " + destinationSommet.getY());
-//        System.out.println("I : " + destinationCase.getColonne() + " J : " + destinationCase.getLigne());
         for (int i = 0; i <= getVitesse(); i++) {
 
             if ( getEnv().getTerrainModele().dansTerrainEnnemie(this.getY() / 16, this.getX() / 16) || this.getX() <= 16 ) {

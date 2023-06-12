@@ -66,4 +66,5 @@ public class Grille {
     public void deconnecte( Case s) {
         this.obstacles.add(s);
     }
+
 }

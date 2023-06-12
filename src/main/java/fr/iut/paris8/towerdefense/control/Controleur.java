@@ -8,12 +8,19 @@ import fr.iut.paris8.towerdefense.modele.defenses.*;
 import fr.iut.paris8.towerdefense.vue.TerrainVue;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.InputEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
@@ -25,6 +32,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class Controleur implements Initializable {
+    private static int compteurImage = 0;
     @FXML
     private TilePane tilepane;
     @FXML
@@ -76,27 +84,27 @@ public class Controleur implements Initializable {
 
         imTourelle.setOnMouseClicked(e -> dragEtReleasedImageView(imTourelle, 1));
         imTesla.setOnMouseClicked(e -> dragEtReleasedImageView(imTesla, 2));
+        imTesla.setOnMouseClicked(e-> dragEtReleasedImageView(imTesla, 2));
         imNuage.setOnMouseClicked(e -> dragEtReleasedImageView(imNuage, 3));
         imMissile.setOnMouseClicked(e -> dragEtReleasedImageView(imMissile, 4));
         imMine.setOnMouseClicked(e -> dragEtReleasedImageView(imMine, 5));
 
     }
 
-
-    public void dragEtReleasedImageView ( ImageView iW, int numeroDef ) {
+    public void dragEtReleasedImageView(ImageView iW, int numeroDef) {
 
         //creation de la copie de l'image qu'on va drag à partir de l'image View de base
         ImageView copie = new ImageView(iW.getImage());
+
         copie.setTranslateX(90);
         copie.setTranslateY(360);
 
+        if (numeroDef == 3) {
 
-        if ( numeroDef == 3 ) {
             copie.setFitWidth(48);
             copie.setFitHeight(48);
             copie.setPreserveRatio(true);
-        }
-        else {
+        } else {
             copie.setFitWidth(iW.getFitWidth());
             copie.setFitHeight(iW.getFitHeight());
             copie.setPreserveRatio(iW.isPreserveRatio());
@@ -119,86 +127,100 @@ public class Controleur implements Initializable {
 
         affichageChemin(bfsSecondaire, listSprite);
 
-        copie.setOnMouseDragged(e1 -> {
-            copie.setTranslateX(e1.getSceneX());
-            copie.setTranslateY(e1.getSceneY() - Top.getHeight());
-            caseTourelle.setColonne((int) ( e1.getSceneX() / 16 ));
-            caseTourelle.setLigne((int) ( ( e1.getSceneY() - Top.getHeight() ) / 16 ));
+        EventHandler<MouseEvent> handler1 = new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                copie.setTranslateX(event.getSceneX());
+                copie.setTranslateY(event.getSceneY() - Top.getHeight());
+                caseTourelle.setColonne((int) ( event.getSceneX() / 16 ));
+                caseTourelle.setLigne((int) ( ( event.getSceneY() - Top.getHeight() ) / 16 ));
 
-            if ( chemin.contains(caseTourelle) ) {
-                if ( !bfsSecondaire.getG().estDeconnecte(caseTourelle) ) {
-                    premier.setColonne(caseTourelle.getColonne());
-                    premier.setLigne(caseTourelle.getLigne());
-
-                    bfsSecondaire.getG().deconnecte(caseTourelle);
-                    System.out.println("case deconnecter");
-                    effacerChemin(listSprite);
-                    affichageChemin(bfsSecondaire, listSprite);
-                }
-                else {
-                    if ( !caseTourelle.equals(premier) ) {
-                        System.out.println(caseTourelle + " " + premier);
-                        effacerChemin(listSprite);
-                        affichageChemin(bfsSecondaire, listSprite);
+                if ( chemin.contains(caseTourelle) ) {
+                    if ( !bfsSecondaire.getG().estDeconnecte(caseTourelle) ) {
                         premier.setColonne(caseTourelle.getColonne());
                         premier.setLigne(caseTourelle.getLigne());
+
+                        bfsSecondaire.getG().deconnecte(caseTourelle);
+                        System.out.println("case deconnecter");
+                        effacerChemin(listSprite);
+                        affichageChemin(bfsSecondaire, listSprite);
+                    }
+                    else {
+                        if ( !caseTourelle.equals(premier) ) {
+                            System.out.println(caseTourelle + " " + premier);
+                            effacerChemin(listSprite);
+                            affichageChemin(bfsSecondaire, listSprite);
+                            premier.setColonne(caseTourelle.getColonne());
+                            premier.setLigne(caseTourelle.getLigne());
+                        }
+                    }
+                }
+                else {
+                    if ( bfsSecondaire.getG().estDeconnecte(caseTourelle) ) {
+                        bfsSecondaire.getG().reconnecte(caseTourelle);
+                        System.out.println("reconnecter");
+                        effacerChemin(listSprite);
+                        affichageChemin(bfsSecondaire, listSprite);
                     }
                 }
             }
-            else {
-                if ( bfsSecondaire.getG().estDeconnecte(caseTourelle) ) {
-                    bfsSecondaire.getG().reconnecte(caseTourelle);
-                    System.out.println("reconnecter");
-                    effacerChemin(listSprite);
-                    affichageChemin(bfsSecondaire, listSprite);
-                }
-            }
+        };
 
-        });
+        copie.addEventHandler(MouseEvent.MOUSE_DRAGGED, handler1);
 
-        pane.setOnMouseReleased(e2 -> {
-            int nbDefenseAncien = env.getDefense().size();
-            Defense d;
+        EventHandler<MouseEvent> handler2 = new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
 
-            if ( defenseBienPlacé(copie) ) {
+                int nbDefenseAncien = env.getDefense().size();
+                Defense d;
 
-                switch ( numeroDef ) {
-                    case 1:
-                        d = new TourelleBase(env);
-                        break;
-                    case 2:
-                        d = new Tesla(env);
-                        break;
-                    case 3:
-                        d = new NuageRalentisseur(env);
-                        copie.setId(( (Piege) d ).getId());
-                        break;
-                    case 4:
-                        d = new LanceMissile(env);
-                        break;
-                    default:
-                        d = new Mine(env);
-                        copie.setId(( (Piege) d ).getId());
-                        break;
-                }
+                if (defenseBienPlacé(copie.getTranslateX(), copie.getTranslateY())) {
 
-                t1.ajouterDefenseDansModele(copie.getTranslateX(), copie.getTranslateY());
-                t1.ajusterEmplacementDefense(copie, (int) ( copie.getTranslateX() / 16 ), (int) ( copie.getTranslateY() / 16 ));
-                d.setColonne((int) copie.getTranslateX());
-                d.setLigne((int) copie.getTranslateY());
-                env.ajouterDefense(d);
+                    switch (numeroDef) {
+                        case 1:
+                            d = new TourelleBase(env);
+                            break;
+                        case 2:
+                            d = new Tesla(env);
+                            break;
+                        case 3:
+                            d = new NuageRalentisseur(env);
+                            break;
+                        case 4:
+                            d = new LanceMissile(env);
+                            break;
+                        default:
+                            d = new Mine(env);
+                            break;
+                    }
 
-                env.getBfs().testBFS();
+                    copie.setId(d.getId());
+                    t1.ajusterEmplacementDefense(copie, (int) (copie.getTranslateX() / 16), (int) (copie.getTranslateY() / 16));
+                    d.setColonne((int) copie.getTranslateX());
+                    d.setLigne((int) copie.getTranslateY());
+                    env.ajouterDefense(d);
 
-                int nbDefenseCourant = env.getDefense().size();
-                if ( nbDefenseAncien == nbDefenseCourant ) {
+                    env.getBfs().testBFS();
+
+                    int nbDefenseCourant = env.getDefense().size();
+                    if (nbDefenseAncien == nbDefenseCourant) {
+                        pane.getChildren().remove(copie);
+                    }
+
+                } else {
                     pane.getChildren().remove(copie);
                 }
-            }
-            else
-                pane.getChildren().remove(copie);
-            effacerChemin(listSprite);
-        });
+                    effacerChemin(listSprite);
+                    copie.removeEventHandler(MouseEvent.MOUSE_DRAGGED, handler1);
+                    pane.removeEventHandler(MouseEvent.MOUSE_DRAGGED, e1 -> {});
+                    pane.removeEventHandler(MouseEvent.MOUSE_RELEASED, this);
+                }
+
+        };
+
+        pane.addEventHandler(MouseEvent.MOUSE_RELEASED, handler2);
+
+
+
     }
 
     private void initTowerDefense() {
@@ -216,6 +238,7 @@ public class Controleur implements Initializable {
         );
         gameLoop.getKeyFrames().add(kf);
     }
+
 
     private boolean defenseBienPlacé(ImageView c) {
         System.out.println(env.getTerrainModele().getTerrain()[(int) c.getTranslateY() /16][(int) c.getTranslateX() /16]);
@@ -238,6 +261,10 @@ public class Controleur implements Initializable {
             compteur++;
             list.add(circle);
         }
+    }
+
+    private boolean defenseBienPlacé(double x, double y) {
+        return ((x < tilepane.getMaxWidth() && y < tilepane.getMaxHeight()) && (x > tilepane.getMinWidth() && y > tilepane.getMinHeight()) && (env.getTerrainModele().getTerrain()[(int) y /16][(int) x /16] == 0));
     }
 
     public void effacerChemin(ArrayList<Circle> list){
