@@ -49,26 +49,6 @@ public class Environnement {
         return listeEnnemis;
     }
 
-    public ObservableList<BalleTourelleBase> getBalles () {
-        ObservableList<BalleTourelleBase> listeBalleTourelleBases = FXCollections.observableArrayList();
-        for (EnMouvement em : enMouvements) {
-            if ( em instanceof BalleTourelleBase) {
-                listeBalleTourelleBases.add((BalleTourelleBase) em);
-            }
-        }
-        return listeBalleTourelleBases;
-    }
-
-    public ObservableList<Piege> getPieges () {
-        ObservableList<Piege> listePiege = FXCollections.observableArrayList();
-        for (Defense d : defenses) {
-            if ( d instanceof Piege ) {
-                listePiege.add((Piege) d);
-            }
-        }
-        return listePiege;
-    }
-
     public ObservableList<Defense> getDefense () {
         return defenses;
     }
@@ -93,28 +73,33 @@ public class Environnement {
     }
 
     public void ajouterDefense ( Defense d ) {
-        if(d instanceof Tourelle) {
-            int colonne = (d.getColonne() - 8) / 16;
-            int ligne = (d.getLigne() - 8) / 16;
 
-            if (colonne <= 2 && colonne >= 1 && ligne <= 11 && ligne >= 9 && d instanceof Tourelle || colonne <= 59 && colonne >= 57 && ligne <= 11 && ligne >= 9 && d instanceof Tourelle) {
-                d.setColonne(0);
-                d.setLigne(0);
-            } else {
-                defenses.add(d);
-                Case sommet = new Case();
-                for (Case s : bfs.getParcours()) {
-                    if (s.getColonne() == d.getColonne() / 16 && s.getLigne() == d.getLigne() / 16) {
-                        sommet = s;
-                        break;
+        if (getRessourceJeu().peutEncoreAcheter(d.getCout())) {
+            getRessourceJeu().achatTourelle(d.getCout());
+            if (d instanceof Tourelle) {
+                int colonne = (d.getColonne() - 8) / 16;
+                int ligne = (d.getLigne() - 8) / 16;
+
+                if (colonne <= 2 && colonne >= 1 && ligne <= 11 && ligne >= 9 && d instanceof Tourelle || colonne <= 59 && colonne >= 57 && ligne <= 11 && ligne >= 9 && d instanceof Tourelle) {
+                    d.setColonne(0);
+                    d.setLigne(0);
+                } else {
+                    defenses.add(d);
+                    Case sommet = new Case();
+                    for (Case s : bfs.getParcours()) {
+                        if (s.getColonne() == d.getColonne() / 16 && s.getLigne() == d.getLigne() / 16) {
+                            sommet = s;
+                            break;
+                        }
                     }
+                    bfs.getG().deconnecte(sommet);
+                    bfs.testBFS();
                 }
-                bfs.getG().deconnecte(sommet);
-                bfs.testBFS();
-            }
+            } else
+                defenses.add(d);
+            getTerrainModele().ajouterDefenseDansModele(d.getColonne(), d.getLigne());
         }
-        else
-            defenses.add(d);
+
     }
 
     public Ennemi getEnnemiID ( String id ) {
@@ -135,16 +120,12 @@ public class Environnement {
         if (!vague.finPartie() && !ressourceJeu.partiePerdu()) {
             nbToursProperty.setValue(nbToursProperty.getValue() + 1);
 
-
-            for (Defense d : defenses) {
-                d.agir();
-            }
+            this.defensesPourChaqueTour();
 
             vague.vaguePourChaqueTour(this);
 
             this.enMouvementsPourChaqueTour();
 
-            piegesPourChaqueTour();
         }
     }
 
@@ -168,12 +149,24 @@ public class Environnement {
         }
     }
 
+    public void defensesPourChaqueTour(){
+        for (int i = defenses.size()-1; i>=0; i--) {
+            defenses.get(i).agir();
+            if(defenses.get(i) instanceof Piege && ((Piege) defenses.get(i)).finDeVie())
+                enleverDefense(defenses.get(i));
+        }
+    }
+
     public BFS getBfs () {
         return bfs;
     }
 
+
     //retourne une liste d'ennemis selon une limite que la tourelle aura pour toucher un ennemi en même temps
     public ArrayList<Ennemi> chercherEnnemisDansPortee(int colonne, int ligne, int portee, int limiteur ) {
+
+
+    //retourne une liste d'ennemis selon une limite que la tourelle aura pour toucher plusieurs ennemis en même temps
 
         ArrayList<Ennemi> ennemisDansPortee = new ArrayList<>();
 
@@ -221,20 +214,18 @@ public class Environnement {
     public void enleverDefense (Defense d) {
         t.caseAZero(d.getColonne()/16,d.getLigne()/16);
         this.defenses.remove(d);
+//        afficherTerrain(getTerrainModele());
 
-        Case sommet = new Case(d.getColonne()/16, d.getLigne()/16);
-        bfs.getG().reconnecte(sommet);
-        this.getBfs().testBFS();
-    }
-    /* Vérifie si les pièges sont encores actifs sinon les retire*/
-    public void piegesPourChaqueTour () {
-        for (int i = getPieges().size() - 1; i >= 0; i--) {
-            if ( getPieges().get(i).finDeVie() ) {
-                getTerrainModele().caseAZero(getPieges().get(i).getColonne()/16, getPieges().get(i).getLigne()/16);
-                defenses.remove(getPieges().get(i));
-            }
+        if(d instanceof Tourelle) {
+            Case sommet = new Case(d.getColonne() / 16, d.getLigne() / 16);
+            bfs.getG().reconnecte(sommet);
+            this.getBfs().testBFS();
         }
     }
+
+//    public boolean estDansEnvironnement(String s){
+//        if(defenses.contains())
+//    }
 }
 
 

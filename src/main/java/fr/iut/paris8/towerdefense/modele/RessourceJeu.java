@@ -10,7 +10,7 @@ public class RessourceJeu {
 
     public RessourceJeu() {
         this.pv = new SimpleIntegerProperty(150);
-        this.argent = new SimpleIntegerProperty(150);
+        this.argent = new SimpleIntegerProperty(10000);
     }
 
     public int getPv() {
@@ -48,6 +48,18 @@ public class RessourceJeu {
 
     public boolean partiePerdu(){return getPv() <= 0;}
 
+    public void achatTourelle(int cout){
+
+        if (peutEncoreAcheter(cout)){
+            setArgent(getArgent() - cout);
+        }
+
+    }
+
+    public boolean peutEncoreAcheter(int cout){
+
+            return (getArgent()>= cout);
+    }
 
 
 }

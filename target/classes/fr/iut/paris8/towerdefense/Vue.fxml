@@ -4,17 +4,36 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import java.net.URL?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.iut.paris8.towerdefense.control.Controleur">
    <top>
-      <HBox fx:id="Top" alignment="CENTER_LEFT" prefHeight="63.0" prefWidth="960.0" spacing="20.0" BorderPane.alignment="CENTER">
-         <children>
+       <HBox fx:id="Top" alignment="CENTER" prefHeight="63.0" prefWidth="960.0" spacing="20.0"
+             BorderPane.alignment="CENTER">
+           <children>
 
-             <Label text="PV" />
-             <Label fx:id="nbPvJoueur" text="150" prefHeight="33.0" prefWidth="84.0" style="-fx-border-color: red;"/>
-             <Label text="Vague" />
-             <Label fx:id="nbVague" text="0" prefHeight="33.0" prefWidth="84.0" style="-fx-border-color: red;"/>
-             <Label text="Argent" />
-             <Label fx:id="nbArgent" text="150" prefHeight="33.0" prefWidth="84.0" style="-fx-border-color: red;"/>
+               <ImageView fitHeight="20" fitWidth="20">
+                   <image>
+                       <Image url="@coeur.png"/>
+                   </image>
+               </ImageView>
+               <Label fx:id="nbPvJoueur" text="150" prefHeight="33.0" prefWidth="84.0"/>
+
+
+               <ImageView fitHeight="20" fitWidth="20">
+                   <image>
+                       <Image url="@vague.png"/>
+                   </image>
+               </ImageView>
+
+             <Label fx:id="nbVague" text="0" prefHeight="33.0" prefWidth="84.0"/>
+               <ImageView fitHeight="20" fitWidth="20">
+                   <image>
+                       <Image url="@argent.png"/>
+                   </image>
+               </ImageView>
+             <Label fx:id="nbArgent" text="150" prefHeight="33.0" prefWidth="84.0"/>
          </children>
       </HBox>
    </top>
@@ -29,22 +48,50 @@
    </center>
 
     <bottom>
-        <HBox prefHeight="85.0" prefWidth="960.0" spacing="15.0" BorderPane.alignment="CENTER">
+        <HBox prefHeight="125.0" prefWidth="960.0" spacing="15.0" BorderPane.alignment="CENTER" alignment="CENTER">
             <children>
-                <Button fx:id="ajoutTourelle" mnemonicParsing="false" onAction="#placementDefense" text="Tourelle"/>
+                <Button fx:id="ajoutTourelle" mnemonicParsing="false" text="Tourelle"/>
+                <ImageView fitHeight="20" fitWidth="20" fx:id="imTourelle">
+                    <image>
+                        <Image url="@tourelleViolet.png"/>
+                    </image>
+                </ImageView>
 
-                <Button fx:id="ajoutTesla" mnemonicParsing="false" onAction="#placementDefense" text="Tesla"/>
+                <Button fx:id="ajoutTesla" mnemonicParsing="false" text="Tesla"/>
+                <ImageView fitHeight="20" fitWidth="20" fx:id="imTesla">
+                    <image>
+                        <Image url="@teslaBleu.png"/>
+                    </image>
+                </ImageView>
 
-                <Button fx:id="ajoutMine" mnemonicParsing="false" onAction="#placementDefense" text="Mine"/>
+                <Button fx:id="ajoutMine" mnemonicParsing="false"  text="Mine"/>
+                <ImageView fitHeight="20" fitWidth="20" fx:id="imMine">
+                    <image>
+                        <Image url="@mine.png"/>
+                    </image>
+                </ImageView>
 
-                <Button fx:id="ajoutRalentisseur" mnemonicParsing="false" onAction="#placementDefense" text="Nuage"/>
+                <Button fx:id="ajoutRalentisseur" mnemonicParsing="false" text="Nuage"/>
+                <ImageView fitHeight="20" fitWidth="20" fx:id="imNuage">
+                    <image>
+                        <Image url="@nuage.png"/>
+                    </image>
+                </ImageView>
 
-                <Button fx:id="ajoutLanceMissile" mnemonicParsing="false" onAction="#placementDefense" text="Missile"/>
+                <Button fx:id="ajoutLanceMissile" mnemonicParsing="false" text="Missile"/>
+                <ImageView fitHeight="20" fitWidth="20" fx:id="imMissile">
+                    <image>
+                        <Image url="@missile.png"/>
+                    </image>
+                </ImageView>
 
             </children>
         </HBox>
     </bottom>
 
+    <stylesheets>
+        <URL value="@styles.css"/>
+    </stylesheets>
 
 
 </BorderPane>

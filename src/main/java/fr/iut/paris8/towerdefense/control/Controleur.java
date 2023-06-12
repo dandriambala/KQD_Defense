@@ -3,17 +3,24 @@ package fr.iut.paris8.towerdefense.control;
 
 import fr.iut.paris8.towerdefense.modele.*;
 import fr.iut.paris8.towerdefense.modele.defenses.*;
-import fr.iut.paris8.towerdefense.vue.DefenseVue;
+
 import fr.iut.paris8.towerdefense.vue.TerrainVue;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
-import javafx.event.ActionEvent;
+
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
+
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.InputEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
@@ -22,18 +29,13 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class Controleur implements Initializable {
+    private static int compteurImage = 0;
     @FXML
     private TilePane tilepane;
     @FXML
     private Pane pane;
     private Environnement env;
     private Timeline gameLoop;
-    @FXML
-    private Button ajoutTourelle;
-    @FXML
-    private Button ajoutMine;
-    @FXML
-    private Button ajoutRalentisseur;
     @FXML
     private HBox Top;
     @FXML
@@ -42,12 +44,20 @@ public class Controleur implements Initializable {
     private Label nbVague;
     @FXML
     private Label nbArgent;
-    @FXML
-    private Button ajoutTesla;
-    @FXML
-    private Button ajoutLanceMissile;
+
     private TerrainModele t1;
 
+
+    @FXML
+    private ImageView imNuage;
+    @FXML
+    private ImageView imTourelle;
+    @FXML
+    private ImageView imMine;
+    @FXML
+    private ImageView imTesla;
+    @FXML
+    private ImageView imMissile;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -69,6 +79,102 @@ public class Controleur implements Initializable {
 
         ListChangeListener l2 = new ObservateurDefenses(pane);
         this.env.getDefense().addListener(l2);
+
+
+        imTourelle.setOnMouseClicked(e -> dragEtReleasedImageView(imTourelle, 1));
+        imTesla.setOnMouseClicked(e-> dragEtReleasedImageView(imTesla, 2));
+        imNuage.setOnMouseClicked(e -> dragEtReleasedImageView(imNuage, 3));
+        imMissile.setOnMouseClicked(e-> dragEtReleasedImageView(imMissile, 4));
+        imMine.setOnMouseClicked(e-> dragEtReleasedImageView(imMine, 5));
+
+    }
+
+    public void dragEtReleasedImageView(ImageView iW, int numeroDef) {
+
+
+        //creation de la copie de l'image qu'on va drag à partir de l'image View de base
+        ImageView copie = new ImageView(iW.getImage());
+
+
+        copie.setTranslateX(90);
+        copie.setTranslateY(360);
+
+
+        if (numeroDef == 3) {
+            copie.setFitWidth(48);
+            copie.setFitHeight(48);
+            copie.setPreserveRatio(true);
+        } else {
+            copie.setFitWidth(iW.getFitWidth());
+            copie.setFitHeight(iW.getFitHeight());
+            copie.setPreserveRatio(iW.isPreserveRatio());
+        }
+
+        pane.getChildren().add(copie);
+
+
+        EventHandler<MouseEvent> handler1 = new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                copie.setTranslateX(event.getSceneX());
+                copie.setTranslateY(event.getSceneY() - Top.getHeight());
+            }
+        };
+
+        copie.addEventHandler(MouseEvent.MOUSE_DRAGGED, handler1);
+
+        EventHandler<MouseEvent> handler2 = new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+
+                int nbDefenseAncien = env.getDefense().size();
+                Defense d;
+
+                if (defenseBienPlacé(copie.getTranslateX(), copie.getTranslateY())) {
+
+                    switch (numeroDef) {
+                        case 1:
+                            d = new TourelleBase(env);
+                            break;
+                        case 2:
+                            d = new Tesla(env);
+                            break;
+                        case 3:
+                            d = new NuageRalentisseur(env);
+                            break;
+                        case 4:
+                            d = new LanceMissile(env);
+                            break;
+                        default:
+                            d = new Mine(env);
+                            break;
+                    }
+
+                    copie.setId(d.getId());
+                    t1.ajusterEmplacementDefense(copie, (int) (copie.getTranslateX() / 16), (int) (copie.getTranslateY() / 16));
+                    d.setColonne((int) copie.getTranslateX());
+                    d.setLigne((int) copie.getTranslateY());
+                    env.ajouterDefense(d);
+
+                    env.getBfs().testBFS();
+
+                    int nbDefenseCourant = env.getDefense().size();
+                    if (nbDefenseAncien == nbDefenseCourant) {
+                        pane.getChildren().remove(copie);
+                    }
+
+                } else {
+                    pane.getChildren().remove(copie);
+                }
+                    copie.removeEventHandler(MouseEvent.MOUSE_DRAGGED, handler1);
+                    pane.removeEventHandler(MouseEvent.MOUSE_DRAGGED, e1 -> {});
+                    pane.removeEventHandler(MouseEvent.MOUSE_RELEASED, this);
+                }
+
+        };
+
+        pane.addEventHandler(MouseEvent.MOUSE_RELEASED, handler2);
+
+
+
     }
 
     private void initTowerDefense() {
@@ -86,83 +192,10 @@ public class Controleur implements Initializable {
         );
         gameLoop.getKeyFrames().add(kf);
     }
-    @FXML
-    void placementDefense(ActionEvent event){
-        Button b;
-        int numeroButton;
 
-        if (ajoutTourelle.isFocused()) {
-            b = ajoutTourelle;
-            numeroButton = 1;
-        }
-        else if (ajoutTesla.isFocused()) {
-            b = ajoutTesla;
-            numeroButton = 2;
-        }
-        else if (ajoutRalentisseur.isFocused()){
-            b = ajoutRalentisseur;
-            numeroButton = 3;
-        }
-        else if (ajoutLanceMissile.isFocused()){
-            b = ajoutLanceMissile;
-            numeroButton = 4;
-        }
-        else {
-                b = ajoutMine;
-                numeroButton = 5;
-        }
-
-        DefenseVue defVue = new DefenseVue(pane);
-        ImageView c = defVue.creerSpriteDefense(numeroButton);
-
-        b.setOnMouseDragged(e1 -> {
-            c.setTranslateX((int) e1.getSceneX());
-            c.setTranslateY((int) (e1.getSceneY() - Top.getHeight()));
-
-            b.setOnMouseReleased(e2 -> {
-                Defense d;
-                if (defenseBienPlacé(c)) {
-                    if (b.equals(ajoutTourelle))
-                        d = new TourelleBase(env);
-                    else if (b.equals(ajoutTesla)) {
-                        d = new Tesla(env);
-                    }
-                    else if (b.equals(ajoutLanceMissile)) {
-                        d = new LanceMissile(env);
-                    }
-                    else if (b.equals(ajoutRalentisseur)) {
-                        d = new NuageRalentisseur(env);
-                    }
-                    else {
-                        d = new Mine(env);
-                    }
-                    c.setId(d.getId());
-
-                    t1.ajouterDefenseDansModele(c.getTranslateX(), c.getTranslateY());
-                    t1.ajusterEmplacementDefense(c, (int) (c.getTranslateX() / 16), (int) (c.getTranslateY() / 16));
-                    d.setColonne((int) c.getTranslateX());
-                    d.setLigne((int) c.getTranslateY());
-                    env.ajouterDefense(d);
-                    System.out.println("Défense ajoutée");
-
-                }
-                else {
-                    System.out.println("Erreur");
-                    pane.getChildren().remove(c);
-                }
-
-
-                env.getBfs().testBFS();
-            });
-        });
-
-
+    private boolean defenseBienPlacé(double x, double y) {
+        return ((x < tilepane.getMaxWidth() && y < tilepane.getMaxHeight()) && (x > tilepane.getMinWidth() && y > tilepane.getMinHeight()) && (env.getTerrainModele().getTerrain()[(int) y /16][(int) x /16] == 0));
     }
-
-    private boolean defenseBienPlacé(ImageView c) {
-        return ((c.getTranslateX() < tilepane.getMaxWidth() && c.getTranslateY() < tilepane.getMaxHeight()) && (c.getTranslateX() > tilepane.getMinWidth() && c.getTranslateY() > tilepane.getMinHeight()) && env.getTerrainModele().getTerrain()[(int) c.getTranslateY() /16][(int) c.getTranslateX() /16] == 0);
-    }
-
 }
 
 

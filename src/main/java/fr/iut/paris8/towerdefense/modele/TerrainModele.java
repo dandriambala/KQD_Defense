@@ -19,10 +19,10 @@ public class TerrainModele {
                 if (li == 0 || li == t.length - 1 || co == 0 || co == t[li].length - 1)
                     t[li][co] = 0;
 //                //TODO première version de l'affichage qui va être remplacé lorsqu'on aura le bfs
-//                if (i == t.length / 2)
-//                    t[i][j] = 1;
                 if (li == 0  ||  co == 0 || li == t.length -1 || co == t[li].length-1 )
                     t[li][co] = 2;
+                if (li == 10 && co == 0 || li == 10 && co == t[li].length-1)
+                    t[li][co] = 1;
             }
         }
 
@@ -66,5 +66,4 @@ public class TerrainModele {
         c.setTranslateX(colonne * 16 );
         c.setTranslateY(ligne * 16 );
     }
-
 }
