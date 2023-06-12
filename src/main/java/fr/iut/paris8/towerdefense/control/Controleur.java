@@ -3,6 +3,7 @@ package fr.iut.paris8.towerdefense.control;
 
 import fr.iut.paris8.towerdefense.modele.*;
 import fr.iut.paris8.towerdefense.vue.TerrainVue;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.ListChangeListener;
@@ -47,6 +48,11 @@ public class Controleur implements Initializable {
     @FXML
     private ImageView imMissile;
 
+    @FXML
+    private ImageView startImage;
+    @FXML
+    private ImageView pauseImage;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         t1 = new TerrainModele();
@@ -55,7 +61,6 @@ public class Controleur implements Initializable {
         TerrainVue tv = new TerrainVue(t1, tilepane);
         tv.afficherTuile();
         initTowerDefense();
-        gameLoop.play();
 
         ListChangeListener l1 = new ObservateurEnMouvement(pane);
         this.env.getEnMouvements().addListener(l1);
@@ -82,8 +87,8 @@ public class Controleur implements Initializable {
 
         //creation de la copie de l'image qu'on va drag à partir de l'image View de base
         ImageView copie = new ImageView(iW.getImage());
-        copie.setTranslateX(90);
-        copie.setTranslateY(360);
+        copie.setTranslateX(120);
+        copie.setTranslateY(420);
 
 
         if (numeroDef == 3){
@@ -167,6 +172,24 @@ public class Controleur implements Initializable {
         return ((c.getTranslateX() < tilepane.getMaxWidth() && c.getTranslateY() < tilepane.getMaxHeight()) && (c.getTranslateX() > tilepane.getMinWidth() && c.getTranslateY() > tilepane.getMinHeight()) && env.getTerrainModele().getTerrain()[(int) c.getTranslateY() /16][(int) c.getTranslateX() /16] == 0);
     }
 
+    @FXML
+    public void commencerPartie(){
+        startImage.setOnMouseClicked(e -> {
+            gameLoop.play();
+        });
+    }
+
+    @FXML
+    public void mettreEnPause(){
+        pauseImage.setOnMouseClicked(e -> {
+            if (gameLoop.getStatus() == Animation.Status.RUNNING) {
+                gameLoop.pause();
+            } else {
+                gameLoop.play();
+
+            }
+        });
+    }
 }
 
 
