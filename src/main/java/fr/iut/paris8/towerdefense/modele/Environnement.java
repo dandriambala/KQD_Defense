@@ -23,12 +23,11 @@ public class Environnement {
     private TerrainModele t;
     private BFS bfs;
     private RessourceJeu ressourceJeu;
+    private boolean partieTerminee = false;
 
     public Environnement ( TerrainModele t ) {
-        super();
         this.nbToursProperty = new SimpleIntegerProperty();
         this.nbToursProperty.setValue(0);
-
         this.enMouvements = FXCollections.observableArrayList();
         this.defenses = FXCollections.observableArrayList();
         this.t = t;
@@ -36,7 +35,6 @@ public class Environnement {
         vague = new GenerateurVague();
         ressourceJeu = new RessourceJeu();
     }
-
     public final IntegerProperty nbToursProperty () {
         return this.nbToursProperty;
     }
@@ -57,26 +55,6 @@ public class Environnement {
             }
         }
         return listeEnnemis;
-    }
-
-    public ObservableList<BalleTourelleBase> getBalles () {
-        ObservableList<BalleTourelleBase> listeBalleTourelleBases = FXCollections.observableArrayList();
-        for (EnMouvement em : enMouvements) {
-            if ( em instanceof BalleTourelleBase) {
-                listeBalleTourelleBases.add((BalleTourelleBase) em);
-            }
-        }
-        return listeBalleTourelleBases;
-    }
-
-    public ObservableList<Piege> getPieges () {
-        ObservableList<Piege> listePiege = FXCollections.observableArrayList();
-        for (Defense d : defenses) {
-            if ( d instanceof Piege ) {
-                listePiege.add((Piege) d);
-            }
-        }
-        return listePiege;
     }
 
     public ObservableList<Defense> getDefense () {
@@ -121,7 +99,9 @@ public class Environnement {
             }
             else
                 defenses.add(d);
+            getTerrainModele().ajouterDefenseDansModele(d.getColonne(), d.getLigne());
         }
+
     }
     public Ennemi getEnnemiID ( String id ) {
         for (Ennemi a : this.getEnnemis()) {
@@ -137,21 +117,35 @@ public class Environnement {
     }
 
     public void unTour() {
-
-        if (!vague.finPartie() && !ressourceJeu.partiePerdu()) {
             nbToursProperty.setValue(nbToursProperty.getValue() + 1);
 
-
-            for (Defense d : defenses) {
-                d.agir();
-            }
+            this.defensesPourChaqueTour();
 
             vague.vaguePourChaqueTour(this);
 
             this.enMouvementsPourChaqueTour();
 
-            piegesPourChaqueTour();
+
+            finPartie();
+    }
+
+    public int finPartie(){
+
+        //si les pv sont supérieur à 0 et que les vagues on atteint 50 alors la partie est gagné et ca retourne 0
+        if (!ressourceJeu.partiePerdu() && vague.finPartie()) {
+            partieTerminee = true;
+            return 0;
         }
+        else if (ressourceJeu.partiePerdu()){
+            partieTerminee = true;
+            return 1;
+        }
+        return -1;
+
+    }
+
+    public boolean getPartieTerminee(){
+        return partieTerminee;
     }
 
     public void enMouvementsPourChaqueTour () {
@@ -171,6 +165,14 @@ public class Environnement {
                 suppressionParPassageEnBase(enMo.getId());
                 enMouvements.remove(enMo);
             }
+        }
+    }
+
+    public void defensesPourChaqueTour(){
+        for (int i = defenses.size()-1; i>=0; i--) {
+            defenses.get(i).agir();
+            if(defenses.get(i) instanceof Piege && ((Piege) defenses.get(i)).finDeVie())
+                enleverDefense(defenses.get(i));
         }
     }
 
@@ -202,7 +204,7 @@ public class Environnement {
     public Defense chercherDefenseDansPorteeEnnemi(int x, int y, int portee) {
 
         for (Tourelle t : this.getTourelle()) {
-            if ((( x + portee) >= t.getColonne() ) &&  ( t.getLigne() == y ) ) {
+            if ((( x + portee) >= t.getColonne() ) && (x<=t.getColonne()) && ( t.getLigne() == y ) ) {
                 return t;
             }
         }
@@ -229,14 +231,18 @@ public class Environnement {
         }
     }
     public void enleverDefense (Defense d) {
+        t.caseAZero(d.getColonne()/16,d.getLigne()/16);
         this.defenses.remove(d);
-    }
-    /* Vérifie si les pièges sont encores actifs sinon les retire*/
-    public void piegesPourChaqueTour () {
-        for (int i = getPieges().size() - 1; i >= 0; i--) {
-            if ( getPieges().get(i).finDeVie() ) {
-                defenses.remove(getPieges().get(i));
-            }
+//        afficherTerrain(getTerrainModele());
+
+        if(d instanceof Tourelle) {
+            Case sommet = new Case(d.getColonne() / 16, d.getLigne() / 16);
+            bfs.getG().reconnecte(sommet);
+            this.getBfs().testBFS();
         }
     }
+
+//    public boolean estDansEnvironnement(String s){
+//        if(defenses.contains())
+//    }
 }

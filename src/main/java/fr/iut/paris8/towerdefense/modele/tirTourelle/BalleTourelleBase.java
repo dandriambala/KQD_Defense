@@ -16,10 +16,10 @@ public class BalleTourelleBase extends EnMouvement {
 
     public BalleTourelleBase(int positionX, int positionY, int vitesse, Environnement env, double ennemiCibleX, double ennemiCibleY, int rayonAction) {
         super(positionX + 8, positionY + 8, vitesse, env);
-        this.ennemiCibleX = ennemiCibleX;
+        this.ennemiCibleX = ennemiCibleX+16;
         this.ennemiCibleY = ennemiCibleY;
-        directionX = Math.cos(directionPourCible(ennemiCibleX,ennemiCibleY));
-        directionY = Math.sin(directionPourCible(ennemiCibleX,ennemiCibleY));
+        directionX = Math.cos(directionPourCible(this.ennemiCibleX,this.ennemiCibleY));
+        directionY = Math.sin(directionPourCible(this.ennemiCibleX,this.ennemiCibleY));
         this.rayonAction = rayonAction;
         setId("B" + compteurBalle);
         compteurBalle++;

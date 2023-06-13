@@ -10,7 +10,7 @@ public class RessourceJeu {
 
     public RessourceJeu() {
         this.pv = new SimpleIntegerProperty(150);
-        this.argent = new SimpleIntegerProperty(150);
+        this.argent = new SimpleIntegerProperty(10000);
     }
 
     public int getPv() {
@@ -46,6 +46,7 @@ public class RessourceJeu {
     }
 
 
+    //retourne vrai si les pv sont inférieur à 0
     public boolean partiePerdu(){return getPv() <= 0;}
 
     public void achatTourelle(int cout){

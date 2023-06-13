@@ -32,3 +32,12 @@
 .button:active {
     -fx-background-color: #3e8e41;
 }
+
+.label {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-align: center;
+    -fx-color: black;
+    -fx-border-radius: 5px;
+    -fx-border: none;
+}
