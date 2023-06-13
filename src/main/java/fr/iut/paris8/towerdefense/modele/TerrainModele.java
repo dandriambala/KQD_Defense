@@ -19,10 +19,10 @@ public class TerrainModele {
                 if (li == 0 || li == t.length - 1 || co == 0 || co == t[li].length - 1)
                     t[li][co] = 0;
 //                //TODO première version de l'affichage qui va être remplacé lorsqu'on aura le bfs
-//                if (i == t.length / 2)
-//                    t[i][j] = 1;
                 if (li == 0  ||  co == 0 || li == t.length -1 || co == t[li].length-1 )
                     t[li][co] = 2;
+                if (li == 10 && co == 0 || li == 10 && co == t[li].length-1)
+                    t[li][co] = 1;
             }
         }
 
@@ -48,6 +48,10 @@ public class TerrainModele {
         return ligne*pixel;
     }
 
+    public void caseAZero(double colonne, double ligne){
+        getTerrain()[(int)ligne][(int)colonne] = 0;
+    }
+
     public void ajouterDefenseDansModele(double colonne, double ligne) {
         int co = (int) (Math.round(colonne / 16.0));
         int li = (int) (Math.round(ligne / 16.0));
@@ -62,5 +66,4 @@ public class TerrainModele {
         c.setTranslateX(colonne * 16 );
         c.setTranslateY(ligne * 16 );
     }
-
 }

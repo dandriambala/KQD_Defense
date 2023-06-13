@@ -48,6 +48,10 @@ public class Grille {
 
     }
 
+    public void reconnecte(Case s) {
+        this.obstacles.remove(s);
+    }
+
     public boolean estDeconnecte ( Case s ) {
         return this.obstacles.contains(s);
     }
@@ -62,4 +66,5 @@ public class Grille {
     public void deconnecte( Case s) {
         this.obstacles.add(s);
     }
+
 }

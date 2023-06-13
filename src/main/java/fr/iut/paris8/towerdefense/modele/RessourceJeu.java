@@ -10,7 +10,7 @@ public class RessourceJeu {
 
     public RessourceJeu() {
         this.pv = new SimpleIntegerProperty(150);
-        this.argent = new SimpleIntegerProperty(150);
+        this.argent = new SimpleIntegerProperty(10000);
     }
 
     public int getPv() {

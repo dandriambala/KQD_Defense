@@ -1,17 +1,19 @@
-package fr.iut.paris8.towerdefense.modele;
+package fr.iut.paris8.towerdefense.modele.ennemis;
 
 import fr.iut.paris8.towerdefense.BFS.Case;
+import fr.iut.paris8.towerdefense.modele.EnMouvement;
+import fr.iut.paris8.towerdefense.modele.Environnement;
 
 import java.util.ArrayList;
 
-public abstract class Ennemi extends EnMouvement{
+public abstract class Ennemi extends EnMouvement {
     private static int compteurEnnemi = 0;
     private int prime; //L'argent que donnera l'ennemi à sa mort
     private int pv;
     private Case destinationCase;
 
-    public Ennemi(int x, int y, int vitesse,  int prime, int pv, Environnement env) {
-      super(x,y,vitesse,env);
+    public Ennemi( int vitesse,  int prime, int pv, Environnement env) {
+      super(0,160,vitesse,env);
         this.prime = prime;
         this.pv = pv;
         setId("E"+ compteurEnnemi);
@@ -35,10 +37,6 @@ public abstract class Ennemi extends EnMouvement{
         if ( destinationCase == null )
             setDestinationSommet();
 
-
-//
-//        System.out.println("Sommet\nX : " + destinationSommet.getX() + " Y : " + destinationSommet.getY());
-//        System.out.println("I : " + destinationCase.getColonne() + " J : " + destinationCase.getLigne());
         for (int i = 0; i <= getVitesse(); i++) {
 
             if ( getEnv().getTerrainModele().dansTerrainEnnemie(this.getY() / 16, this.getX() / 16) || this.getX() <= 16 ) {
@@ -92,13 +90,7 @@ public abstract class Ennemi extends EnMouvement{
     public void setDestinationSommet(){
         ArrayList<Case> Sommets = getEnv().getBfs().getParcours();
 
-        Case sommet = new Case();
-        for (Case s : Sommets) {
-            if ( s.getColonne() == getX() / 16 && s.getLigne() == getY() / 16 ) {
-                sommet = s;
-                break;
-            }
-        }
+        Case sommet = new Case(getX()/16,getY()/16);
 
         ArrayList<Case> chemin = getEnv().getBfs().cheminVersSource(sommet);
 

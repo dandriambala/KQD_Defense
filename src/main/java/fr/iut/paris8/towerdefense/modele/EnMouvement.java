@@ -10,13 +10,6 @@ public abstract class EnMouvement {
     private Environnement env;
     private String id;
 
-    public EnMouvement(int x, int y, int vitesse, Environnement env, String id) {
-        this.env = env;
-        this.positionXProperty = new SimpleIntegerProperty(x);
-        this.positionYProperty = new SimpleIntegerProperty(y);
-        this.vitesse = vitesse;
-        this.id = id;
-    }
     public EnMouvement(int x, int y, int vitesse, Environnement env) {
         this.env = env;
         this.positionXProperty = new SimpleIntegerProperty(x);

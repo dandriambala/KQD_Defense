@@ -55,4 +55,12 @@ public class Case implements Comparable<Case> {
             return this.colonne == o.colonne ? this.ligne - o.ligne : 1;
         }
     }
+
+    public void setColonne ( int colonne ) {
+        this.colonne = colonne;
+    }
+
+    public void setLigne ( int ligne ) {
+        this.ligne = ligne;
+    }
 }

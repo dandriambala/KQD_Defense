@@ -3,6 +3,11 @@ package fr.iut.paris8.towerdefense.modele;
 import fr.iut.paris8.towerdefense.BFS.BFS;
 import fr.iut.paris8.towerdefense.BFS.Grille;
 import fr.iut.paris8.towerdefense.BFS.Case;
+import fr.iut.paris8.towerdefense.modele.defenses.Defense;
+import fr.iut.paris8.towerdefense.modele.defenses.Piege;
+import fr.iut.paris8.towerdefense.modele.defenses.Tourelle;
+import fr.iut.paris8.towerdefense.modele.ennemis.Ennemi;
+import fr.iut.paris8.towerdefense.modele.tirTourelle.BalleTourelleBase;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
@@ -21,10 +26,8 @@ public class Environnement {
     private boolean partieTerminee = false;
 
     public Environnement ( TerrainModele t ) {
-        super();
         this.nbToursProperty = new SimpleIntegerProperty();
         this.nbToursProperty.setValue(0);
-
         this.enMouvements = FXCollections.observableArrayList();
         this.defenses = FXCollections.observableArrayList();
         this.t = t;
@@ -54,28 +57,18 @@ public class Environnement {
         return listeEnnemis;
     }
 
-    public ObservableList<Balle> getBalles () {
-        ObservableList<Balle> listeBalles = FXCollections.observableArrayList();
-        for (EnMouvement em : enMouvements) {
-            if ( em instanceof Balle ) {
-                listeBalles.add((Balle) em);
-            }
-        }
-        return listeBalles;
-    }
-
-    public ObservableList<Piege> getPieges () {
-        ObservableList<Piege> listePiege = FXCollections.observableArrayList();
-        for (Defense d : defenses) {
-            if ( d instanceof Piege ) {
-                listePiege.add((Piege) d);
-            }
-        }
-        return listePiege;
-    }
-
     public ObservableList<Defense> getDefense () {
         return defenses;
+    }
+
+    public ObservableList<Tourelle> getTourelle () {
+        ObservableList<Tourelle> listeTourelles = FXCollections.observableArrayList();
+        for (Defense d : defenses) {
+            if ( d instanceof Tourelle ) {
+                listeTourelles.add((Tourelle) d);
+            }
+        }
+        return listeTourelles;
     }
 
 
@@ -89,32 +82,27 @@ public class Environnement {
 
     public void ajouterDefense ( Defense d ) {
 
-        if (getRessourceJeu().peutEncoreAcheter(d.getCout())) {
+        if ( getRessourceJeu().peutEncoreAcheter(d.getCout()) ) {
             getRessourceJeu().achatTourelle(d.getCout());
-            if (d instanceof Tourelle) {
-                int colonne = (d.getColonne() - 8) / 16;
-                int ligne = (d.getLigne() - 8) / 16;
-
-                if (colonne <= 2 && colonne >= 1 && ligne <= 11 && ligne >= 9 && d instanceof Tourelle || colonne <= 59 && colonne >= 57 && ligne <= 11 && ligne >= 9 && d instanceof Tourelle) {
+            if ( d instanceof Tourelle ) {
+                int colonne = ( d.getColonne() - 8 ) / 16;
+                int ligne = ( d.getLigne() - 8 ) / 16;
+                if ( colonne <= 2 && colonne >= 1 && ligne <= 11 && ligne >= 9 && d instanceof Tourelle || colonne <= 59 && colonne >= 57 && ligne <= 11 && ligne >= 9 && d instanceof Tourelle ) {
                     d.setColonne(0);
                     d.setLigne(0);
-                } else {
+                }
+                else {
                     defenses.add(d);
-                    Case sommet = new Case();
-                    for (Case s : bfs.getParcours()) {
-                        if (s.getColonne() == d.getColonne() / 16 && s.getLigne() == d.getLigne() / 16) {
-                            sommet = s;
-                            break;
-                        }
-                    }
-                    bfs.getG().deconnecte(sommet);
+                    bfs.getG().deconnecte(new Case(colonne+1, ligne+1));
                     bfs.testBFS();
                 }
-            } else
+            }
+            else
                 defenses.add(d);
+            getTerrainModele().ajouterDefenseDansModele(d.getColonne(), d.getLigne());
         }
-    }
 
+    }
     public Ennemi getEnnemiID ( String id ) {
         for (Ennemi a : this.getEnnemis()) {
             if ( a.getId().equals(id) ) {
@@ -131,16 +119,13 @@ public class Environnement {
     public void unTour() {
             nbToursProperty.setValue(nbToursProperty.getValue() + 1);
 
-
-            for (Defense d : defenses) {
-                d.agir();
-            }
+            this.defensesPourChaqueTour();
 
             vague.vaguePourChaqueTour(this);
 
             this.enMouvementsPourChaqueTour();
 
-            piegesPourChaqueTour();
+
             finPartie();
     }
 
@@ -170,7 +155,7 @@ public class Environnement {
             if ( ( enMo instanceof Ennemi && ( (Ennemi) enMouvements.get(i) ).estVivant() ) && t.dansTerrain(enMo.getY() / 16, enMo.getX() / 16) ) {
                 enMo.agir();
             }
-            else if ( enMo instanceof Balle && !( (Balle) enMouvements.get(i) ).ennemiAtteint() )
+            else if ( enMo instanceof BalleTourelleBase && !( (BalleTourelleBase) enMouvements.get(i) ).ennemiAtteint() )
                 enMo.agir();
             else if ( enMo instanceof Ennemi && !( (Ennemi) enMouvements.get(i) ).estVivant() ) {
                 mortParTourelle(enMo.getId());
@@ -183,13 +168,24 @@ public class Environnement {
         }
     }
 
+    public void defensesPourChaqueTour(){
+        for (int i = defenses.size()-1; i>=0; i--) {
+            defenses.get(i).agir();
+            if(defenses.get(i) instanceof Piege && ((Piege) defenses.get(i)).finDeVie())
+                enleverDefense(defenses.get(i));
+        }
+    }
+
     public BFS getBfs () {
         return bfs;
     }
 
 
+    //retourne une liste d'ennemis selon une limite que la tourelle aura pour toucher un ennemi en même temps
+    public ArrayList<Ennemi> chercherEnnemisDansPortee(int colonne, int ligne, int portee, int limiteur ) {
+
+
     //retourne une liste d'ennemis selon une limite que la tourelle aura pour toucher plusieurs ennemis en même temps
-    public ArrayList<Ennemi> chercherDansPortee ( int colonne, int ligne, int portee, int limiteur ) {
 
         ArrayList<Ennemi> ennemisDansPortee = new ArrayList<>();
 
@@ -202,6 +198,17 @@ public class Environnement {
             }
         }
         return ennemisDansPortee;
+    }
+
+    //retourne une defense qui se situe près d'un tank
+    public Defense chercherDefenseDansPorteeEnnemi(int x, int y, int portee) {
+
+        for (Tourelle t : this.getTourelle()) {
+            if ((( x + portee) >= t.getColonne() ) && (x<=t.getColonne()) && ( t.getLigne() == y ) ) {
+                return t;
+            }
+        }
+        return null;
     }
 
     public GenerateurVague getVague () {
@@ -223,15 +230,19 @@ public class Environnement {
             ressourceJeu.ennemiEntrerDansLaBase(getEnnemiID(id).getPv() / 25);
         }
     }
-    /* Vérifie si les pièges sont encores actifs sinon les retire*/
-    public void piegesPourChaqueTour () {
-        for (int i = getPieges().size() - 1; i >= 0; i--) {
-            if ( getPieges().get(i).finDeVie() ) {
-                defenses.remove(getPieges().get(i));
-            }
-        }
+    public void enleverDefense (Defense d) {
+        t.caseAZero(d.getColonne()/16,d.getLigne()/16);
+        this.defenses.remove(d);
+//        afficherTerrain(getTerrainModele());
 
+        if(d instanceof Tourelle) {
+            Case sommet = new Case(d.getColonne() / 16, d.getLigne() / 16);
+            bfs.getG().reconnecte(sommet);
+            this.getBfs().testBFS();
+        }
     }
 
+//    public boolean estDansEnvironnement(String s){
+//        if(defenses.contains())
+//    }
 }
-
