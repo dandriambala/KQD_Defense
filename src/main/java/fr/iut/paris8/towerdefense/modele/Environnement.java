@@ -18,6 +18,7 @@ public class Environnement {
     private TerrainModele t;
     private BFS bfs;
     private RessourceJeu ressourceJeu;
+    private boolean partieTerminee = false;
 
     public Environnement ( TerrainModele t ) {
         super();
@@ -31,7 +32,6 @@ public class Environnement {
         vague = new GenerateurVague();
         ressourceJeu = new RessourceJeu();
     }
-
     public final IntegerProperty nbToursProperty () {
         return this.nbToursProperty;
     }
@@ -129,8 +129,6 @@ public class Environnement {
     }
 
     public void unTour() {
-
-        if (!vague.finPartie() && !ressourceJeu.partiePerdu()) {
             nbToursProperty.setValue(nbToursProperty.getValue() + 1);
 
 
@@ -143,7 +141,26 @@ public class Environnement {
             this.enMouvementsPourChaqueTour();
 
             piegesPourChaqueTour();
+            finPartie();
+    }
+
+    public int finPartie(){
+
+        //si les pv sont supérieur à 0 et que les vagues on atteint 50 alors la partie est gagné et ca retourne 0
+        if (!ressourceJeu.partiePerdu() && vague.finPartie()) {
+            partieTerminee = true;
+            return 0;
         }
+        else if (ressourceJeu.partiePerdu()){
+            partieTerminee = true;
+            return 1;
+        }
+        return -1;
+
+    }
+
+    public boolean getPartieTerminee(){
+        return partieTerminee;
     }
 
     public void enMouvementsPourChaqueTour () {

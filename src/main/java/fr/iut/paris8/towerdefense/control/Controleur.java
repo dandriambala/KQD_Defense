@@ -6,9 +6,11 @@ import fr.iut.paris8.towerdefense.vue.TerrainVue;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -163,6 +165,12 @@ public class Controleur implements Initializable {
                 Duration.seconds(0.08),
                 (ev -> {
                     env.unTour();
+
+
+                    if (env.getPartieTerminee()) {
+                        gameLoop.stop();
+                        afficherAlerte("Partie terminée", "Vous avez perdu la partie.");
+                    }
                 })
         );
         gameLoop.getKeyFrames().add(kf);
@@ -190,7 +198,15 @@ public class Controleur implements Initializable {
             }
         });
     }
+
+    private void afficherAlerte(String titre, String message) {
+        Platform.runLater(() -> {
+        Alert alerte = new Alert(Alert.AlertType.INFORMATION);
+        alerte.setTitle(titre);
+        alerte.setHeaderText(null);
+        alerte.setContentText(message);
+        alerte.showAndWait();
+        });
+    }
+
 }
-
-
-

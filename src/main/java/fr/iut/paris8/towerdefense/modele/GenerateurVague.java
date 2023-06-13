@@ -63,6 +63,7 @@ public class GenerateurVague {
         return (x<=pp);
     }
 
+    //retourne vrai si on est arrivé à la fin de toutes les vagues
     public boolean finPartie(){
         return getNbVague() ==50;
     }

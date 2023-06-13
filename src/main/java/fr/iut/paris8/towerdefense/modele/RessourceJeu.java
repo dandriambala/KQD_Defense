@@ -46,6 +46,7 @@ public class RessourceJeu {
     }
 
 
+    //retourne vrai si les pv sont inférieur à 0
     public boolean partiePerdu(){return getPv() <= 0;}
 
     public void achatTourelle(int cout){
