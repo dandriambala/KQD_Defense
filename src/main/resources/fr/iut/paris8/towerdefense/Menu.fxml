@@ -16,6 +16,7 @@
          </children>
       </VBox>
    </children>
+
    <stylesheets>
       <URL value="@styleMenu.css" />
    </stylesheets>

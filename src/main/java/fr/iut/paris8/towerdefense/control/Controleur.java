@@ -117,16 +117,17 @@ public class Controleur implements Initializable {
         pane.getChildren().add(copie);
 
         BFS bfsSecondaire = new BFS(new Grille(env.getTerrainModele().getWidth() / 16, env.getTerrainModele().getHeight() / 16), new Case(59, 10));
-        Case caseDentree = new Case(1, 10);
         Case caseTourelle = new Case();
         Case premier = new Case();
+        ArrayList<Case> listeObsMis = env.getBfs().getG().getObstacles();
 
         for (Defense defense : env.getDefense())
             if ( defense instanceof Tourelle )
                 bfsSecondaire.getG().deconnecte(new Case(defense.getColonne() / 16, defense.getLigne() / 16));
         bfsSecondaire.testBFS();
 
-        ArrayList<Case> chemin = bfsSecondaire.cheminVersSource(caseDentree);
+
+        ArrayList<Case> chemin = bfsSecondaire.cheminVersSource(new Case(1, 10));
         ArrayList<Circle> listSprite = new ArrayList<>();
 
         affichageChemin(bfsSecondaire, listSprite);
@@ -150,7 +151,7 @@ public class Controleur implements Initializable {
                     }
                     else {
                         if ( !caseTourelle.equals(premier) ) {
-                            System.out.println(caseTourelle + " " + premier);
+                            System.out.println("refait le bfs" + caseTourelle + " " + premier);
                             effacerChemin(listSprite);
                             affichageChemin(bfsSecondaire, listSprite);
                             premier.setColonne(caseTourelle.getColonne());
@@ -159,12 +160,12 @@ public class Controleur implements Initializable {
                     }
                 }
                 else {
-                    if ( bfsSecondaire.getG().estDeconnecte(caseTourelle) ) {
-                        bfsSecondaire.getG().reconnecte(caseTourelle);
-                        System.out.println("reconnecter");
-                        effacerChemin(listSprite);
-                        affichageChemin(bfsSecondaire, listSprite);
-                    }
+                        if ( bfsSecondaire.getG().estDeconnecte(caseTourelle) && !listeObsMis.contains(caseTourelle)) {
+                            bfsSecondaire.getG().reconnecte(caseTourelle);
+                            System.out.println("reconnecter");
+                            effacerChemin(listSprite);
+                            affichageChemin(bfsSecondaire, listSprite);
+                        }
                 }
             }
         };
@@ -220,26 +221,18 @@ public class Controleur implements Initializable {
                 }
 
         };
-
         pane.addEventHandler(MouseEvent.MOUSE_RELEASED, handler2);
-
-
-
     }
 
     private void initTowerDefense() {
 
         gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);
-
-
         KeyFrame kf = new KeyFrame(
 
                 Duration.seconds(0.08),
                 (ev -> {
                     env.unTour();
-
-
                     if (env.getPartieTerminee()) {
                         gameLoop.stop();
                         afficherAlerte("Partie terminée", "Vous avez perdu la partie.");
@@ -312,7 +305,7 @@ public class Controleur implements Initializable {
         int compteur = 0;
 
         for ( Circle circle : list){
-            pane.getChildren().remove(pane.lookup("#chemin"+compteur));
+            pane.getChildren().remove(circle);
             compteur++;
         }
     }

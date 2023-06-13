@@ -48,7 +48,11 @@ public class Grille {
 
     }
 
-    public void reconnecte(Case s) {
+    public ArrayList<Case> getObstacles () {
+        return obstacles;
+    }
+
+    public void reconnecte( Case s) {
         this.obstacles.remove(s);
     }
 
