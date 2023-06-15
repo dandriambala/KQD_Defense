@@ -41,36 +41,22 @@ public abstract class Ennemi extends EnMouvement {
 
             if ( getEnv().getTerrainModele().dansTerrainEnnemie(this.getY() / 16, this.getX() / 16) || this.getX() <= 16 ) {
                 if ( getX() != destinationCase.getX() ) {
-                    if ( destinationCase.getX() - getX() > 0 ) {
+                    if ( destinationCase.getX() - getX() > 0 )
                         avancerEnX();
-                        if ( destinationCase.getX() - getX() < 0 )
-                            setDestinationSommet();
-                    }
-                    else {
+                    else
                         reculerEnX();
-                        if ( destinationCase.getX() - getX() > 0 )
-                            setDestinationSommet();
-                    }
                 }
                 else if ( getY() != destinationCase.getY() ) {
-                    if ( destinationCase.getY() - getY() > 0 ) {
+                    if ( destinationCase.getY() - getY() > 0 )
                         descendreEnY();
-                        if ( destinationCase.getY() - getY() < 0 )
-                            setDestinationSommet();
-                    }
-                    else {
+                    else
                         monterEnY();
-                        if ( destinationCase.getY() - getY() > 0 )
-                            setDestinationSommet();
-                    }
                 }
-                else {
+                else
                     setDestinationSommet();
-                }
              }
-            else{
+            else
                 avancerEnX();
-            }
         }
     }
 
@@ -88,7 +74,6 @@ public abstract class Ennemi extends EnMouvement {
     }
 
     public void setDestinationSommet(){
-        ArrayList<Case> Sommets = getEnv().getBfs().getParcours();
 
         Case sommet = new Case(getX()/16,getY()/16);
 

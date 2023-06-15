@@ -14,12 +14,9 @@ import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-
 import javafx.scene.control.Alert;
-
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -151,7 +148,6 @@ public class Controleur implements Initializable {
                     }
                     else {
                         if ( !caseTourelle.equals(premier) ) {
-                            System.out.println("refait le bfs" + caseTourelle + " " + premier);
                             effacerChemin(listSprite);
                             affichageChemin(bfsSecondaire, listSprite);
                             premier.setColonne(caseTourelle.getColonne());
@@ -244,7 +240,6 @@ public class Controleur implements Initializable {
 
 
     private boolean defenseBienPlacé(ImageView c) {
-        System.out.println(env.getTerrainModele().getTerrain()[(int) c.getTranslateY() /16][(int) c.getTranslateX() /16]);
         return ((c.getTranslateX() < tilepane.getMaxWidth() && c.getTranslateY() < tilepane.getMaxHeight()) && (c.getTranslateX() > tilepane.getMinWidth() && c.getTranslateY() > tilepane.getMinHeight()) && env.getTerrainModele().getTerrain()[(int) c.getTranslateY() /16][(int) c.getTranslateX() /16] == 0);
     }
 
@@ -253,6 +248,7 @@ public class Controleur implements Initializable {
     public void commencerPartie(){
         startImage.setOnMouseClicked(e -> {
             gameLoop.play();
+            System.out.println("play");
         });
     }
 
