@@ -24,9 +24,10 @@ public class BalleTourelleBase extends EnMouvement {
         setId("B" + compteurBalle);
         compteurBalle++;
          }
+
     public void agir(){
-        seDeplacer();
-}
+            seDeplacer();
+    }
 
     public double directionPourCible(double x, double y){
         double ennemiCibleX = x;
@@ -46,5 +47,4 @@ public class BalleTourelleBase extends EnMouvement {
     public boolean ennemiAtteint(){
         return (Math.abs(this.getX() - this.ennemiCibleX) < rayonAction && Math.abs(this.getY() - this.ennemiCibleY) < rayonAction);
     }
-
 }

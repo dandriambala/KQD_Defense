@@ -3,6 +3,7 @@ package fr.iut.paris8.towerdefense.modele.ennemis;
 import fr.iut.paris8.towerdefense.BFS.Case;
 import fr.iut.paris8.towerdefense.modele.EnMouvement;
 import fr.iut.paris8.towerdefense.modele.Environnement;
+import fr.iut.paris8.towerdefense.modele.tirTourelle.BalleTourelleBase;
 
 import java.util.ArrayList;
 

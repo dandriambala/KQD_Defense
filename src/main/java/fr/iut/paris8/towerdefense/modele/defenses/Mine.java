@@ -15,8 +15,15 @@ public class Mine extends Piege {
         compteurMine++;
     }
     public void agir(){
+        super.agir();
         exploser();
     }
+
+/**
+ * La méthode est responsable de l'explosion de la mine.
+ * Elle recherche les ennemis à portée de 1 et leur inflige des dégâts équivalents à la valeur de dégâts de la mine.
+ * Après avoir infligé des dégâts aux ennemis, la méthode met à jour la durée de vie de la tourelle à zéro, ce qui signifie qu'elle est détruite.
+ */
     private void exploser(){
        ArrayList<Ennemi> ennemis = this.getEnv().chercherEnnemisDansPortee(getColonne(),getLigne(),getPortee(), 1);
         if(!ennemis.isEmpty()) {

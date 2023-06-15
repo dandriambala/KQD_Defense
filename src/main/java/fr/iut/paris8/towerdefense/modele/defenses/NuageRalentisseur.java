@@ -21,6 +21,7 @@ public class NuageRalentisseur extends Piege {
     }
 
     public void agir() {
+        super.agir();
         ralentir();
 
         long tempsActuel = System.currentTimeMillis();
@@ -31,6 +32,14 @@ public class NuageRalentisseur extends Piege {
         }
     }
 
+    /**
+     * La méthode "ralentir" est responsable de l'effet de ralentissement appliqué par le nuage.
+     * Elle recherche les ennemis à portée du nuage, s'ils ne sont pas déjà ralentis, elle diminue leur vitesse en fonction du facteur de ralentissement.
+     * Les ennemis ralentis sont ajoutés à la liste "ennemisDansZone" pour un suivi ultérieur.
+     * Ensuite, la méthode vérifie si des ennemis dans la liste "ennemisDansZone" sont morts ou ont quitté la portée de la tourelle.
+     * Dans ces cas, leur vitesse est rétablie à la normale et ils sont retirés de la liste.
+     * Cette méthode permet au nuage de ralentir les ennemis dans sa portée et de maintenir cet effet jusqu'à ce que les ennemis meurent ou sortent de la portée.
+     */
     private void ralentir() {
 
         ArrayList<Ennemi> ennemisaRalentir = this.getEnv().chercherEnnemisDansPortee(getColonne(), getLigne(), getPortee(), 10);
@@ -55,6 +64,13 @@ public class NuageRalentisseur extends Piege {
             }
         }
     }
+
+    /**
+     * La méthode "accélérer" est responsable de l'effet d'accélération appliqué par le nuage.
+     * Elle parcourt la liste des ennemis dans la zone d'effet "ennemisDansZone" et augmente leur vitesse en inversant le facteur de ralentissement.
+     * Cela permet d'accélérer les ennemis qui ont été ralentis précédemment par le nuage.
+     * Cette méthode est appelée lorsque le nuage qui applique le ralentissement est supprimée, afin de rétablir la vitesse normale des ennemis ralentis.
+     */
     private void accélerer(){
         if (!ennemisDansZone.isEmpty()) {
             for (int i = 0; i < ennemisDansZone.size(); i++) {

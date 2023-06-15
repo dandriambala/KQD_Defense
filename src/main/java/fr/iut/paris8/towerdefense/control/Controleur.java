@@ -94,6 +94,32 @@ public class Controleur implements Initializable {
 
     }
 
+
+    /**
+     * La méthode "dragEtReleasedImageView" gère le glissement et le lâcher d'une image représentant une défense.
+     * Elle prend en paramètre l'image view de base et un numéro de défense.
+     *
+     * La méthode effectue les actions suivantes :
+     *   - Crée une copie de l'image view pour la déplacer pendant le glissement.
+     *   - Ajoute la copie à la scène.
+     *   - Initialise un objet BFS pour le calcul des chemins.
+     *   - Déconnecte les cases correspondant aux tourelles existantes dans le graphe du BFS.
+     *   - Affiche le chemin entre la case d'entrée et la case de la tourelle actuellement survolée.
+     *   - Gère les événements de glissement de la copie de l'image :
+     *     - Met à jour les coordonnées de la copie selon la position de la souris.
+     *     - Vérifie si la case de la tourelle est valide (appartient au chemin calculé) :
+     *       - Si la case est valide et n'est pas déconnectée dans le graphe, elle la déconnecte et met à jour le chemin.
+     *       - Si la case est valide et est différente de la case précédente, elle met à jour le chemin.
+     *       - Si la case n'est pas valide et est déconnectée dans le graphe, elle la reconnecte et met à jour le chemin.
+     *   - Gère l'événement de lâcher de la copie :
+     *     - Vérifie si la défense peut être placée à l'emplacement final de la copie.
+     *     - Crée une nouvelle instance de la défense correspondante et l'ajoute à l'environnement si possible.
+     *     - Met à jour le graphe BFS.
+     *     - Si le nombre de défenses n'a pas changé, supprime la copie de la scène.
+     *   - Efface le chemin affiché.
+     *   - Supprime les gestionnaires d'événements associés à la copie.
+     *   - Supprime les gestionnaires d'événements de glissement et de lâcher de la scène.
+     */
     public void dragEtReleasedImageView(ImageView iW, int numeroDef) {
 
         //creation de la copie de l'image qu'on va drag à partir de l'image View de base
@@ -250,12 +276,6 @@ public class Controleur implements Initializable {
     }
 
 
-    private boolean defenseBienPlacé(ImageView c) {
-        System.out.println(env.getTerrainModele().getTerrain()[(int) c.getTranslateY() /16][(int) c.getTranslateX() /16]);
-        return ((c.getTranslateX() < tilepane.getMaxWidth() && c.getTranslateY() < tilepane.getMaxHeight()) && (c.getTranslateX() > tilepane.getMinWidth() && c.getTranslateY() > tilepane.getMinHeight()) && env.getTerrainModele().getTerrain()[(int) c.getTranslateY() /16][(int) c.getTranslateX() /16] == 0);
-    }
-
-
     @FXML
     public void commencerPartie(){
         startImage.setOnMouseClicked(e -> {
@@ -286,6 +306,16 @@ public class Controleur implements Initializable {
     }
 
 
+    /**
+     * La méthode affiche visuellement le chemin calculé par l'algorithme BFS.
+     * Elle prend en paramètre le BFS et une liste de cercles pour représenter le chemin.
+     * La méthode effectue les actions suivantes :
+     *   - Exécute le BFS pour calculer le chemin.
+     *   - Récupère le chemin depuis la source jusqu'à la case en (0, 10).
+     *   - Pour chaque case du chemin, crée un cercle blanc pour la représenter visuellement.
+     *   - Positionne le cercle au centre de la case correspondante.
+     *   - Ajoute le cercle à la scène et à la liste de cercles.
+     */
     private void affichageChemin(BFS bfsSecondaire, ArrayList<Circle> list){
         int compteur = 0;
         bfsSecondaire.testBFS();

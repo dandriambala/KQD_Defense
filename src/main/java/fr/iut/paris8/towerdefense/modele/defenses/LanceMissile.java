@@ -17,7 +17,8 @@ public class LanceMissile extends Tourelle {
         this.balleTourelleBaseActuelle = null;
     }
 
-    public void sniper() {
+
+     private void sniper() {
 
         ArrayList<Ennemi> ennemis = getEnv().chercherEnnemisDansPortee(this.getColonne(), this.getLigne(), this.getPortee(), getNbCible());
 
@@ -36,6 +37,14 @@ public class LanceMissile extends Tourelle {
 
     }
 
+    /**
+     * La tourelle effectue une attaque lorsqu'elle n'est pas en période de "cooldown".
+     * Lors de l'attaque, la tourelle recherche les ennemis à portée et sélectionne le premier ennemi trouvé.
+     * Ensuite, elle recherche les ennemis à portée de ce premier ennemi, et si elle en trouve, elle inflige des dégâts à ces ennemis.
+     * Les dégâts en chaîne sont réalisés grâce à une balle spécifique (balleTourelleBaseActuelle) créée par la tourelle.
+     * Cette balle est utilisée pour infliger des dégâts aux ennemis dans la zone de dégâts en chaîne.
+     * Une fois que l'attaque est terminée, la période de "cooldown" est réinitialisée.
+     */
     public void attaquer() {
         if (cooldown == 0) {
             cooldown = TEMPS;

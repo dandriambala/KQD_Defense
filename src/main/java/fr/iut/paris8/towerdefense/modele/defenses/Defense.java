@@ -39,9 +39,6 @@ public abstract class Defense {
         return colonne.getValue();
     }
 
-    public IntegerProperty colonneProperty(){
-        return colonne;
-    }
 
     public  void setColonne(int n){
         colonne.setValue(n);
@@ -51,9 +48,6 @@ public abstract class Defense {
         return ligne.getValue();
     }
 
-    public IntegerProperty ligneProperty(){
-        return ligne;
-    }
 
     public  void setLigne(int n){
         ligne.setValue(n);

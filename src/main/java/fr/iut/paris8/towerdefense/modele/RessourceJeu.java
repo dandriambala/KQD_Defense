@@ -58,7 +58,6 @@ public class RessourceJeu {
     }
 
     public boolean peutEncoreAcheter(int cout){
-
             return (getArgent()>= cout);
     }
 
