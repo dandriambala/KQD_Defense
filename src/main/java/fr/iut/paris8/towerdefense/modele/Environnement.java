@@ -4,10 +4,8 @@ import fr.iut.paris8.towerdefense.BFS.BFS;
 import fr.iut.paris8.towerdefense.BFS.Grille;
 import fr.iut.paris8.towerdefense.BFS.Case;
 import fr.iut.paris8.towerdefense.modele.defenses.Defense;
-import fr.iut.paris8.towerdefense.modele.defenses.Piege;
 import fr.iut.paris8.towerdefense.modele.defenses.Tourelle;
 import fr.iut.paris8.towerdefense.modele.ennemis.Ennemi;
-import fr.iut.paris8.towerdefense.modele.tirTourelle.Balle;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
@@ -55,6 +53,7 @@ public class Environnement {
         return defenses;
     }
 
+
     public ObservableList<Tourelle> getTourelle () {
         ObservableList<Tourelle> listeTourelles = FXCollections.observableArrayList();
         for (Defense d : defenses) {
@@ -74,14 +73,27 @@ public class Environnement {
         return enMouvements;
     }
 
+    /**
+     * La méthode "ajouterDefense" permet d'ajouter une défense (tourelle ou autre) dans le jeu.
+     * Elle vérifie d'abord si les ressources de jeu permettent l'achat de la défense en fonction de son coût.
+     * Si l'achat est possible, la méthode effectue les actions suivantes :
+     *   - Déduit le coût de la défense des ressources de jeu.
+     *   - elle vérifie si la position de la tourelle est dans une zone restreinte spécifique.
+     *       - Si la position est dans la zone restreinte, elle réinitialise les coordonnées de la défense à (0, 0).
+     *       - Sinon, elle ajoute la défense à la liste des défenses et effectue une déconnexion dans le graphe BFS.
+     *   - Si la défense n'est pas une tourelle, elle l'ajoute simplement à la liste des défenses.
+     *   - Ajoute la défense dans le modèle du terrain.
+     */
     public void ajouterDefense ( Defense d ) {
 
         if ( getRessourceJeu().peutEncoreAcheter(d.getCout()) ) {
             getRessourceJeu().achatTourelle(d.getCout());
             if ( d instanceof Tourelle ) {
+
                 int colonne = ( d.getColonne() ) / 16;
                 int ligne = ( d.getLigne()  ) / 16;
                 if ( colonne <= 2 && colonne >= 1 && ligne <= 11 && ligne >= 9 && d instanceof Tourelle || colonne <= 59 && colonne >= 57 && ligne <= 11 && ligne >= 9 && d instanceof Tourelle ) {
+
                     d.setColonne(0);
                     d.setLigne(0);
                 }
@@ -96,14 +108,6 @@ public class Environnement {
             getTerrainModele().ajouterDefenseDansModele(d.getColonne(), d.getLigne());
         }
 
-    }
-    public Ennemi getEnnemiID ( String id ) {
-        for (Ennemi a : this.getEnnemis()) {
-            if ( a.getId().equals(id) ) {
-                return a;
-            }
-        }
-        return null;
     }
 
     public void ajouterEnnemi ( Ennemi a ) {
@@ -138,31 +142,21 @@ public class Environnement {
         return partieTerminee;
     }
 
+
     public void enMouvementsPourChaqueTour () {
 
         for (int i = enMouvements.size() - 1; i >= 0; i--) {
             EnMouvement enMo = enMouvements.get(i);
-            if ( ( enMo instanceof Ennemi && ( (Ennemi) enMouvements.get(i) ).estVivant() ) && t.dansTerrain(enMo.getY() / 16, enMo.getX() / 16) ) {
-                enMo.agir();
-            }
-            else if ( enMo instanceof Balle && !( (Balle) enMouvements.get(i) ).ennemiAtteint() )
-                enMo.agir();
-            else if ( enMo instanceof Ennemi && !( (Ennemi) enMouvements.get(i) ).estVivant() ) {
-                mortParTourelle(enMo.getId());
-                enMouvements.remove(enMo);
-            }
-            else {
-                suppressionParPassageEnBase(enMo.getId());
-                enMouvements.remove(enMo);
-            }
+
+            enMo.agir();
+            if (enMo.estTerminé())
+                enMouvements.remove(i);
         }
     }
 
     public void defensesPourChaqueTour(){
         for (int i = defenses.size()-1; i>=0; i--) {
             defenses.get(i).agir();
-            if(defenses.get(i) instanceof Piege && ((Piege) defenses.get(i)).finDeVie())
-                enleverDefense(defenses.get(i));
         }
     }
 
@@ -209,26 +203,22 @@ public class Environnement {
         return ressourceJeu;
     }
 
-    public void mortParTourelle ( String id ) {
-        if ( getEnnemiID(id) != null ) {
-            ressourceJeu.mortDUnEnnemi(getEnnemiID(id).getPrime());
-        }
-    }
-
-    public void suppressionParPassageEnBase ( String id ) {
-        if ( getEnnemiID(id) != null ) {
-            ressourceJeu.ennemiEntrerDansLaBase(getEnnemiID(id).getPv() / 25);
-        }
-    }
-    public void enleverDefense (Defense d) {
-        t.caseAZero(d.getColonne()/16,d.getLigne()/16);
+    /**
+     * La méthode "enleverDefense" permet de supprimer une défense du jeu.
+     * Elle effectue les actions suivantes :
+     *   - Met à zéro la valeur de la case correspondant à la position de la défense dans le tableau du terrain.
+     *   - Supprime la défense de la liste des défenses du jeu.
+     *   - Crée un objet "Case" à partir des coordonnées de la défense pour reconnecter cette case dans le graphe BFS.
+     *   - Effectue une nouvelle recherche BFS pour mettre à jour les informations du graphe après la suppression de la défense.
+     */
+    public void enleverDefense(Defense d) {
+        t.caseAZero(d.getColonne() / 16, d.getLigne() / 16);
         this.defenses.remove(d);
 
+        Case sommet = new Case(d.getColonne() / 16, d.getLigne() / 16);
+        bfs.getG().reconnecte(sommet);
+        this.getBfs().testBFS();
 
-        if(d instanceof Tourelle) {
-            Case sommet = new Case(d.getColonne() / 16, d.getLigne() / 16);
-            bfs.getG().reconnecte(sommet);
-            this.getBfs().testBFS();
-        }
     }
+
 }

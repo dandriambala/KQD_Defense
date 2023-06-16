@@ -24,9 +24,11 @@ public class Balle extends EnMouvement {
         setId("B" + compteurBalle);
         compteurBalle++;
          }
+
     public void agir(){
-        seDeplacer();
-}
+        if (!ennemiAtteint())
+            seDeplacer();
+    }
 
     public double directionPourCible(double ennemiCibleX, double ennemiCibleY){
 
@@ -61,6 +63,10 @@ public class Balle extends EnMouvement {
         return rayonAction;
     }
 
+
+    public boolean estTerminé() {
+        return ennemiAtteint();
+    }
     public void setDirectionX(double directionX) {
         this.directionX = directionX;
     }

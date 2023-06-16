@@ -19,6 +19,10 @@ public class Tourelle extends Defense {
         compteurTourelle++;
     }
 
+    public Tourelle(int cout, Environnement env, int portee, int degat, int colonne, int ligne, int nbCible) {
+        super(cout, env, portee, degat, colonne, ligne);
+        this.nbCible = nbCible;
+    }
 
     public void attaquer(){
         ArrayList<Ennemi> ennemis = getEnv().chercherEnnemisDansPortee(this.getColonne(), this.getLigne(),this.getPortee(), nbCible);

@@ -12,6 +12,10 @@ public class Tesla extends Tourelle {
         super(150, env, 5, 1, 5,5);
     }
 
+    public Tesla(Environnement env, int colonne, int ligne) {
+        super(150, env, 5, 1, colonne,ligne,5);
+    }
+
     public Balle creerBallesDansTourelle(Ennemi e){
         Balle b = new Eclair(this.getColonne(), this.getLigne(), getVitesseAttaque(), getEnv(),e);
         getEnv().getEnMouvements().add(b);

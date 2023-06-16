@@ -10,7 +10,17 @@ public abstract class Piege extends Defense {
         super(cout,env,portee,degats);
         this.dureeDeVie = dureeDeVie;
     }
-    public abstract void agir();
+
+    public Piege (int cout, Environnement env, int portee, int degats, int dureeDeVie, int colonne, int ligne){
+        super(cout,env,portee,degats, colonne, ligne);
+        this.dureeDeVie = dureeDeVie;
+    }
+
+    public void agir(){
+        if (finDeVie()){
+            getEnv().enleverDefense(this);
+        }
+    }
 
     public boolean finDeVie(){
         return this.dureeDeVie == 0;

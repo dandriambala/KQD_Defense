@@ -14,7 +14,7 @@
                 <Button mnemonicParsing="false" onAction="#quitter" text="Quitter" />
             </children>
         </HBox>
-        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="280.0" prefHeight="120.0" prefWidth="960.0" text="Vous avez gagner">
+        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="280.0" prefHeight="120.0" prefWidth="960.0" text="Vous avez gagné">
             <font>
                 <Font name="NimbusSans-Regular" size="53.0" />
             </font>
