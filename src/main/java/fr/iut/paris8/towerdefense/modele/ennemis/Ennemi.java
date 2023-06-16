@@ -115,7 +115,11 @@ public abstract class Ennemi extends EnMouvement {
 
     public boolean estTerminé(){
         if (estVivant() && !(getEnv().getTerrainModele().dansTerrainEnnemie(this.getY() / 16, this.getX() / 16))){
-            getEnv().getRessourceJeu().diminuePv(getPv()/25);
+            int pvAEnlever = getPv()/25;
+            if (pvAEnlever < 1){
+                pvAEnlever = 1;
+            }
+            getEnv().getRessourceJeu().diminuePv(pvAEnlever);
             return true;
         }
         else if (!estVivant()  && getEnv().getTerrainModele().dansTerrainEnnemie(this.getY() / 16, this.getX() / 16)){

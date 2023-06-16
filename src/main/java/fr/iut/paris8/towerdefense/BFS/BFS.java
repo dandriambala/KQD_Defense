@@ -14,14 +14,16 @@ public class BFS {
     public BFS(Grille g, Case source) {
         this.g = g;
         this.source = source;
-        testBFS();
+        grilleBFS();
     }
-
-    public void testBFS() {
-        Case s;
-        LinkedList<Case> fifo = new LinkedList<>();
-        parcours = new ArrayList<>();
-        predecesseurs = new HashMap<Case, Case>();
+    /**
+     * Effectue une recherche en largeur sur une grille à partir d'une case source.
+     */
+    public void grilleBFS() {
+        Case s; // Variable temporaire pour stocker les cases en cours de traitement
+        LinkedList<Case> fifo = new LinkedList<>(); // File d'attente pour les cases à traiter
+        parcours = new ArrayList<>(); // Liste des cases parcourues
+        predecesseurs = new HashMap<>(); // Dictionnaire des prédecesseurs des cases
 
         predecesseurs.put(source,null);
         parcours.add(source);

@@ -14,7 +14,7 @@ public class LanceMissile extends Tourelle {
     private Balle balleActuelle;
 
     public LanceMissile(Environnement env) {
-        super(1500, env, 4, 10, 4, 1);
+        super(100, env, 4, 30, 4, 1);
         this.balleActuelle = null;
     }
 

@@ -10,7 +10,7 @@ public class Mine extends Piege {
 
     //La durée de vie à 1 n'a pas d'impact
     public Mine (Environnement env){
-        super(25,env,1,200,1);
+        super(40,env,1,200,1);
         setId("M" + compteurMine);
         compteurMine++;
     }

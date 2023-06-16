@@ -170,7 +170,7 @@ public class Controleur implements Initializable {
         for (Defense defense : env.getDefense())
             if ( defense instanceof Tourelle )
                 bfsSecondaire.getG().deconnecte(new Case(defense.getColonne() / 16, defense.getLigne() / 16));
-        bfsSecondaire.testBFS();
+        bfsSecondaire.grilleBFS();
 
         ArrayList<Case> chemin = bfsSecondaire.cheminVersSource(caseDentree);
         ArrayList<Circle> listSprite = new ArrayList<>();
@@ -209,6 +209,7 @@ public class Controleur implements Initializable {
                         if ( bfsSecondaire.getG().estDeconnecte(caseTourelle) ) {
                             bfsSecondaire.getG().reconnecte(caseTourelle);
                             System.out.println("reconnecter");
+
                             effacerChemin(listSprite);
                             affichageChemin(bfsSecondaire, listSprite);
                         }
@@ -225,7 +226,8 @@ public class Controleur implements Initializable {
                 int nbDefenseAncien = env.getDefense().size();
                 Defense d;
 
-                if ( defenseBienPlacé(copie.getTranslateX(), copie.getTranslateY()) ) {
+
+                if (imageDefenseBienPlacé(copie.getTranslateX(), copie.getTranslateY())) {
 
                     switch ( numeroDef ) {
                         case 1:
@@ -251,7 +253,7 @@ public class Controleur implements Initializable {
                     d.setLigne((int) copie.getTranslateY());
                     env.ajouterDefense(d);
 
-                    env.getBfs().testBFS();
+                    env.getBfs().grilleBFS();
 
                     int nbDefenseCourant = env.getDefense().size();
                     if ( nbDefenseAncien == nbDefenseCourant ) {
@@ -279,7 +281,7 @@ public class Controleur implements Initializable {
 
         KeyFrame kf = new KeyFrame(
 
-                Duration.seconds(0.01),
+                Duration.seconds(0.08),
                 ( ev -> {
                     switch ( env.getPartieTerminee() ) {
                         case -1:
@@ -355,7 +357,7 @@ public class Controleur implements Initializable {
      */
     private void affichageChemin(BFS bfsSecondaire, ArrayList<Circle> list){
         int compteur = 0;
-        bfsSecondaire.testBFS();
+        bfsSecondaire.grilleBFS();
         ArrayList<Case> chemin = bfsSecondaire.cheminVersSource(new Case(0,10));
 
         for ( Case c : chemin){
@@ -370,7 +372,7 @@ public class Controleur implements Initializable {
         }
     }
 
-    private boolean defenseBienPlacé(double x, double y) {
+    private boolean imageDefenseBienPlacé(double x, double y) {
         return ((x < tilepane.getMaxWidth() && y < tilepane.getMaxHeight()) && (x > tilepane.getMinWidth() && y > tilepane.getMinHeight()) && (env.getTerrainModele().getTerrain()[(int) y /16][(int) x /16] == 0));
     }
 

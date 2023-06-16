@@ -9,7 +9,7 @@ import fr.iut.paris8.towerdefense.modele.tirTourelle.Eclair;
 public class Tesla extends Tourelle {
 
     public Tesla(Environnement env) {
-        super(150, env, 5, 1, 5,5);
+        super(150, env, 5, 3, 5,5);
     }
 
     public Tesla(Environnement env, int colonne, int ligne) {

@@ -87,24 +87,29 @@ public class Environnement {
     public void ajouterDefense ( Defense d ) {
 
         if ( getRessourceJeu().peutEncoreAcheter(d.getCout()) ) {
-            getRessourceJeu().achatTourelle(d.getCout());
+
             if ( d instanceof Tourelle ) {
 
-                int colonne = ( d.getColonne() ) / 16;
-                int ligne = ( d.getLigne()  ) / 16;
-                if ( colonne <= 2 && colonne >= 1 && ligne <= 11 && ligne >= 9 && d instanceof Tourelle || colonne <= 59 && colonne >= 57 && ligne <= 11 && ligne >= 9 && d instanceof Tourelle ) {
+                int colonne = ( d.getColonne()) / 16;
+                int ligne = ( d.getLigne()) / 16;
+                if ( colonne <= 2 && colonne >= 1 && ligne <= 11 && ligne >= 9 || colonne <= 59 && colonne >= 57 && ligne <= 11 && ligne >= 9  ) {
 
                     d.setColonne(0);
                     d.setLigne(0);
                 }
                 else {
+                    getRessourceJeu().achatTourelle(d.getCout());
                     defenses.add(d);
                     bfs.getG().deconnecte(new Case(colonne, ligne));
-                    bfs.testBFS();
+
+                    bfs.grilleBFS();
+
                 }
             }
-            else
+            else {
+                getRessourceJeu().achatTourelle(d.getCout());
                 defenses.add(d);
+            }
             getTerrainModele().ajouterDefenseDansModele(d.getColonne(), d.getLigne());
         }
 
@@ -122,6 +127,7 @@ public class Environnement {
             vague.vaguePourChaqueTour(this);
 
             this.enMouvementsPourChaqueTour();
+
 
             partieTerminee = finPartie();
 
@@ -217,7 +223,7 @@ public class Environnement {
 
         Case sommet = new Case(d.getColonne() / 16, d.getLigne() / 16);
         bfs.getG().reconnecte(sommet);
-        this.getBfs().testBFS();
+        this.getBfs().grilleBFS();
 
     }
 
