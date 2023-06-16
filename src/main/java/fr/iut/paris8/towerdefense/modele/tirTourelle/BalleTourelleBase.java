@@ -26,6 +26,7 @@ public class BalleTourelleBase extends EnMouvement {
          }
 
     public void agir(){
+        if (!ennemiAtteint())
             seDeplacer();
     }
 
@@ -46,5 +47,9 @@ public class BalleTourelleBase extends EnMouvement {
 
     public boolean ennemiAtteint(){
         return (Math.abs(this.getX() - this.ennemiCibleX) < rayonAction && Math.abs(this.getY() - this.ennemiCibleY) < rayonAction);
+    }
+
+    public boolean estTerminé(){
+        return ennemiAtteint();
     }
 }

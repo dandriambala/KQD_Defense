@@ -18,6 +18,11 @@ public class LanceMissile extends Tourelle {
     }
 
 
+    public LanceMissile(Environnement env, int colonne, int ligne) {
+        super(1500, env, 3, 10, colonne, ligne, 1 );
+        this.balleTourelleBaseActuelle = null;
+    }
+
      private void sniper() {
 
         ArrayList<Ennemi> ennemis = getEnv().chercherEnnemisDansPortee(this.getColonne(), this.getLigne(), this.getPortee(), getNbCible());
@@ -34,7 +39,7 @@ public class LanceMissile extends Tourelle {
             }
         } else
                 balleTourelleBaseActuelle = null;
-
+        // on remet la balle à null pour ne pas avoir le cas où le missile ne tire plus car il n'a pas touché sa cible
     }
 
     /**

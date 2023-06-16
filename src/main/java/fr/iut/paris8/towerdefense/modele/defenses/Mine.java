@@ -14,6 +14,11 @@ public class Mine extends Piege {
         setId("M" + compteurMine);
         compteurMine++;
     }
+
+    public Mine(Environnement env, int colonne, int ligne){
+        super(25, env, 1, 200, 1, colonne, ligne);
+    }
+
     public void agir(){
         super.agir();
         exploser();

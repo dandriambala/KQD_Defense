@@ -10,5 +10,8 @@ public class TourelleBase extends Tourelle {
         super(60, env, 2, 2,10,1);
     }
 
+    public TourelleBase(Environnement env, int colonne, int ligne) {
+        super(60, env, 2,2, colonne, ligne,1);
+    }
 }
 

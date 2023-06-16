@@ -41,7 +41,7 @@ public class RessourceJeu {
         setArgent(getArgent() + prime);
     }
 
-    public void ennemiEntrerDansLaBase(int a){
+    public void diminuePv(int a){
         setPv(getPv()-a);
     }
 

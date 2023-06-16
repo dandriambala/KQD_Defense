@@ -3,7 +3,7 @@ package fr.iut.paris8.towerdefense.modele.ennemis;
 import fr.iut.paris8.towerdefense.BFS.Case;
 import fr.iut.paris8.towerdefense.modele.EnMouvement;
 import fr.iut.paris8.towerdefense.modele.Environnement;
-import fr.iut.paris8.towerdefense.modele.tirTourelle.BalleTourelleBase;
+import fr.iut.paris8.towerdefense.modele.TerrainModele;
 
 import java.util.ArrayList;
 
@@ -20,6 +20,15 @@ public abstract class Ennemi extends EnMouvement {
         setId("E"+ compteurEnnemi);
         compteurEnnemi++;
     }
+
+    public Ennemi(int x, int y, int vitesse,  int prime, int pv, Environnement env){
+        super(x, y, vitesse, env);
+        this.prime = prime;
+        this.pv = pv;
+        setId("E"+ compteurEnnemi);
+        compteurEnnemi++;
+    }
+
     public int getPv(){return this.pv;}
 
     public boolean estVivant () {
@@ -35,42 +44,41 @@ public abstract class Ennemi extends EnMouvement {
 
 
     public void agir () {
-        if ( destinationCase == null )
-            setDestinationSommet();
+        TerrainModele t = getEnv().getTerrainModele();
+       if (t.dansTerrain(this.getY() / 16, this.getX() / 16)  && estVivant()) {
 
-        for (int i = 0; i <= getVitesse(); i++) {
+            if (destinationCase == null)
+                setDestinationSommet();
 
-            if ( getEnv().getTerrainModele().dansTerrainEnnemie(this.getY() / 16, this.getX() / 16) || this.getX() <= 16 ) {
-                if ( getX() != destinationCase.getX() ) {
-                    if ( destinationCase.getX() - getX() > 0 ) {
-                        avancerEnX();
-                        if ( destinationCase.getX() - getX() < 0 )
-                            setDestinationSommet();
+            for (int i = 0; i <= getVitesse(); i++) {
+
+                if (getEnv().getTerrainModele().dansTerrainEnnemie(this.getY() / 16, this.getX() / 16) || this.getX() <= 16) {
+                    if (getX() != destinationCase.getX()) {
+                        if (destinationCase.getX() - getX() > 0) {
+                            avancerEnX();
+                            if (destinationCase.getX() - getX() < 0)
+                                setDestinationSommet();
+                        } else {
+                            reculerEnX();
+                            if (destinationCase.getX() - getX() > 0)
+                                setDestinationSommet();
+                        }
+                    } else if (getY() != destinationCase.getY()) {
+                        if (destinationCase.getY() - getY() > 0) {
+                            descendreEnY();
+                            if (destinationCase.getY() - getY() < 0)
+                                setDestinationSommet();
+                        } else {
+                            monterEnY();
+                            if (destinationCase.getY() - getY() > 0)
+                                setDestinationSommet();
+                        }
+                    } else {
+                        setDestinationSommet();
                     }
-                    else {
-                        reculerEnX();
-                        if ( destinationCase.getX() - getX() > 0 )
-                            setDestinationSommet();
-                    }
+                } else {
+                    avancerEnX();
                 }
-                else if ( getY() != destinationCase.getY() ) {
-                    if ( destinationCase.getY() - getY() > 0 ) {
-                        descendreEnY();
-                        if ( destinationCase.getY() - getY() < 0 )
-                            setDestinationSommet();
-                    }
-                    else {
-                        monterEnY();
-                        if ( destinationCase.getY() - getY() > 0 )
-                            setDestinationSommet();
-                    }
-                }
-                else {
-                    setDestinationSommet();
-                }
-             }
-            else{
-                avancerEnX();
             }
         }
     }
@@ -104,6 +112,18 @@ public abstract class Ennemi extends EnMouvement {
                 break;
             }
         }
+    }
+
+    public boolean estTerminé(){
+        if (estVivant() && !(getEnv().getTerrainModele().dansTerrainEnnemie(this.getY() / 16, this.getX() / 16))){
+            getEnv().getRessourceJeu().diminuePv(getPv()/25);
+            return true;
+        }
+        else if (!estVivant()  && getEnv().getTerrainModele().dansTerrainEnnemie(this.getY() / 16, this.getX() / 16)){
+            getEnv().getRessourceJeu().mortDUnEnnemi(getPrime());
+            return true;
+        }
+        return false;
     }
 }
 

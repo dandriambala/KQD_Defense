@@ -110,14 +110,6 @@ public class Environnement {
         }
 
     }
-    public Ennemi getEnnemiID ( String id ) {
-        for (Ennemi a : this.getEnnemis()) {
-            if ( a.getId().equals(id) ) {
-                return a;
-            }
-        }
-        return null;
-    }
 
     public void ajouterEnnemi ( Ennemi a ) {
         enMouvements.add(a);
@@ -156,31 +148,14 @@ public class Environnement {
     }
 
 
-    /**
-     * La méthode "enMouvementsPourChaqueTour" gère les mouvements et actions de chaque entité en mouvement dans le jeu pour chaque tour.
-     * Elle parcourt la liste des entités en mouvement et effectue les actions suivantes :
-     *   - Si l'entité en mouvement est un ennemi vivant et est à l'intérieur du terrain, elle appelle sa méthode "agir".
-     *   - Si l'entité en mouvement est une balle tirée par une tourelle et n'a pas atteint sa cible ennemie, elle appelle sa méthode "agir".
-     *   - Si l'entité en mouvement est un ennemi mais n'est plus vivant, elle déclenche une action de mort par une tourelle et la supprime de la liste des entités en mouvement.
-     *   - Dans tous les autres cas, elle déclenche une action de suppression par passage en base et supprime l'entité de la liste en mouvement.
-     */
     public void enMouvementsPourChaqueTour () {
 
         for (int i = enMouvements.size() - 1; i >= 0; i--) {
             EnMouvement enMo = enMouvements.get(i);
-            if ( ( enMo instanceof Ennemi && ( (Ennemi) enMouvements.get(i) ).estVivant() ) && t.dansTerrain(enMo.getY() / 16, enMo.getX() / 16) ) {
-                enMo.agir();
-            }
-            else if ( enMo instanceof BalleTourelleBase && !( (BalleTourelleBase) enMouvements.get(i) ).ennemiAtteint() )
-                enMo.agir();
-            else if ( enMo instanceof Ennemi && !( (Ennemi) enMouvements.get(i) ).estVivant() ) {
-                mortParTourelle(enMo.getId());
-                enMouvements.remove(enMo);
-            }
-            else {
-                suppressionParPassageEnBase(enMo.getId());
-                enMouvements.remove(enMo);
-            }
+            enMo.agir();
+
+            if (enMo.estTerminé())
+                enMouvements.remove(i);
         }
     }
 
@@ -232,19 +207,6 @@ public class Environnement {
     public RessourceJeu getRessourceJeu () {
         return ressourceJeu;
     }
-
-    public void mortParTourelle ( String id ) {
-        if ( getEnnemiID(id) != null ) {
-            ressourceJeu.mortDUnEnnemi(getEnnemiID(id).getPrime());
-        }
-    }
-
-    public void suppressionParPassageEnBase ( String id ) {
-        if ( getEnnemiID(id) != null ) {
-            ressourceJeu.ennemiEntrerDansLaBase(getEnnemiID(id).getPv() / 25);
-        }
-    }
-
 
     /**
      * La méthode "enleverDefense" permet de supprimer une défense du jeu.

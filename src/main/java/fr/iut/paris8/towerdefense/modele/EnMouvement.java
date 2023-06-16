@@ -63,4 +63,6 @@ public abstract class EnMouvement {
 
     public abstract void agir();
 
+    public  abstract boolean estTerminé();
+
 }

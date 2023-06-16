@@ -20,6 +20,15 @@ public class NuageRalentisseur extends Piege {
         compteurRalentisseur++;
     }
 
+    public NuageRalentisseur(Environnement env, int colonne, int ligne) {
+        super(40, env, 3, 0, 20000, colonne, ligne);
+        setId("NR" + compteurRalentisseur);
+
+        ennemisDansZone = new ArrayList<>();
+        tempsDebut = System.currentTimeMillis();
+        compteurRalentisseur++;
+    }
+
     public void agir() {
         super.agir();
         ralentir();
