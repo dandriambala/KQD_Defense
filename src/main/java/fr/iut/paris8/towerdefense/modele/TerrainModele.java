@@ -20,7 +20,9 @@ public class TerrainModele {
                     t[li][co] = 0;
                 if (li == 0  ||  co == 0 || li == t.length -1 || co == t[li].length-1 )
                     t[li][co] = 2;
-                if (li == 10 && co == 0 || li == 10 && co == t[li].length-1)
+//                if (li == 10 && co == 0 || li == 10 && co == t[li].length-1)
+//                    t[li][co] = 1;
+                if (li >= 9 && co == 0 && li <=11 || li >= 9 && co == t[li].length-1 && li <=11)
                     t[li][co] = 1;
             }
         }

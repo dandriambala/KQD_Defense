@@ -12,7 +12,7 @@ public class GenerateurVague {
     private static int pourcentageDifficulte = 6;
     private IntegerProperty nbVague;
     private int nbEnnemisCreeeDansVague;
-    private int nbToursDerniereVagueTerminee; // -1 signifie vague en cours
+    private int nbToursDerniereVagueTerminee; // -1 signifie que la vague précédente est terminée
     private static int limiteur = 1;
 
     public GenerateurVague() {
@@ -39,7 +39,7 @@ public class GenerateurVague {
         nbToursDerniereVagueTerminee = env.getNbTours();
         }
 
-        if (nbToursDerniereVagueTerminee != -1 && env.getNbTours()- nbToursDerniereVagueTerminee >= 60) {
+        if (nbToursDerniereVagueTerminee != -1) {
             if (env.getNbTours() % 20 == 0) {
                 genererUnElementDeLaVague(env);
                 nbEnnemisCreeeDansVague++;
