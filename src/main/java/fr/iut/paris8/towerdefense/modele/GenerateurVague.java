@@ -1,9 +1,6 @@
 package fr.iut.paris8.towerdefense.modele;
 
-import fr.iut.paris8.towerdefense.modele.ennemis.Eclaireur;
-import fr.iut.paris8.towerdefense.modele.ennemis.EnnemiBase;
-import fr.iut.paris8.towerdefense.modele.ennemis.Mastodonte;
-import fr.iut.paris8.towerdefense.modele.ennemis.Tank;
+import fr.iut.paris8.towerdefense.modele.ennemis.*;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
@@ -14,6 +11,7 @@ public class GenerateurVague {
     private int nbEnnemisCreeeDansVague;
     private int nbToursDerniereVagueTerminee; // -1 signifie que la vague précédente est terminée
     private static int limiteur = 1;
+    private double augmentationPv = 1.0;
 
     public GenerateurVague() {
         this.nbVague = new SimpleIntegerProperty(0);
@@ -56,20 +54,25 @@ public class GenerateurVague {
     public void genererUnElementDeLaVague(Environnement env) {
 
         int compteur = 0;
+        Ennemi e = null;
 
         if (!reussitProba(pourcentageDifficulte)) {
             if (getNbVague() >= 5){
-                env.ajouterEnnemi(new Eclaireur(env));
+                e=new Eclaireur(env);
+                env.ajouterEnnemi(e);
             }
             else
-                env.ajouterEnnemi(new EnnemiBase(env));
+                e = new Eclaireur(env);
+                env.ajouterEnnemi(e);
 
         } else {
             if (compteur <= limiteur && getNbVague()>12) {
-                env.ajouterEnnemi(new Tank(env));
+                e = new Tank(env);
+                env.ajouterEnnemi(e);
                 compteur++;
             } else {
-                env.ajouterEnnemi(new Mastodonte(env));
+                e = new Mastodonte(env);
+                env.ajouterEnnemi(e);
             }
         }
         limiteur += 2;

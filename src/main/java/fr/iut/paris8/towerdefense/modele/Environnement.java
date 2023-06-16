@@ -79,7 +79,7 @@ public class Environnement {
 
             if ( d instanceof Tourelle ) {
                 int colonne = ( d.getColonne()) / 16;
-                int ligne = ( d.getLigne() ) / 16;
+                int ligne = ( d.getLigne()) / 16;
                 if ( colonne <= 2 && colonne >= 1 && ligne <= 11 && ligne >= 9 || colonne <= 59 && colonne >= 57 && ligne <= 11 && ligne >= 9  ) {
                     d.setColonne(0);
                     d.setLigne(0);
@@ -87,8 +87,8 @@ public class Environnement {
                 else {
                     getRessourceJeu().achatTourelle(d.getCout());
                     defenses.add(d);
-                    bfs.getG().deconnecte(new Case(colonne+1, ligne+1));
-                    bfs.testBFS();
+                    bfs.getG().deconnecte(new Case(colonne, ligne));
+                    bfs.grilleBFS();
                 }
             }
             else {
@@ -120,7 +120,6 @@ public class Environnement {
             vague.vaguePourChaqueTour(this);
 
             this.enMouvementsPourChaqueTour();
-
 
             finPartie();
     }
@@ -234,7 +233,7 @@ public class Environnement {
         if(d instanceof Tourelle) {
             Case sommet = new Case(d.getColonne() / 16, d.getLigne() / 16);
             bfs.getG().reconnecte(sommet);
-            this.getBfs().testBFS();
+            this.getBfs().grilleBFS();
         }
     }
 }
