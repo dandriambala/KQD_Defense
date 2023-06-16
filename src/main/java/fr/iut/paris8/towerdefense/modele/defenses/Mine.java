@@ -19,11 +19,11 @@ public class Mine extends Piege {
     }
     private void exploser(){
        ArrayList<Ennemi> ennemis = this.getEnv().chercherEnnemisDansPortee(getColonne(),getLigne(),getPortee(), 1);
+
+       //Explose sur le premier ennemi qu'il a dans sa portée
         if(!ennemis.isEmpty()) {
-            for (int i =0; i< ennemis.size(); i++) {
-                ennemis.get(i).decrementerPv(this.getDegats());
+                ennemis.get(0).decrementerPv(this.getDegats());
                 setDureeDeVie(0);
-            }
         }
     }
 

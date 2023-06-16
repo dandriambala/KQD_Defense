@@ -99,12 +99,12 @@ public class Controleur implements Initializable {
         //creation de la copie de l'image qu'on va drag à partir de l'image View de base
         ImageView copie = new ImageView(iW.getImage());
 
+        //Placement dans l'inventaire
         copie.setTranslateX(120);
         copie.setTranslateY(420);
 
 
         if (numeroDef == 3) {
-
             copie.setFitWidth(48);
             copie.setFitHeight(48);
             copie.setPreserveRatio(true);
@@ -116,6 +116,7 @@ public class Controleur implements Initializable {
 
         pane.getChildren().add(copie);
 
+        //Affichage du bfs après sélection de la défense
         BFS bfsSecondaire = new BFS(new Grille(env.getTerrainModele().getWidth() / 16, env.getTerrainModele().getHeight() / 16), new Case(59, 10));
         Case caseDentree = new Case(1, 10);
         Case caseTourelle = new Case();
@@ -223,8 +224,6 @@ public class Controleur implements Initializable {
 
         pane.addEventHandler(MouseEvent.MOUSE_RELEASED, handler2);
 
-
-
     }
 
     private void initTowerDefense() {
@@ -247,12 +246,6 @@ public class Controleur implements Initializable {
                 })
         );
         gameLoop.getKeyFrames().add(kf);
-    }
-
-
-    private boolean defenseBienPlacé(ImageView c) {
-        System.out.println(env.getTerrainModele().getTerrain()[(int) c.getTranslateY() /16][(int) c.getTranslateX() /16]);
-        return ((c.getTranslateX() < tilepane.getMaxWidth() && c.getTranslateY() < tilepane.getMaxHeight()) && (c.getTranslateX() > tilepane.getMinWidth() && c.getTranslateY() > tilepane.getMinHeight()) && env.getTerrainModele().getTerrain()[(int) c.getTranslateY() /16][(int) c.getTranslateX() /16] == 0);
     }
 
 
@@ -290,7 +283,6 @@ public class Controleur implements Initializable {
         int compteur = 0;
         bfsSecondaire.testBFS();
         ArrayList<Case> chemin = bfsSecondaire.cheminVersSource(new Case(0,10));
-
 
         for ( Case c : chemin){
             Circle circle = new Circle(2);

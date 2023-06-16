@@ -7,7 +7,7 @@ import fr.iut.paris8.towerdefense.modele.defenses.Defense;
 import fr.iut.paris8.towerdefense.modele.defenses.Piege;
 import fr.iut.paris8.towerdefense.modele.defenses.Tourelle;
 import fr.iut.paris8.towerdefense.modele.ennemis.Ennemi;
-import fr.iut.paris8.towerdefense.modele.tirTourelle.BalleTourelleBase;
+import fr.iut.paris8.towerdefense.modele.tirTourelle.Balle;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
@@ -155,7 +155,7 @@ public class Environnement {
             if ( ( enMo instanceof Ennemi && ( (Ennemi) enMouvements.get(i) ).estVivant() ) && t.dansTerrain(enMo.getY() / 16, enMo.getX() / 16) ) {
                 enMo.agir();
             }
-            else if ( enMo instanceof BalleTourelleBase && !( (BalleTourelleBase) enMouvements.get(i) ).ennemiAtteint() )
+            else if ( enMo instanceof Balle && !( (Balle) enMouvements.get(i) ).ennemiAtteint() )
                 enMo.agir();
             else if ( enMo instanceof Ennemi && !( (Ennemi) enMouvements.get(i) ).estVivant() ) {
                 mortParTourelle(enMo.getId());

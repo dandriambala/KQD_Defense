@@ -95,7 +95,7 @@
                 <Button fx:id="ajoutLanceMissile" mnemonicParsing="false" text="Missile" />
                 <ImageView fx:id="imMissile" fitHeight="20" fitWidth="20">
                     <image>
-                        <Image url="@missile.png" />
+                        <Image url="@lance-missile.png" />
                     </image>
                 </ImageView>
 

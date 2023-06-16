@@ -23,10 +23,11 @@ public class NuageRalentisseur extends Piege {
     public void agir() {
         ralentir();
 
-        long tempsActuel = System.currentTimeMillis();
-        long dureeEcoulee = tempsActuel - tempsDebut;
-        if (dureeEcoulee > getDureeDeVie()) {
-            accélerer();
+        /* Si la différence entre le temps actuel le temps de création du nuage est supérieure à la durée de vie du nuage
+            Alors on annule son effet et on le fait disparaître
+         */
+        if (System.currentTimeMillis() - tempsDebut > getDureeDeVie()) {
+            accélererAvantDisparition();
             setDureeDeVie(0);
         }
     }
@@ -48,6 +49,7 @@ public class NuageRalentisseur extends Piege {
             for (int i = ennemisDansZone.size() - 1; i >= 0; i--) {
                 if (!ennemisDansZone.get(i).estVivant())
                     ennemisDansZone.remove(ennemisDansZone.get(i));
+                // Si l'ennemi sort de la zone alors on le réaccélère
                 else if (this.getColonne() + getPortee() < ennemisDansZone.get(i).getX() || this.getLigne() + getPortee() < ennemisDansZone.get(i).getY()) {
                     ennemisDansZone.get(i).setVitesse(ennemisDansZone.get(i).getVitesse() * (1/ralentissement));
                     ennemisDansZone.remove(ennemisDansZone.get(i));
@@ -55,7 +57,7 @@ public class NuageRalentisseur extends Piege {
             }
         }
     }
-    private void accélerer(){
+    private void accélererAvantDisparition(){
         if (!ennemisDansZone.isEmpty()) {
             for (int i = 0; i < ennemisDansZone.size(); i++) {
                 ennemisDansZone.get(i).setVitesse(ennemisDansZone.get(i).getVitesse() * (1/ralentissement));
