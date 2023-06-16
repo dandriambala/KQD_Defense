@@ -1,5 +1,8 @@
 package fr.iut.paris8.towerdefense.modele;
 
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.TilePane;
+
 public class TerrainModele {
 
     private int[][] terrain;
@@ -15,11 +18,12 @@ public class TerrainModele {
             for (int co = 0; co < t[li].length; co++) {
                 if (li == 0 || li == t.length - 1 || co == 0 || co == t[li].length - 1)
                     t[li][co] = 0;
-//                //TODO première version de l'affichage qui va être remplacé lorsqu'on aura le bfs
-//                if (i == t.length / 2)
-//                    t[i][j] = 1;
-                if (li == 0 || co == 0 || li == t.length - 1 || co == t[li].length - 1)
+                if (li == 0  ||  co == 0 || li == t.length -1 || co == t[li].length-1 )
                     t[li][co] = 2;
+//                if (li == 10 && co == 0 || li == 10 && co == t[li].length-1)
+//                    t[li][co] = 1;
+                if (li >= 9 && co == 0 && li <=11 || li >= 9 && co == t[li].length-1 && li <=11)
+                    t[li][co] = 1;
             }
         }
 
@@ -34,13 +38,32 @@ public class TerrainModele {
     public boolean dansTerrain(int ligne, int colonne) {
         return (0 <= ligne && ligne < this.ligne && 0 <= colonne && colonne < this.colonne);
     }
-
-    public int getWidth() {
-        return colonne * pixel;
+    public boolean dansTerrainEnnemie(int ligne, int colonne) {
+        return (1 <= ligne && ligne < this.ligne-1 && 0 <= colonne && colonne < this.colonne-1);
     }
 
-    public int getHeight() {
-        return ligne * pixel;
+    public int getWidth(){
+        return colonne*pixel;
+    }
+    public int getHeight(){
+        return ligne*pixel;
     }
 
+    public void caseAZero(double colonne, double ligne){
+        getTerrain()[(int)ligne][(int)colonne] = 0;
+    }
+
+    public void ajouterDefenseDansModele(double colonne, double ligne) {
+        int co = (int) (Math.round(colonne / 16.0));
+        int li = (int) (Math.round(ligne / 16.0));
+
+        if (dansTerrain(li, co) && getTerrain()[li][co] == 0) {
+            getTerrain()[li][co] = 3;
+        }
+    }
+
+    public void ajusterEmplacementDefense(ImageView c, double colonne, double ligne ) {
+        c.setTranslateX(colonne * 16 );
+        c.setTranslateY(ligne * 16 );
+    }
 }

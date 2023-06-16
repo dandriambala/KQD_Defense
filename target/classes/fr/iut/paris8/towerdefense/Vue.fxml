@@ -1,43 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import java.net.URL?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0"
-            prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="fr.iut.paris8.towerdefense.control.Controleur">
-
-    <top>
-        <HBox fx:id="Top" alignment="CENTER_LEFT" prefHeight="63.0" prefWidth="960.0" spacing="20.0"
-              BorderPane.alignment="CENTER">
-            <children>
-                <Label text="Vie"/>
-                <Label text="20"/>
-                <Label text="\$"/>
-            </children>
-        </HBox>
-    </top>
+<BorderPane prefHeight="800.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.iut.paris8.towerdefense.control.Controleur">
+   <top>
+       <HBox fx:id="Top" alignment="CENTER" prefHeight="63.0" prefWidth="960.0" spacing="20.0" BorderPane.alignment="CENTER">
+           <children>
+               <ImageView fitHeight="20" fitWidth="20">
+                   <image>
+                       <Image url="@coeur.png" />
+                   </image>
+               </ImageView>
+               <Label fx:id="nbPvJoueur" prefHeight="33.0" prefWidth="84.0" text="150" />
 
 
-    <center>
-        <Pane fx:id="pane" prefHeight="352.0" prefWidth="960.0" BorderPane.alignment="CENTER">
-            <children>
-                <TilePane fx:id="tilepane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                          minWidth="-Infinity" prefHeight="352.0" prefTileHeight="16.0" prefTileWidth="16.0"
-                          prefWidth="960.0"/>
-            </children>
-        </Pane>
-    </center>
+               <ImageView fitHeight="20" fitWidth="20">
+                   <image>
+                       <Image url="@vague.png" />
+                   </image>
+               </ImageView>
 
+             <Label fx:id="nbVague" prefHeight="33.0" prefWidth="84.0" text="0" />
+               <ImageView fitHeight="20" fitWidth="20">
+                   <image>
+                       <Image url="@argent.png" />
+                   </image>
+               </ImageView>
+             <Label fx:id="nbArgent" prefHeight="33.0" prefWidth="84.0" text="150" />
+
+               <ImageView fx:id="startImage" fitHeight="70" fitWidth="70" onMouseClicked="#commencerPartie">
+                   <image>
+                       <Image url="@start.png" />
+                   </image>
+               </ImageView>
+               <ImageView fx:id="pauseImage" fitHeight="40" fitWidth="40" onMouseClicked="#mettreEnPause">
+                   <image>
+                       <Image url="@pause.png" />
+                   </image>
+               </ImageView>
+         </children>
+      </HBox>
+   </top>
+
+
+   <center>
+      <Pane fx:id="pane" prefHeight="352.0" prefWidth="960.0" BorderPane.alignment="CENTER">
+         <children>
+            <TilePane fx:id="tilepane" maxHeight="352" maxWidth="960" minHeight="0" minWidth="0" prefHeight="352.0" prefTileHeight="16.0" prefTileWidth="16.0" prefWidth="960.0" />
+               <VBox layoutX="105.0" layoutY="486.0" />
+                 <Label layoutX="78.0" layoutY="385.0" prefHeight="100.0" prefWidth="100.0" text="" />
+                 <Label fx:id="inventaire" layoutX="78.0" layoutY="352.0" prefHeight="33.0" prefWidth="100.0" text="Inventaire" />
+         </children>
+      </Pane>
+   </center>
     <bottom>
-        <HBox prefHeight="85.0" prefWidth="960.0" spacing="15.0" BorderPane.alignment="CENTER">
+        <HBox alignment="CENTER" prefHeight="125.0" prefWidth="960.0" spacing="15.0" BorderPane.alignment="CENTER">
             <children>
-                <Button mnemonicParsing="false" onAction="#testEnnemieLent" text="Lent"/>
-                <Button mnemonicParsing="false" onAction="#testEnnemieRapide" text="Rapide"/>
-                <Button fx:id="ajoutTourelle" mnemonicParsing="false" onAction="#testTourelle" text="Tourelle"/>
+                <Button fx:id="ajoutTourelle" mnemonicParsing="false" text="Tourelle" />
+                <ImageView fx:id="imTourelle" fitHeight="20" fitWidth="20">
+                    <image>
+                        <Image url="@tourelleViolet.png" />
+                    </image>
+                </ImageView>
+
+                <Button fx:id="ajoutTesla" mnemonicParsing="false" text="Tesla" />
+                <ImageView fx:id="imTesla" fitHeight="20" fitWidth="20">
+                    <image>
+                        <Image url="@teslaBleu.png" />
+                    </image>
+                </ImageView>
+
+                <Button fx:id="ajoutMine" mnemonicParsing="false" text="Mine" />
+                <ImageView fx:id="imMine" fitHeight="20" fitWidth="20">
+                    <image>
+                        <Image url="@mine.png" />
+                    </image>
+                </ImageView>
+
+                <Button fx:id="ajoutRalentisseur" mnemonicParsing="false" text="Nuage" />
+                <ImageView fx:id="imNuage" fitHeight="20" fitWidth="20">
+                    <image>
+                        <Image url="@nuage.png" />
+                    </image>
+                </ImageView>
+
+                <Button fx:id="ajoutLanceMissile" mnemonicParsing="false" text="Missile" />
+                <ImageView fx:id="imMissile" fitHeight="20" fitWidth="20">
+                    <image>
+                        <Image url="@lance-missile.png" />
+                    </image>
+                </ImageView>
+
             </children>
         </HBox>
     </bottom>
+
+    <stylesheets>
+        <URL value="@styles.css" />
+    </stylesheets>
+
 
 </BorderPane>
