@@ -13,7 +13,7 @@ public class GenerateurVague {
     private IntegerProperty nbVague;
     private int nbEnnemisCreeeDansVague;
     private int nbToursDerniereVagueTerminee; // -1 signifie vague en cours
-
+    private static int limiteur = 1;
 
     public GenerateurVague() {
         this.nbVague = new SimpleIntegerProperty(0);
@@ -52,13 +52,27 @@ public class GenerateurVague {
     }
 
     //gerer par des pourcentage, plus pourcentageDifficulté sera grand, plus on a de chance d'avoir des ennemis fort
-    //todo ajouter un limiteur lorsqu'on aura des ennemis plus forts : boss
-    public void genererUnElementDeLaVague(Environnement env){
-            if (!reussitProba(pourcentageDifficulte)) {
-                env.ajouterEnnemi(new EnnemiBase(env));
-            } else {
-                env.ajouterEnnemi(new Tank(env));
+    //il y a un limiteur pour pas qu'il y ait trop de Tank créer par vague
+    public void genererUnElementDeLaVague(Environnement env) {
+
+        int compteur = 0;
+
+        if (!reussitProba(pourcentageDifficulte)) {
+            if (getNbVague() >= 5){
+                env.ajouterEnnemi(new Eclaireur(env));
             }
+            else
+                env.ajouterEnnemi(new EnnemiBase(env));
+
+        } else {
+            if (compteur <= limiteur && getNbVague()>12) {
+                env.ajouterEnnemi(new Tank(env));
+                compteur++;
+            } else {
+                env.ajouterEnnemi(new Mastodonte(env));
+            }
+        }
+        limiteur += 2;
     }
 
     public static boolean reussitProba(double pourcent){

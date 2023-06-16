@@ -18,7 +18,6 @@ public class TerrainModele {
             for (int co = 0; co < t[li].length; co++) {
                 if (li == 0 || li == t.length - 1 || co == 0 || co == t[li].length - 1)
                     t[li][co] = 0;
-//                //TODO première version de l'affichage qui va être remplacé lorsqu'on aura le bfs
                 if (li == 0  ||  co == 0 || li == t.length -1 || co == t[li].length-1 )
                     t[li][co] = 2;
                 if (li == 10 && co == 0 || li == 10 && co == t[li].length-1)
@@ -58,11 +57,10 @@ public class TerrainModele {
 
         if (dansTerrain(li, co) && getTerrain()[li][co] == 0) {
             getTerrain()[li][co] = 3;
-        } else System.out.println("erreur placement");
+        }
     }
 
     public void ajusterEmplacementDefense(ImageView c, double colonne, double ligne ) {
-        System.out.println(colonne + " " + ligne);
         c.setTranslateX(colonne * 16 );
         c.setTranslateY(ligne * 16 );
     }

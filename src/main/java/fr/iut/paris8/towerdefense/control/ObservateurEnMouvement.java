@@ -3,7 +3,8 @@ package fr.iut.paris8.towerdefense.control;
 import fr.iut.paris8.towerdefense.Main1;
 import fr.iut.paris8.towerdefense.modele.*;
 import fr.iut.paris8.towerdefense.modele.ennemis.*;
-import fr.iut.paris8.towerdefense.modele.tirTourelle.BalleTourelleBase;
+import fr.iut.paris8.towerdefense.modele.tirTourelle.Balle;
+//import fr.iut.paris8.towerdefense.vue.BalleMissile;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -47,8 +48,8 @@ public class ObservateurEnMouvement implements ListChangeListener<EnMouvement> {
         while (change.next()) {
 
             for (EnMouvement em : change.getAddedSubList()){
-                if(em instanceof BalleTourelleBase)
-                    creerSpriteBalle((BalleTourelleBase) em);
+                if(em instanceof Balle)
+                    creerSpriteBalle((Balle) em);
                 else
                     creerSpriteEnnemi((Ennemi) em);
             }
@@ -58,14 +59,25 @@ public class ObservateurEnMouvement implements ListChangeListener<EnMouvement> {
             }
         }
     }
-    public void creerSpriteBalle(BalleTourelleBase b) {
-        Circle c = new Circle(1);
-        c.setFill(Color.YELLOW);
+    public void creerSpriteBalle(Balle b) {
+        Circle c;
+        if(b.getType().equals("missile")) {
+            c = new Circle(5);
+            c.setFill(Color.RED);
+        }
+        else if (b.getType().equals("eclair")){
+            c = new Circle(1);
+            c.setFill(Color.WHITE);
+        }
+        else{
+            c = new Circle(1);
+            c.setFill(Color.YELLOW);
+        }
         c.setTranslateX(b.getX());
         c.setTranslateY(b.getY());
         pane.getChildren().add(c);
-        c.translateXProperty().bind(b.getXProperty());
-        c.translateYProperty().bind(b.getYProperty());
+        c.translateXProperty().bind(b.positionXProperty());
+        c.translateYProperty().bind(b.positionYProperty());
         c.setId(b.getId());
 
     }
@@ -89,8 +101,8 @@ public class ObservateurEnMouvement implements ListChangeListener<EnMouvement> {
         c.setTranslateX(ennemi.getX());
         c.setTranslateY(ennemi.getY());
         pane.getChildren().add(c);
-        c.translateXProperty().bind(ennemi.getXProperty());
-        c.translateYProperty().bind(ennemi.getYProperty());
+        c.translateXProperty().bind(ennemi.positionXProperty());
+        c.translateYProperty().bind(ennemi.positionYProperty());
         c.setId(ennemi.getId());
 
     }

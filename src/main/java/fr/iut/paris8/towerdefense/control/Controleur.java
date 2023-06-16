@@ -110,17 +110,16 @@ public class Controleur implements Initializable {
         //creation de la copie de l'image qu'on va drag à partir de l'image View de base
         ImageView copie = new ImageView(iW.getImage());
 
+        //Placement dans l'inventaire
         copie.setTranslateX(120);
         copie.setTranslateY(420);
 
 
-        if ( numeroDef == 3 ) {
-
+        if (numeroDef == 3) {
             copie.setFitWidth(48);
             copie.setFitHeight(48);
             copie.setPreserveRatio(true);
-        }
-        else {
+        } else {
             copie.setFitWidth(iW.getFitWidth());
             copie.setFitHeight(iW.getFitHeight());
             copie.setPreserveRatio(iW.isPreserveRatio());
@@ -128,6 +127,7 @@ public class Controleur implements Initializable {
 
         pane.getChildren().add(copie);
 
+        //Affichage du bfs après sélection de la défense
         BFS bfsSecondaire = new BFS(new Grille(env.getTerrainModele().getWidth() / 16, env.getTerrainModele().getHeight() / 16), new Case(59, 10));
         Case caseDentree = new Case(1, 10);
         Case caseTourelle = new Case();
@@ -224,8 +224,7 @@ public class Controleur implements Initializable {
                         pane.getChildren().remove(copie);
                     }
 
-                }
-                else {
+                } else {
                     pane.getChildren().remove(copie);
                 }
                 effacerChemin(listSprite);
@@ -234,15 +233,11 @@ public class Controleur implements Initializable {
                 });
                 pane.removeEventHandler(MouseEvent.MOUSE_RELEASED, this);
             }
-
         };
-
         pane.addEventHandler(MouseEvent.MOUSE_RELEASED, handler2);
-
-
     }
 
-    private void initTowerDefense () {
+    private void initTowerDefense() {
 
         gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);
@@ -273,7 +268,7 @@ public class Controleur implements Initializable {
                             }
                             break;
                     }
-                } )
+                })
         );
         gameLoop.getKeyFrames().add(kf);
     }
@@ -287,12 +282,6 @@ public class Controleur implements Initializable {
         primaryStage.setTitle("Towerdefense");
         primaryStage.setScene(scene);
         primaryStage.show();
-    }
-
-
-    private boolean defenseBienPlacé(ImageView c) {
-        System.out.println(env.getTerrainModele().getTerrain()[(int) c.getTranslateY() /16][(int) c.getTranslateX() /16]);
-        return ((c.getTranslateX() < tilepane.getMaxWidth() && c.getTranslateY() < tilepane.getMaxHeight()) && (c.getTranslateX() > tilepane.getMinWidth() && c.getTranslateY() > tilepane.getMinHeight()) && env.getTerrainModele().getTerrain()[(int) c.getTranslateY() /16][(int) c.getTranslateX() /16] == 0);
     }
 
 
@@ -331,7 +320,6 @@ public class Controleur implements Initializable {
         int compteur = 0;
         bfsSecondaire.testBFS();
         ArrayList<Case> chemin = bfsSecondaire.cheminVersSource(new Case(0,10));
-
 
         for ( Case c : chemin){
             Circle circle = new Circle(2);

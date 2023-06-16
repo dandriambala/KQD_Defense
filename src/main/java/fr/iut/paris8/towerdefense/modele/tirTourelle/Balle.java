@@ -2,25 +2,25 @@ package fr.iut.paris8.towerdefense.modele.tirTourelle;
 
 import fr.iut.paris8.towerdefense.modele.EnMouvement;
 import fr.iut.paris8.towerdefense.modele.Environnement;
+import fr.iut.paris8.towerdefense.modele.ennemis.Ennemi;
 
 // Classe représentant les balles tirées par les tourelles
-public class BalleTourelleBase extends EnMouvement {
+public class Balle extends EnMouvement {
     private static int compteurBalle = 0;
     private double directionX;
     private double directionY;
-    private double ennemiCibleX;
-    private double ennemiCibleY;
+    private String type;
 
     //le rayon dans lequel la balle détectera un ennemi
     private int rayonAction;
 
-    public BalleTourelleBase(int positionX, int positionY, int vitesse, Environnement env, double ennemiCibleX, double ennemiCibleY, int rayonAction) {
+    public Balle(int positionX, int positionY, int vitesse, Environnement env, Ennemi e, int rayonAction, String type) {
         super(positionX + 8, positionY + 8, vitesse, env);
-        this.ennemiCibleX = ennemiCibleX+16;
-        this.ennemiCibleY = ennemiCibleY;
-        directionX = Math.cos(directionPourCible(this.ennemiCibleX,this.ennemiCibleY));
-        directionY = Math.sin(directionPourCible(this.ennemiCibleX,this.ennemiCibleY));
+        directionX = Math.cos(directionPourCible(e.getX()+16,e.getY()+16));
+        directionY = Math.sin(directionPourCible(e.getX()+16,e.getY()+16));
+
         this.rayonAction = rayonAction;
+        this.type = type;
         setId("B" + compteurBalle);
         compteurBalle++;
          }
@@ -28,9 +28,7 @@ public class BalleTourelleBase extends EnMouvement {
         seDeplacer();
 }
 
-    public double directionPourCible(double x, double y){
-        double ennemiCibleX = x;
-        double ennemiCibleY = y;
+    public double directionPourCible(double ennemiCibleX, double ennemiCibleY){
 
         // Calculer la direction vers l'ennemi cible
         double direction = Math.atan2(ennemiCibleY - getY(), ennemiCibleX - getX());
@@ -44,7 +42,30 @@ public class BalleTourelleBase extends EnMouvement {
     }
 
     public boolean ennemiAtteint(){
-        return (Math.abs(this.getX() - this.ennemiCibleX) < rayonAction && Math.abs(this.getY() - this.ennemiCibleY) < rayonAction);
+        return !getEnv().chercherEnnemisDansPortee(getX()-8,getY()-8,rayonAction,1).isEmpty();
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public double getDirectionX() {
+        return directionX;
+    }
+
+    public double getDirectionY() {
+        return directionY;
+    }
+
+    public int getRayonAction() {
+        return rayonAction;
+    }
+
+    public void setDirectionX(double directionX) {
+        this.directionX = directionX;
+    }
+
+    public void setDirectionY(double directionY) {
+        this.directionY = directionY;
+    }
 }

@@ -11,10 +11,11 @@ public class Tank extends Ennemi{
         this.setPositionXProperty(this.getX()+1);
         detruireDefenses();
     }
+
+    // enlève les défenses qui sont sur son passage
     public void detruireDefenses(){
         Defense d = this.getEnv().chercherDefenseDansPorteeEnnemi(this.getX(), this.getY(), 16);
         if(d != null) {
-            System.out.println("defense enlevée");
             this.getEnv().enleverDefense(d);
         }
     }
