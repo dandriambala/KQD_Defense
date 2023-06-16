@@ -95,61 +95,6 @@ public class Controleur implements Initializable {
         imMissile.setOnMouseClicked(e -> dragEtReleasedImageView(imMissile, 4));
         imMine.setOnMouseClicked(e -> dragEtReleasedImageView(imMine, 5));
 
-//
-//        TerrainModele test = new TerrainModele();
-//        Environnement environnement = new Environnement(test);
-//
-//        Tesla t = new Tesla(environnement, 80, 112);
-//        environnement.ajouterDefense(t);
-//
-//        Mastodonte mastodonte = new Mastodonte(environnement, 80, 90);
-//        System.out.println(mastodonte.getPv());
-//        environnement.ajouterEnnemi(mastodonte);
-//
-//        environnement.defensesPourChaqueTour();
-//        //340
-//        System.out.println(mastodonte.getPv());
-//
-//        environnement.enleverDefense(t);
-//        TourelleBase tB = new TourelleBase(environnement, 160, 160);
-//        environnement.ajouterDefense(tB);
-//        //340
-//        System.out.println(mastodonte.getPv());
-//
-//        mastodonte.setPositionXProperty(160);
-//        mastodonte.setPositionYProperty(170);
-//
-//        environnement.defensesPourChaqueTour();
-//
-//        //338
-//        System.out.println(mastodonte.getPv());
-//        environnement.enleverDefense(tB);
-//
-//        Mine m = new Mine(environnement, 165, 170);
-//        environnement.ajouterDefense(m);
-//
-//        environnement.defensesPourChaqueTour();
-//        //138
-//        System.out.println(mastodonte.getPv());
-//
-//
-//        NuageRalentisseur nuageRalentisseur = new NuageRalentisseur(environnement, 160, 144);
-//        mastodonte.setPositionXProperty(160);
-//        mastodonte.setPositionYProperty(144);
-//        environnement.ajouterDefense(nuageRalentisseur);
-//        environnement.defensesPourChaqueTour();
-//
-//        System.out.println(mastodonte.getVitesse());
-//
-//        Mastodonte mastodonte2 = new Mastodonte(environnement, 155, 144);
-//        environnement.ajouterEnnemi(mastodonte2);
-//
-//        LanceMissile lanceMissile = new LanceMissile(environnement, 160, 144);
-//        environnement.ajouterDefense(lanceMissile);
-//        environnement.defensesPourChaqueTour();
-//
-//        System.out.println(mastodonte.getPv() + "  " + mastodonte2.getPv());
-
     }
 
 
@@ -336,9 +281,8 @@ public class Controleur implements Initializable {
 
     @FXML
     public void commencerPartie(){
-        startImage.setOnMouseClicked(e -> {
-            gameLoop.play();
-        });
+        startImage.setOnMouseClicked(e ->
+            gameLoop.play());
     }
 
     @FXML

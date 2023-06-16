@@ -4,10 +4,8 @@ import fr.iut.paris8.towerdefense.BFS.BFS;
 import fr.iut.paris8.towerdefense.BFS.Grille;
 import fr.iut.paris8.towerdefense.BFS.Case;
 import fr.iut.paris8.towerdefense.modele.defenses.Defense;
-import fr.iut.paris8.towerdefense.modele.defenses.Piege;
 import fr.iut.paris8.towerdefense.modele.defenses.Tourelle;
 import fr.iut.paris8.towerdefense.modele.ennemis.Ennemi;
-import fr.iut.paris8.towerdefense.modele.tirTourelle.BalleTourelleBase;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
@@ -39,8 +37,6 @@ public class Environnement {
     public final int getNbTours () {
         return this.nbToursProperty.getValue();
     }
-
-
 
     public ObservableList<Ennemi> getEnnemis () {
         ObservableList<Ennemi> listeEnnemis = FXCollections.observableArrayList();
@@ -153,7 +149,6 @@ public class Environnement {
         for (int i = enMouvements.size() - 1; i >= 0; i--) {
             EnMouvement enMo = enMouvements.get(i);
             enMo.agir();
-
             if (enMo.estTerminé())
                 enMouvements.remove(i);
         }
@@ -211,7 +206,7 @@ public class Environnement {
     /**
      * La méthode "enleverDefense" permet de supprimer une défense du jeu.
      * Elle effectue les actions suivantes :
-     *   - Met à zéro la valeur de la case correspondant à la position de la défense dans la matrice du terrain.
+     *   - Met à zéro la valeur de la case correspondant à la position de la défense dans le tableau du terrain.
      *   - Supprime la défense de la liste des défenses du jeu.
      *   - Crée un objet "Case" à partir des coordonnées de la défense pour reconnecter cette case dans le graphe BFS.
      *   - Effectue une nouvelle recherche BFS pour mettre à jour les informations du graphe après la suppression de la défense.
