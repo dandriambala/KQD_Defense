@@ -7,7 +7,7 @@ import fr.iut.paris8.towerdefense.modele.defenses.Tourelle;
 public class TourelleBase extends Tourelle {
 
     public TourelleBase(Environnement env) {
-        super(60, env, 2, 2,10,1);
+        super(60, env, 2, 4,10,1);
     }
 
 }
