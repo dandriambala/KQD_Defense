@@ -48,7 +48,6 @@ public abstract class Defense {
         return ligne.getValue();
     }
 
-
     public  void setLigne(int n){
         ligne.setValue(n);
     }
