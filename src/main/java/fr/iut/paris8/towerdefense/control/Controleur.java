@@ -128,12 +128,12 @@ public class Controleur implements Initializable {
         //creation de la copie de l'image qu'on va drag à partir de l'image View de base
         ImageView copie = new ImageView(iW.getImage());
 
+        //Placement dans l'inventaire
         copie.setTranslateX(120);
         copie.setTranslateY(420);
 
 
         if (numeroDef == 3) {
-
             copie.setFitWidth(48);
             copie.setFitHeight(48);
             copie.setPreserveRatio(true);
@@ -145,6 +145,7 @@ public class Controleur implements Initializable {
 
         pane.getChildren().add(copie);
 
+        //Affichage du bfs après sélection de la défense
         BFS bfsSecondaire = new BFS(new Grille(env.getTerrainModele().getWidth() / 16, env.getTerrainModele().getHeight() / 16), new Case(59, 10));
         Case caseDentree = new Case(1, 10);
         Case caseTourelle = new Case();
@@ -173,7 +174,6 @@ public class Controleur implements Initializable {
                         premier.setLigne(caseTourelle.getLigne());
 
                         bfsSecondaire.getG().deconnecte(caseTourelle);
-                        System.out.println("case deconnecter");
                         effacerChemin(listSprite);
                         affichageChemin(bfsSecondaire, listSprite);
                     }
@@ -190,7 +190,6 @@ public class Controleur implements Initializable {
                 else {
                     if ( bfsSecondaire.getG().estDeconnecte(caseTourelle) ) {
                         bfsSecondaire.getG().reconnecte(caseTourelle);
-                        System.out.println("reconnecter");
                         effacerChemin(listSprite);
                         affichageChemin(bfsSecondaire, listSprite);
                     }
@@ -251,8 +250,6 @@ public class Controleur implements Initializable {
         };
 
         pane.addEventHandler(MouseEvent.MOUSE_RELEASED, handler2);
-
-
 
     }
 
@@ -322,7 +319,6 @@ public class Controleur implements Initializable {
         int compteur = 0;
         bfsSecondaire.testBFS();
         ArrayList<Case> chemin = bfsSecondaire.cheminVersSource(new Case(0,10));
-
 
         for ( Case c : chemin){
             Circle circle = new Circle(2);

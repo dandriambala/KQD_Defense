@@ -1,6 +1,6 @@
 package fr.iut.paris8.towerdefense.modele.defenses;
 
-import fr.iut.paris8.towerdefense.modele.tirTourelle.BalleTourelleBase;
+import fr.iut.paris8.towerdefense.modele.tirTourelle.Balle;
 import fr.iut.paris8.towerdefense.modele.Environnement;
 import fr.iut.paris8.towerdefense.modele.ennemis.Ennemi;
 
@@ -29,14 +29,14 @@ public class Tourelle extends Defense {
 
         if (!ennemis.isEmpty()) {
             for (int i = 0; i < ennemis.size(); i++) {
-                creerBallesDansTourelle(ennemis.get(i).getX(), ennemis.get(i).getY());
+                creerBallesDansTourelle(ennemis.get(i));
                 ennemis.get(i).decrementerPv(this.getDegats());
             }
         }
     }
 
-    public BalleTourelleBase creerBallesDansTourelle(double ennemiCibleX, double ennemiCibleY){
-        BalleTourelleBase b = new BalleTourelleBase(this.getColonne(), this.getLigne(), this.vitesseAttaque, getEnv(),ennemiCibleX,ennemiCibleY, 5);
+    public Balle creerBallesDansTourelle(Ennemi e){
+        Balle b = new Balle(this.getColonne(), this.getLigne(), this.vitesseAttaque, getEnv(),e, this.vitesseAttaque+1, "normal");
         getEnv().getEnMouvements().add(b);
         return b;
     }
@@ -47,4 +47,7 @@ public class Tourelle extends Defense {
 
     public void agir(){attaquer();}
 
+    public int getVitesseAttaque() {
+        return vitesseAttaque;
+    }
 }

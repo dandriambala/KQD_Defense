@@ -26,13 +26,13 @@ public abstract class Defense {
         this.degats = degats;
     }
 
-    public Defense(int cout, Environnement env, int portee, int degat, int colonne, int ligne) {
+    public Defense(int cout, Environnement env, int portee, int degats, int colonne, int ligne) {
         this.colonne = new SimpleIntegerProperty(colonne);
         this.ligne = new SimpleIntegerProperty(ligne);
         this.cout = cout;
         this.env = env;
         this.portee = portee*16;
-        this.degats = degat;
+        this.degats = degats;
     }
 
     public  int getColonne() {

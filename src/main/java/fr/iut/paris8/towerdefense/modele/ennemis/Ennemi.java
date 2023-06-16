@@ -31,8 +31,8 @@ public abstract class Ennemi extends EnMouvement {
 
     public int getPv(){return this.pv;}
 
-    public boolean estVivant () {
-        return this.pv >= 0;
+    public boolean estVivant() {
+        return this.pv > 0;
     }
 
     public int getPrime () {
@@ -97,7 +97,6 @@ public abstract class Ennemi extends EnMouvement {
     }
 
     public void setDestinationSommet(){
-        ArrayList<Case> Sommets = getEnv().getBfs().getParcours();
 
         Case sommet = new Case(getX()/16,getY()/16);
 

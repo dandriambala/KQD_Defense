@@ -148,6 +148,7 @@ public class Environnement {
 
         for (int i = enMouvements.size() - 1; i >= 0; i--) {
             EnMouvement enMo = enMouvements.get(i);
+
             enMo.agir();
             if (enMo.estTerminé())
                 enMouvements.remove(i);
@@ -220,6 +221,5 @@ public class Environnement {
         this.getBfs().testBFS();
 
     }
-
 
 }

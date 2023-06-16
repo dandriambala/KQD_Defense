@@ -21,7 +21,7 @@ public abstract class EnMouvement {
         return positionXProperty.getValue();
     }
 
-    public IntegerProperty getXProperty() {
+    public IntegerProperty positionXProperty() {
         return positionXProperty;
     }
 
@@ -29,7 +29,7 @@ public abstract class EnMouvement {
         return positionYProperty.getValue();
     }
 
-    public IntegerProperty getYProperty() {
+    public IntegerProperty positionYProperty() {
         return positionYProperty;
     }
 
