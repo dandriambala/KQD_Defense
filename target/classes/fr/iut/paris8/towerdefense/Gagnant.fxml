@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<Pane prefHeight="800.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.iut.paris8.towerdefense.control.ControleurFin">
+    <children>
+        <HBox alignment="CENTER" layoutX="193.0" layoutY="503.0" spacing="175.0">
+            <children>
+                <Button mnemonicParsing="false" onAction="#rejouer" text="Relancer" />
+                <Button mnemonicParsing="false" onAction="#quitter" text="Quitter" />
+            </children>
+        </HBox>
+        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="280.0" prefHeight="120.0" prefWidth="960.0" text="Vous avez gagner">
+            <font>
+                <Font name="NimbusSans-Regular" size="53.0" />
+            </font>
+            <textFill>
+            <RadialGradient centerX="0.46111111111111114" centerY="0.5" cycleMethod="REPEAT" radius="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.9510489702224731" green="1.0" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color />
+                     </color>
+                  </Stop>
+               </stops>
+            </RadialGradient>
+            </textFill>
+        </Label>
+    </children>
+
+    <stylesheets>
+        <URL value="@styleGagnant.css" />
+    </stylesheets>
+</Pane>

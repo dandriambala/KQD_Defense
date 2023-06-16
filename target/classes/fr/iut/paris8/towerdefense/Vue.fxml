@@ -9,11 +9,10 @@
 <?import javafx.scene.image.Image?>
 <?import java.net.URL?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.iut.paris8.towerdefense.control.Controleur">
+<BorderPane prefHeight="800.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.iut.paris8.towerdefense.control.Controleur">
    <top>
        <HBox fx:id="Top" alignment="CENTER" prefHeight="63.0" prefWidth="960.0" spacing="20.0" BorderPane.alignment="CENTER">
            <children>
-
                <ImageView fitHeight="20" fitWidth="20">
                    <image>
                        <Image url="@coeur.png" />

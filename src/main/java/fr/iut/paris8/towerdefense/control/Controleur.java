@@ -13,20 +13,28 @@ import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -46,6 +54,9 @@ public class Controleur implements Initializable {
     private Label nbVague;
     @FXML
     private Label nbArgent;
+
+    @FXML
+    private BorderPane borderPane;
 
     private TerrainModele t1;
     @FXML
@@ -87,14 +98,14 @@ public class Controleur implements Initializable {
 
         imTourelle.setOnMouseClicked(e -> dragEtReleasedImageView(imTourelle, 1));
         imTesla.setOnMouseClicked(e -> dragEtReleasedImageView(imTesla, 2));
-        imTesla.setOnMouseClicked(e-> dragEtReleasedImageView(imTesla, 2));
+        imTesla.setOnMouseClicked(e -> dragEtReleasedImageView(imTesla, 2));
         imNuage.setOnMouseClicked(e -> dragEtReleasedImageView(imNuage, 3));
         imMissile.setOnMouseClicked(e -> dragEtReleasedImageView(imMissile, 4));
         imMine.setOnMouseClicked(e -> dragEtReleasedImageView(imMine, 5));
 
     }
 
-    public void dragEtReleasedImageView(ImageView iW, int numeroDef) {
+    public void dragEtReleasedImageView ( ImageView iW, int numeroDef ) {
 
         //creation de la copie de l'image qu'on va drag à partir de l'image View de base
         ImageView copie = new ImageView(iW.getImage());
@@ -103,12 +114,13 @@ public class Controleur implements Initializable {
         copie.setTranslateY(420);
 
 
-        if (numeroDef == 3) {
+        if ( numeroDef == 3 ) {
 
             copie.setFitWidth(48);
             copie.setFitHeight(48);
             copie.setPreserveRatio(true);
-        } else {
+        }
+        else {
             copie.setFitWidth(iW.getFitWidth());
             copie.setFitHeight(iW.getFitHeight());
             copie.setPreserveRatio(iW.isPreserveRatio());
@@ -132,38 +144,40 @@ public class Controleur implements Initializable {
         affichageChemin(bfsSecondaire, listSprite);
 
         EventHandler<MouseEvent> handler1 = new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent event) {
+            public void handle ( MouseEvent event ) {
                 copie.setTranslateX(event.getSceneX());
                 copie.setTranslateY(event.getSceneY() - Top.getHeight());
-                caseTourelle.setColonne((int) ( event.getSceneX() / 16 ));
-                caseTourelle.setLigne((int) ( ( event.getSceneY() - Top.getHeight() ) / 16 ));
+                if ( numeroDef != 5 ) {
+                    caseTourelle.setColonne((int) ( event.getSceneX() / 16 ));
+                    caseTourelle.setLigne((int) ( ( event.getSceneY() - Top.getHeight() ) / 16 ));
 
-                if ( chemin.contains(caseTourelle) ) {
-                    if ( !bfsSecondaire.getG().estDeconnecte(caseTourelle) ) {
-                        premier.setColonne(caseTourelle.getColonne());
-                        premier.setLigne(caseTourelle.getLigne());
-
-                        bfsSecondaire.getG().deconnecte(caseTourelle);
-                        System.out.println("case deconnecter");
-                        effacerChemin(listSprite);
-                        affichageChemin(bfsSecondaire, listSprite);
-                    }
-                    else {
-                        if ( !caseTourelle.equals(premier) ) {
-                            System.out.println(caseTourelle + " " + premier);
-                            effacerChemin(listSprite);
-                            affichageChemin(bfsSecondaire, listSprite);
+                    if ( chemin.contains(caseTourelle) ) {
+                        if ( !bfsSecondaire.getG().estDeconnecte(caseTourelle) ) {
                             premier.setColonne(caseTourelle.getColonne());
                             premier.setLigne(caseTourelle.getLigne());
+
+                            bfsSecondaire.getG().deconnecte(caseTourelle);
+                            System.out.println("case deconnecter");
+                            effacerChemin(listSprite);
+                            affichageChemin(bfsSecondaire, listSprite);
+                        }
+                        else {
+                            if ( !caseTourelle.equals(premier) ) {
+                                System.out.println(caseTourelle + " " + premier);
+                                effacerChemin(listSprite);
+                                affichageChemin(bfsSecondaire, listSprite);
+                                premier.setColonne(caseTourelle.getColonne());
+                                premier.setLigne(caseTourelle.getLigne());
+                            }
                         }
                     }
-                }
-                else {
-                    if ( bfsSecondaire.getG().estDeconnecte(caseTourelle) ) {
-                        bfsSecondaire.getG().reconnecte(caseTourelle);
-                        System.out.println("reconnecter");
-                        effacerChemin(listSprite);
-                        affichageChemin(bfsSecondaire, listSprite);
+                    else {
+                        if ( bfsSecondaire.getG().estDeconnecte(caseTourelle) ) {
+                            bfsSecondaire.getG().reconnecte(caseTourelle);
+                            System.out.println("reconnecter");
+                            effacerChemin(listSprite);
+                            affichageChemin(bfsSecondaire, listSprite);
+                        }
                     }
                 }
             }
@@ -172,14 +186,14 @@ public class Controleur implements Initializable {
         copie.addEventHandler(MouseEvent.MOUSE_DRAGGED, handler1);
 
         EventHandler<MouseEvent> handler2 = new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent event) {
+            public void handle ( MouseEvent event ) {
 
                 int nbDefenseAncien = env.getDefense().size();
                 Defense d;
 
-                if (defenseBienPlacé(copie.getTranslateX(), copie.getTranslateY())) {
+                if ( defenseBienPlacé(copie.getTranslateX(), copie.getTranslateY()) ) {
 
-                    switch (numeroDef) {
+                    switch ( numeroDef ) {
                         case 1:
                             d = new TourelleBase(env);
                             break;
@@ -198,7 +212,7 @@ public class Controleur implements Initializable {
                     }
 
                     copie.setId(d.getId());
-                    t1.ajusterEmplacementDefense(copie, (int) (copie.getTranslateX() / 16), (int) (copie.getTranslateY() / 16));
+                    t1.ajusterEmplacementDefense(copie, (int) ( copie.getTranslateX() / 16 ), (int) ( copie.getTranslateY() / 16 ));
                     d.setColonne((int) copie.getTranslateX());
                     d.setLigne((int) copie.getTranslateY());
                     env.ajouterDefense(d);
@@ -206,28 +220,29 @@ public class Controleur implements Initializable {
                     env.getBfs().testBFS();
 
                     int nbDefenseCourant = env.getDefense().size();
-                    if (nbDefenseAncien == nbDefenseCourant) {
+                    if ( nbDefenseAncien == nbDefenseCourant ) {
                         pane.getChildren().remove(copie);
                     }
 
-                } else {
+                }
+                else {
                     pane.getChildren().remove(copie);
                 }
-                    effacerChemin(listSprite);
-                    copie.removeEventHandler(MouseEvent.MOUSE_DRAGGED, handler1);
-                    pane.removeEventHandler(MouseEvent.MOUSE_DRAGGED, e1 -> {});
-                    pane.removeEventHandler(MouseEvent.MOUSE_RELEASED, this);
-                }
+                effacerChemin(listSprite);
+                copie.removeEventHandler(MouseEvent.MOUSE_DRAGGED, handler1);
+                pane.removeEventHandler(MouseEvent.MOUSE_DRAGGED, e1 -> {
+                });
+                pane.removeEventHandler(MouseEvent.MOUSE_RELEASED, this);
+            }
 
         };
 
         pane.addEventHandler(MouseEvent.MOUSE_RELEASED, handler2);
 
 
-
     }
 
-    private void initTowerDefense() {
+    private void initTowerDefense () {
 
         gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);
@@ -236,17 +251,42 @@ public class Controleur implements Initializable {
         KeyFrame kf = new KeyFrame(
 
                 Duration.seconds(0.08),
-                (ev -> {
-                    env.unTour();
-
-
-                    if (env.getPartieTerminee()) {
-                        gameLoop.stop();
-                        afficherAlerte("Partie terminée", "Vous avez perdu la partie.");
+                ( ev -> {
+                    switch ( env.getPartieTerminee() ) {
+                        case -1:
+                            env.unTour();
+                            break;
+                        case 0:
+                            gameLoop.stop();
+                            try {
+                                scene("Perdant");
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            break;
+                        case 1:
+                            gameLoop.stop();
+                            try {
+                                scene("Gagnant");
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            break;
                     }
-                })
+                } )
         );
         gameLoop.getKeyFrames().add(kf);
+    }
+    private void scene(String typeFin) throws IOException {
+        Stage primaryStage = (Stage) ( pane.getScene().getWindow() );
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        URL ressource = getClass().getResource("/fr/iut/paris8/towerdefense/" + typeFin + ".fxml");
+        Parent root = fxmlLoader.load(ressource);
+        Scene scene = new Scene(root,960,770);
+        primaryStage.setResizable(false);
+        primaryStage.setTitle("Towerdefense");
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
 
@@ -260,6 +300,7 @@ public class Controleur implements Initializable {
     public void commencerPartie(){
         startImage.setOnMouseClicked(e -> {
             gameLoop.play();
+            System.out.println("play");
         });
     }
 
