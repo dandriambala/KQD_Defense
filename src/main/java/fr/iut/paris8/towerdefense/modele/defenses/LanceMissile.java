@@ -9,12 +9,12 @@ import java.util.ArrayList;
 
 public class LanceMissile extends Tourelle {
 
-    private static int TEMPS = 10;
-    private static int cooldown = 0;
+    private int TEMPS = 10;
+    private int cooldown = 0;
     private Balle balleActuelle;
 
     public LanceMissile(Environnement env) {
-        super(1500, env, 3, 10, 4, 1);
+        super(1500, env, 4, 10, 4, 1);
         this.balleActuelle = null;
     }
 
@@ -51,7 +51,7 @@ public class LanceMissile extends Tourelle {
         }
     }
     public Balle creerBallesDansTourelle(Ennemi e){
-        Balle b = new Missile(this.getColonne(), this.getLigne(), getVitesseAttaque(), getEnv(),e, 5);
+        Balle b = new Missile(this.getColonne(), this.getLigne(), getVitesseAttaque(), getEnv(),e);
         getEnv().getEnMouvements().add(b);
         return b;
     }

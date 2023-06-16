@@ -32,7 +32,7 @@ public class Tourelle extends Defense {
     }
 
     public Balle creerBallesDansTourelle(Ennemi e){
-        Balle b = new Balle(this.getColonne(), this.getLigne(), this.vitesseAttaque, getEnv(),e, 16, "normal");
+        Balle b = new Balle(this.getColonne(), this.getLigne(), this.vitesseAttaque, getEnv(),e, this.vitesseAttaque+1, "normal");
         getEnv().getEnMouvements().add(b);
         return b;
     }
