@@ -145,7 +145,6 @@ public class Controleur implements Initializable {
                         premier.setLigne(caseTourelle.getLigne());
 
                         bfsSecondaire.getG().deconnecte(caseTourelle);
-                        System.out.println("case deconnecter");
                         effacerChemin(listSprite);
                         affichageChemin(bfsSecondaire, listSprite);
                     }
@@ -162,7 +161,6 @@ public class Controleur implements Initializable {
                 else {
                     if ( bfsSecondaire.getG().estDeconnecte(caseTourelle) ) {
                         bfsSecondaire.getG().reconnecte(caseTourelle);
-                        System.out.println("reconnecter");
                         effacerChemin(listSprite);
                         affichageChemin(bfsSecondaire, listSprite);
                     }

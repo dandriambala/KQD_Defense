@@ -35,16 +35,9 @@ public class Environnement {
         vague = new GenerateurVague();
         ressourceJeu = new RessourceJeu();
     }
-    public final IntegerProperty nbToursProperty () {
-        return this.nbToursProperty;
-    }
 
     public final int getNbTours () {
         return this.nbToursProperty.getValue();
-    }
-
-    public final void setNbToursProperty ( int n ) {
-        this.nbToursProperty.setValue(n);
     }
 
     public ObservableList<Ennemi> getEnnemis () {
@@ -233,7 +226,7 @@ public class Environnement {
     public void enleverDefense (Defense d) {
         t.caseAZero(d.getColonne()/16,d.getLigne()/16);
         this.defenses.remove(d);
-//        afficherTerrain(getTerrainModele());
+
 
         if(d instanceof Tourelle) {
             Case sommet = new Case(d.getColonne() / 16, d.getLigne() / 16);
@@ -241,8 +234,4 @@ public class Environnement {
             this.getBfs().testBFS();
         }
     }
-
-//    public boolean estDansEnvironnement(String s){
-//        if(defenses.contains())
-//    }
 }
