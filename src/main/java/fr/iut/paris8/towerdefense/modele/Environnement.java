@@ -79,15 +79,15 @@ public class Environnement {
         if ( getRessourceJeu().peutEncoreAcheter(d.getCout()) ) {
             getRessourceJeu().achatTourelle(d.getCout());
             if ( d instanceof Tourelle ) {
-                int colonne = ( d.getColonne() - 8 ) / 16;
-                int ligne = ( d.getLigne() - 8 ) / 16;
+                int colonne = ( d.getColonne() ) / 16;
+                int ligne = ( d.getLigne()  ) / 16;
                 if ( colonne <= 2 && colonne >= 1 && ligne <= 11 && ligne >= 9 && d instanceof Tourelle || colonne <= 59 && colonne >= 57 && ligne <= 11 && ligne >= 9 && d instanceof Tourelle ) {
                     d.setColonne(0);
                     d.setLigne(0);
                 }
                 else {
                     defenses.add(d);
-                    bfs.getG().deconnecte(new Case(colonne+1, ligne+1));
+                    bfs.getG().deconnecte(new Case(colonne, ligne));
                     bfs.testBFS();
                 }
             }
