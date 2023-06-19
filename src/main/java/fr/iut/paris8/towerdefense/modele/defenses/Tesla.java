@@ -13,7 +13,7 @@ public class Tesla extends Tourelle {
     }
 
     public Tesla(Environnement env, int colonne, int ligne) {
-        super(150, env, 5, 1, colonne,ligne,5);
+        super(150, env, 5, 3,5, colonne,ligne,5);
     }
 
     public Balle creerBallesDansTourelle(Ennemi e){
