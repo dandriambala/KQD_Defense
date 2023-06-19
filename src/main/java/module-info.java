@@ -6,4 +6,5 @@ module fr.iut.paris8.towerdefense {
 
     opens fr.iut.paris8.towerdefense.control to javafx.fxml;
     exports fr.iut.paris8.towerdefense;
+    exports fr.iut.paris8.towerdefense.modele;
 }

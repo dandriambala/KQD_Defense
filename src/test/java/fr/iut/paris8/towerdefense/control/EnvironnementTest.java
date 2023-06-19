@@ -1,8 +1,8 @@
+package fr.iut.paris8.towerdefense.control;
+
+
 import fr.iut.paris8.towerdefense.modele.Environnement;
 import fr.iut.paris8.towerdefense.modele.TerrainModele;
-import fr.iut.paris8.towerdefense.modele.defenses.*;
-import fr.iut.paris8.towerdefense.modele.ennemis.Ennemi;
-import fr.iut.paris8.towerdefense.modele.ennemis.Mastodonte;
 import org.junit.jupiter.api.Test;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -127,6 +127,9 @@ public class EnvironnementTest {
 
     @Test
     public void testFinDePartie(){
+
+        TerrainModele t = new TerrainModele();
+        environnement = new Environnement(t);
 
         environnement.getRessourceJeu().setPv(0);
         int a = environnement.finPartie();
