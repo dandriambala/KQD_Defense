@@ -5,6 +5,11 @@ import fr.iut.paris8.towerdefense.modele.defenses.Defense;
 
 public class Tank extends Ennemi{
     public Tank (Environnement env) { super(1,100,450, env);}
+    public Tank (Environnement env, int x, int y) {
+        super( 1,100,450, env);
+        setPositionXProperty(x);
+        setPositionYProperty(y);
+    }
 
     @Override
     public void agir() {

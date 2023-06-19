@@ -11,7 +11,6 @@ public class GenerateurVague {
     private int nbEnnemisCreeeDansVague;
     private int nbToursDerniereVagueTerminee; // -1 signifie que la vague précédente est terminée
     private static int limiteur = 1;
-    private double augmentationPv = 1.0;
 
     public GenerateurVague() {
         this.nbVague = new SimpleIntegerProperty(0);

@@ -8,5 +8,11 @@ public class EnnemiBase extends Ennemi {
 
         super( 2, 10, 100, env);
     }
+    public EnnemiBase(Environnement env, int x, int y) {
+
+        super( 2, 10, 100, env);
+        setPositionXProperty(x);
+        setPositionYProperty(y);
+    }
 
 }
