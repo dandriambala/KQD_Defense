@@ -17,6 +17,12 @@ public class LanceMissile extends Tourelle {
         super(100, env, 4, 30, 4, 1);
         this.balleActuelle = null;
     }
+    public LanceMissile(Environnement env, int colonne, int ligne) {
+        super(100, env, 4, 30, 4, 1);
+        this.balleActuelle = null;
+        setColonne(colonne);
+        setLigne(ligne);
+    }
 
      private void sniper() {
 
