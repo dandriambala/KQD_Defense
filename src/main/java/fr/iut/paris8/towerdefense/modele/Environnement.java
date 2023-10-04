@@ -14,7 +14,7 @@ import javafx.collections.ObservableList;
 import java.util.ArrayList;
 
 public class Environnement {
-    private GenerateurVague vague;
+    private Vague vague;
     private ObservableList<Defense> defenses;
     private ObservableList<EnMouvement> enMouvements;
     private IntegerProperty nbToursProperty;
@@ -30,12 +30,9 @@ public class Environnement {
         this.defenses = FXCollections.observableArrayList();
         this.t = t;
         this.bfs = new BFS(new Grille(t.getWidth() / 16, t.getHeight() / 16), new Case(59, 10));
-        vague = new GenerateurVague();
+        vague = new VaguePermutation();
         ressourceJeu = new RessourceJeu();
         this.partieTerminee = -1;
-        // Définissez la stratégie de vague que vous souhaitez utiliser
-        StrategieEnnemiBase strategie = new StrategieEnnemiBase();
-        vague.setStrategieCourante(strategie);
     }
 
     public final int getNbTours () {
@@ -204,7 +201,7 @@ public class Environnement {
         return null;
     }
 
-    public GenerateurVague getVague () {
+    public Vague getVague () {
         return vague;
     }
 

@@ -1,25 +1,21 @@
 package fr.iut.paris8.towerdefense.modele;
 
-import fr.iut.paris8.towerdefense.modele.ennemis.*;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
-public class GenerateurVague {
+public abstract class Vague {
 
     private IntegerProperty nbVague;
     private int nbEnnemisCreeeDansVague;
     private int nbToursDerniereVagueTerminee; // -1 signifie que la vague précédente est terminée
-    private StrategieVague strategieCourante;
 
-    public GenerateurVague() {
+    public Vague() {
         this.nbVague = new SimpleIntegerProperty(0);
         this.nbEnnemisCreeeDansVague = 0;
         this.nbToursDerniereVagueTerminee = -1;
     }
 
-    public void setStrategieCourante(StrategieVague strategie) {
-        this.strategieCourante = strategie;
-    }
+    public abstract void faireApparaitreEnnemi(Environnement env);
 
     public int getNbVague() {
         return nbVague.getValue();
@@ -34,8 +30,9 @@ public class GenerateurVague {
     }
 
     public void genererUnElementDeLaVague(Environnement env) {
-        strategieCourante.trouverVague(env);
+        faireApparaitreEnnemi(env);
     }
+
     /**
      * La méthode "vaguePourChaqueTour" est appelée à chaque tour du jeu pour gérer la génération des vagues d'ennemis.
      * Elle vérifie d'abord si la dernière vague est terminée et si aucune vague n'est en cours.
@@ -46,18 +43,14 @@ public class GenerateurVague {
      */
 
     public void vaguePourChaqueTour(Environnement env){
-
         if (nbToursDerniereVagueTerminee == -1 && env.getEnnemis().isEmpty() && !finPartie()){
         nbToursDerniereVagueTerminee = env.getNbTours();
         }
-
         if (nbToursDerniereVagueTerminee != -1) {
-
             if (env.getNbTours() % 20 == 0) {
                 genererUnElementDeLaVague(env);
                 nbEnnemisCreeeDansVague++;
             }
-
             if (nbEnnemisCreeeDansVague == getNbVague()+5) {
                finDUneVague();
             }
@@ -70,15 +63,10 @@ public class GenerateurVague {
         return getNbVague() ==50;
     }
 
-
     //A la fin d'une vague on met à jour les attribut pour la prochaine vague
     public void finDUneVague(){
         setNbVague(getNbVague() + 1);
         nbEnnemisCreeeDansVague = 0;
         nbToursDerniereVagueTerminee = -1;
     }
-
-
-
-
 }
