@@ -11,6 +11,7 @@ public class Tourelle extends Defense {
     private int nbCible;
     private int vitesseAttaque;
     private static int compteurTourelle = 0;
+
     public Tourelle(int cout, Environnement env, int portee, int degats, int vitesseAttaque, int nbCible) {
         super(cout, env, portee, degats);
         this.vitesseAttaque = vitesseAttaque;

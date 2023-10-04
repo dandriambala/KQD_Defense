@@ -33,6 +33,9 @@ public class Environnement {
         vague = new GenerateurVague();
         ressourceJeu = new RessourceJeu();
         this.partieTerminee = -1;
+        // Définissez la stratégie de vague que vous souhaitez utiliser
+        StrategieEnnemiBase strategie = new StrategieEnnemiBase();
+        vague.setStrategieCourante(strategie);
     }
 
     public final int getNbTours () {
