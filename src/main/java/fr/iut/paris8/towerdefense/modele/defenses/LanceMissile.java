@@ -66,9 +66,11 @@ public class LanceMissile extends Tourelle {
             }
         }
     }
-    public Balle creerBallesDansTourelle(Ennemi e){
-        Balle b = new Missile(this.getColonne(), this.getLigne(), getVitesseAttaque(), getEnv(),e);
-        getEnv().getEnMouvements().add(b);
-        return b;
+
+
+    @Override
+    public Balle creerBalle(int positionX, int positionY, int vitesse, Environnement env, Ennemi e, int rayonAction) {
+        return new Missile(this.getColonne(), this.getLigne(), getVitesseAttaque(), getEnv(),e);
     }
+
 }
