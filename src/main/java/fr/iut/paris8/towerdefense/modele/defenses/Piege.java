@@ -4,33 +4,23 @@ import fr.iut.paris8.towerdefense.modele.Environnement;
 import fr.iut.paris8.towerdefense.modele.defenses.Defense;
 
 public abstract class Piege extends Defense {
-    private int dureeDeVie;
 
-    public Piege (int cout, Environnement env, int portee, int degats, int dureeDeVie){
+    public Piege (int cout, Environnement env, int portee, int degats){
         super(cout,env,portee,degats);
-        this.dureeDeVie = dureeDeVie;
     }
 
     public Piege (int cout, Environnement env, int portee, int degats, int dureeDeVie, int colonne, int ligne){
         super(cout,env,portee,degats, colonne, ligne);
-        this.dureeDeVie = dureeDeVie;
     }
 
     public void agir(){
         if (finDeVie()){
             getEnv().enleverDefense(this);
         }
+        else faireEffet();
     }
 
-    public boolean finDeVie(){
-        return this.dureeDeVie == 0;
-    }
+    public abstract void faireEffet();
+    public abstract boolean finDeVie();
 
-    public int getDureeDeVie() {
-        return dureeDeVie;
-    }
-
-    public void setDureeDeVie(int dureeDeVie) {
-        this.dureeDeVie = dureeDeVie;
-    }
 }

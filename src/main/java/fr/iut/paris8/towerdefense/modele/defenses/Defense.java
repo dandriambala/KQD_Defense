@@ -1,6 +1,9 @@
 package fr.iut.paris8.towerdefense.modele.defenses;
 
 import fr.iut.paris8.towerdefense.modele.Environnement;
+import fr.iut.paris8.towerdefense.modele.ennemis.Ennemi;
+import fr.iut.paris8.towerdefense.modele.tirTourelle.Balle;
+import fr.iut.paris8.towerdefense.modele.tirTourelle.Missile;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
