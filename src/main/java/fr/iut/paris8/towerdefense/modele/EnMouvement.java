@@ -4,14 +4,15 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public abstract class EnMouvement {
+
     private IntegerProperty positionXProperty;
     private IntegerProperty positionYProperty;
     private double vitesse;
     private Environnement env;
     private String id;
 
-    public EnMouvement(int x, int y, int vitesse, Environnement env) {
-        this.env = env;
+    public EnMouvement(int x, int y, int vitesse) {
+        this.env = Environnement.getInstance(TerrainModele.getInstance());
         this.positionXProperty = new SimpleIntegerProperty(x);
         this.positionYProperty = new SimpleIntegerProperty(y);
         this.vitesse = vitesse;

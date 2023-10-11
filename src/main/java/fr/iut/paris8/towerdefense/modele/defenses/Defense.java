@@ -1,6 +1,7 @@
 package fr.iut.paris8.towerdefense.modele.defenses;
 
 import fr.iut.paris8.towerdefense.modele.Environnement;
+import fr.iut.paris8.towerdefense.modele.TerrainModele;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
@@ -17,20 +18,20 @@ public abstract class Defense {
     private int degats;
     private int cout;
 
-    public Defense(int cout, Environnement env, int portee, int degats) {
+    public Defense(int cout,  int portee, int degats) {
+        this.env = Environnement.getInstance(TerrainModele.getInstance());
         this.colonne = new SimpleIntegerProperty();
         this.ligne = new SimpleIntegerProperty();
         this.cout = cout;
-        this.env = env;
         this.portee = portee*16;
         this.degats = degats;
     }
 
-    public Defense(int cout, Environnement env, int portee, int degats, int colonne, int ligne) {
+    public Defense(int cout, int portee, int degats, int colonne, int ligne) {
         this.colonne = new SimpleIntegerProperty(colonne);
         this.ligne = new SimpleIntegerProperty(ligne);
         this.cout = cout;
-        this.env = env;
+        this.env = Environnement.getInstance(TerrainModele.getInstance());
         this.portee = portee*16;
         this.degats = degats;
     }

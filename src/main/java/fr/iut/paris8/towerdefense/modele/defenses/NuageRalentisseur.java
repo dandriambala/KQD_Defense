@@ -11,8 +11,8 @@ public class NuageRalentisseur extends Piege {
     private static double ralentissement = 0.4;
     private long tempsDebut;
 
-    public NuageRalentisseur(Environnement env) {
-        super(40, env, 3, 0, 20000);
+    public NuageRalentisseur() {
+        super(40, 3, 0, 20000);
         setId("NR" + compteurRalentisseur);
 
         ennemisDansZone = new ArrayList<>();
@@ -20,8 +20,8 @@ public class NuageRalentisseur extends Piege {
         compteurRalentisseur++;
     }
 
-    public NuageRalentisseur(Environnement env, int colonne, int ligne) {
-        super(40, env, 3, 0, 20000, colonne, ligne);
+    public NuageRalentisseur( int colonne, int ligne) {
+        super(40,  3, 0, 20000, colonne, ligne);
         setId("NR" + compteurRalentisseur);
 
         ennemisDansZone = new ArrayList<>();

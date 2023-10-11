@@ -9,14 +9,14 @@ public class Mine extends Piege {
     private static int compteurMine = 0;
 
     //La durée de vie à 1 n'a pas d'impact
-    public Mine (Environnement env){
-        super(40,env,1,200,1);
+    public Mine (){
+        super(40,1,200,1);
         setId("M" + compteurMine);
         compteurMine++;
     }
 
-    public Mine(Environnement env, int colonne, int ligne){
-        super(25, env, 1, 200, 1, colonne, ligne);
+    public Mine( int colonne, int ligne){
+        super(25,  1, 200, 1, colonne, ligne);
     }
 
     public void agir(){

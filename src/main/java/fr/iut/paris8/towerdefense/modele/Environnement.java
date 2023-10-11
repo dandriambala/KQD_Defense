@@ -14,6 +14,8 @@ import javafx.collections.ObservableList;
 import java.util.ArrayList;
 
 public class Environnement {
+    private static Environnement uniqueInstance = null;
+
     private GenerateurVague vague;
     private ObservableList<Defense> defenses;
     private ObservableList<EnMouvement> enMouvements;
@@ -23,7 +25,7 @@ public class Environnement {
     private RessourceJeu ressourceJeu;
     private int partieTerminee;
 
-    public Environnement ( TerrainModele t ) {
+    private Environnement(TerrainModele t) {
         this.nbToursProperty = new SimpleIntegerProperty();
         this.nbToursProperty.setValue(0);
         this.enMouvements = FXCollections.observableArrayList();
@@ -34,6 +36,15 @@ public class Environnement {
         ressourceJeu = new RessourceJeu();
         this.partieTerminee = -1;
     }
+
+    public static synchronized Environnement getInstance(TerrainModele terrainModele) {
+        if (uniqueInstance == null) {
+            uniqueInstance = new Environnement(terrainModele);
+        }
+        return uniqueInstance;
+    }
+
+
 
     public final int getNbTours () {
         return this.nbToursProperty.getValue();
@@ -124,7 +135,7 @@ public class Environnement {
 
             this.defensesPourChaqueTour();
 
-            vague.vaguePourChaqueTour(this);
+            vague.vaguePourChaqueTour();
 
             this.enMouvementsPourChaqueTour();
 
