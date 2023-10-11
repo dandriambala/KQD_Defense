@@ -14,7 +14,7 @@ import javafx.collections.ObservableList;
 import java.util.ArrayList;
 
 public class Environnement {
-    private Vague vague;
+    private GestionnaireDeVague gestionnaireDeVague;
     private ObservableList<Defense> defenses;
     private ObservableList<EnMouvement> enMouvements;
     private IntegerProperty nbToursProperty;
@@ -30,9 +30,9 @@ public class Environnement {
         this.defenses = FXCollections.observableArrayList();
         this.t = t;
         this.bfs = new BFS(new Grille(t.getWidth() / 16, t.getHeight() / 16), new Case(59, 10));
-        vague = new VaguePermutation();
         ressourceJeu = new RessourceJeu();
         this.partieTerminee = -1;
+        gestionnaireDeVague= new GestionnaireDeVague();
     }
 
     public final int getNbTours () {
@@ -124,7 +124,7 @@ public class Environnement {
 
             this.defensesPourChaqueTour();
 
-            vague.vaguePourChaqueTour(this);
+            gestionnaireDeVague.vaguePourChaqueTour(this);
 
             this.enMouvementsPourChaqueTour();
 
@@ -135,7 +135,7 @@ public class Environnement {
 
     public int finPartie(){
         //si les pv sont supérieur à 0 et que les vagues on atteint 50 alors la partie est gagné et ca retourne 0
-        if (!ressourceJeu.partiePerdu() && vague.finPartie()) {
+        if (!ressourceJeu.partiePerdu() && gestionnaireDeVague.finPartie(this)) {
             return 0;
         }
         else if (ressourceJeu.partiePerdu()){
@@ -201,8 +201,8 @@ public class Environnement {
         return null;
     }
 
-    public Vague getVague () {
-        return vague;
+    public GestionnaireDeVague getVague () {
+        return gestionnaireDeVague;
     }
 
     public RessourceJeu getRessourceJeu () {
