@@ -15,8 +15,8 @@ import java.util.ArrayList;
 
 public class Environnement {
     private static Environnement uniqueInstance = null;
+    private GestionnaireDeVague gestionnaireDeVague;
 
-    private GenerateurVague vague;
     private ObservableList<Defense> defenses;
     private ObservableList<EnMouvement> enMouvements;
     private IntegerProperty nbToursProperty;
@@ -32,9 +32,9 @@ public class Environnement {
         this.defenses = FXCollections.observableArrayList();
         this.t = t;
         this.bfs = new BFS(new Grille(t.getWidth() / 16, t.getHeight() / 16), new Case(59, 10));
-        vague = new GenerateurVague();
         ressourceJeu = new RessourceJeu();
         this.partieTerminee = -1;
+        gestionnaireDeVague= new GestionnaireDeVague();
     }
 
     public static synchronized Environnement getInstance(TerrainModele terrainModele) {
@@ -135,7 +135,11 @@ public class Environnement {
 
             this.defensesPourChaqueTour();
 
-            vague.vaguePourChaqueTour();
+
+            Ennemi e = gestionnaireDeVague.vaguePourChaqueTour(this);
+            if (e!=null){
+                ajouterEnnemi(e);
+            }
 
             this.enMouvementsPourChaqueTour();
 
@@ -146,7 +150,7 @@ public class Environnement {
 
     public int finPartie(){
         //si les pv sont supérieur à 0 et que les vagues on atteint 50 alors la partie est gagné et ca retourne 0
-        if (!ressourceJeu.partiePerdu() && vague.finPartie()) {
+        if (!ressourceJeu.partiePerdu() && gestionnaireDeVague.aFiniVague() && getEnnemis().isEmpty()) {
             return 0;
         }
         else if (ressourceJeu.partiePerdu()){
@@ -160,7 +164,7 @@ public class Environnement {
     }
 
 
-    public void enMouvementsPourChaqueTour () {
+    private void enMouvementsPourChaqueTour () {
 
         for (int i = enMouvements.size() - 1; i >= 0; i--) {
             EnMouvement enMo = enMouvements.get(i);
@@ -171,7 +175,7 @@ public class Environnement {
         }
     }
 
-    public void defensesPourChaqueTour(){
+    private void defensesPourChaqueTour(){
         for (int i = defenses.size()-1; i>=0; i--) {
             defenses.get(i).agir();
         }
@@ -212,8 +216,8 @@ public class Environnement {
         return null;
     }
 
-    public GenerateurVague getVague () {
-        return vague;
+    public GestionnaireDeVague getVague () {
+        return gestionnaireDeVague;
     }
 
     public RessourceJeu getRessourceJeu () {
