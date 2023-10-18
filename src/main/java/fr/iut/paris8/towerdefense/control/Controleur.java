@@ -81,8 +81,9 @@ public class Controleur implements Initializable {
 
     @Override
     public void initialize ( URL url, ResourceBundle resourceBundle ) {
-        t1 = new TerrainModele();
-        env = new Environnement(t1);
+        t1 = TerrainModele.getInstance();
+        env= Environnement.getInstance(t1);
+
 
         TerrainVue tv = new TerrainVue(t1, tilepane);
         tv.afficherTuile();
@@ -231,19 +232,19 @@ public class Controleur implements Initializable {
 
                     switch ( numeroDef ) {
                         case 1:
-                            d = new TourelleBase(env);
+                            d = new TourelleBase();
                             break;
                         case 2:
-                            d = new Tesla(env);
+                            d = new Tesla();
                             break;
                         case 3:
-                            d = new NuageRalentisseur(env);
+                            d = new NuageRalentisseur();
                             break;
                         case 4:
-                            d = new LanceMissile(env);
+                            d = new LanceMissile();
                             break;
                         default:
-                            d = new Mine(env);
+                            d = new Mine();
                             break;
                     }
 

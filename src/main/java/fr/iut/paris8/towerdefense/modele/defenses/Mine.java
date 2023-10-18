@@ -10,14 +10,15 @@ public class Mine extends Piege {
     private boolean aExplosé = false;
 
     //La durée de vie à 1 n'a pas d'impact
-    public Mine (Environnement env){
-        super(40,env,1,200);
+    public Mine (){
+        super(40,1,200);
+
         setId("M" + compteurMine);
         compteurMine++;
     }
 
-    public Mine(Environnement env, int colonne, int ligne){
-        super(25, env, 1, 200, 1, colonne, ligne);
+    public Mine( int colonne, int ligne){
+        super(25,  1, 200, 1, colonne, ligne);
     }
 
     public void faireEffet(){

@@ -13,16 +13,16 @@ public abstract class Ennemi extends EnMouvement {
     private int pv;
     private Case destinationCase;
 
-    public Ennemi( int vitesse,  int prime, int pv, Environnement env) {
-      super(0,160,vitesse,env);
+    public Ennemi( int vitesse,  int prime, int pv) {
+      super(0,160,vitesse);
         this.prime = prime;
         this.pv = pv;
         setId("E"+ compteurEnnemi);
         compteurEnnemi++;
     }
 
-    public Ennemi(int x, int y, int vitesse,  int prime, int pv, Environnement env){
-        super(x, y, vitesse, env);
+    public Ennemi(int x, int y, int vitesse,  int prime, int pv){
+        super(x, y, vitesse);
         this.prime = prime;
         this.pv = pv;
         setId("E"+ compteurEnnemi);

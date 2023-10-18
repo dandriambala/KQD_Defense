@@ -1,12 +1,13 @@
 package fr.iut.paris8.towerdefense.modele.ennemis;
 
 import fr.iut.paris8.towerdefense.modele.Environnement;
+import fr.iut.paris8.towerdefense.modele.TerrainModele;
 import fr.iut.paris8.towerdefense.modele.defenses.Defense;
 
 public class Tank extends Ennemi{
-    public Tank (Environnement env) { super(1,100,450, env);}
-    public Tank (Environnement env, int x, int y) {
-        super( 1,100,450, env);
+    public Tank () { super(1,100,450);}
+    public Tank ( int x, int y) {
+        super( 1,100,450);
         setPositionXProperty(x);
         setPositionYProperty(y);
     }

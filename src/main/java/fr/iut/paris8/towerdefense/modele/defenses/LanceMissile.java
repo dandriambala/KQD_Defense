@@ -13,12 +13,12 @@ public class LanceMissile extends Tourelle {
     private int cooldown = 0;
     private Balle balleActuelle;
 
-    public LanceMissile(Environnement env) {
-        super(100, env, 4, 30, 4, 1);
+    public LanceMissile() {
+        super(100,  4, 30, 4, 1);
         this.balleActuelle = null;
     }
-    public LanceMissile(Environnement env, int colonne, int ligne) {
-        super(100, env, 4, 30, 4, 1);
+    public LanceMissile( int colonne, int ligne) {
+        super(100,  4, 30, 4, 1);
         this.balleActuelle = null;
         setColonne(colonne);
         setLigne(ligne);
@@ -69,8 +69,9 @@ public class LanceMissile extends Tourelle {
 
 
     @Override
-    public Balle creerBalle(int positionX, int positionY, int vitesse, Environnement env, Ennemi e, int rayonAction) {
-        return new Missile(this.getColonne(), this.getLigne(), getVitesseAttaque(), getEnv(),e);
+    public Balle creerBalle(int positionX, int positionY, int vitesse, Ennemi e, int rayonAction) {
+        return new Missile(this.getColonne(), this.getLigne(), getVitesseAttaque(), e);
+
     }
 
 }

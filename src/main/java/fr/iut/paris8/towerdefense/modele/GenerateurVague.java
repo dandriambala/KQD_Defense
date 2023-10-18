@@ -39,17 +39,17 @@ public class GenerateurVague {
      * Elle compte également le nombre d'ennemis créés dans la vague en cours.
      * Lorsque le nombre d'ennemis créés atteint un certain seuil (la taille de la vague actuelle + 5), la méthode appelle "finDUneVague" pour marquer la fin de la vague en cours.
      */
-    public void vaguePourChaqueTour(Environnement env){
+    public void vaguePourChaqueTour(){
 
-        if (nbToursDerniereVagueTerminee == -1 && env.getEnnemis().isEmpty() && !finPartie()){
-        nbToursDerniereVagueTerminee = env.getNbTours();
+        if (nbToursDerniereVagueTerminee == -1 && Environnement.getInstance(TerrainModele.getInstance()).getEnnemis().isEmpty() && !finPartie()){
+        nbToursDerniereVagueTerminee = Environnement.getInstance(TerrainModele.getInstance()).getNbTours();
         }
 
 
         if (nbToursDerniereVagueTerminee != -1) {
 
-            if (env.getNbTours() % 20 == 0) {
-                genererUnElementDeLaVague(env);
+            if (Environnement.getInstance(TerrainModele.getInstance()).getNbTours() % 20 == 0) {
+                genererUnElementDeLaVague();
                 nbEnnemisCreeeDansVague++;
             }
 
@@ -61,25 +61,25 @@ public class GenerateurVague {
 
     //gerer par des pourcentage, plus pourcentageDifficulté sera grand, plus on a de chance d'avoir des ennemis fort
     //il y a un limiteur pour pas qu'il y ait trop de Tank créer par vague
-    public void genererUnElementDeLaVague(Environnement env) {
+    public void genererUnElementDeLaVague() {
 
         int compteur = 0;
 
 
         if (!reussitProba(pourcentageDifficulte)) {
             if (getNbVague() >= 5){
-                env.ajouterEnnemi(new Eclaireur(env));
+                Environnement.getInstance(TerrainModele.getInstance()).ajouterEnnemi(new Eclaireur());
             }
             else
 
-                env.ajouterEnnemi(new EnnemiBase(env));
+                Environnement.getInstance(TerrainModele.getInstance()).ajouterEnnemi(new EnnemiBase());
 
         } else {
             if (compteur <= limiteur && getNbVague()>12) {
-                env.ajouterEnnemi(new Tank(env));
+                Environnement.getInstance(TerrainModele.getInstance()).ajouterEnnemi(new Tank());
                 compteur++;
             } else {
-                env.ajouterEnnemi(new Mastodonte(env));
+                Environnement.getInstance(TerrainModele.getInstance()).ajouterEnnemi(new Mastodonte());
             }
         }
         limiteur += 2;
