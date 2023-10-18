@@ -173,7 +173,11 @@ public class Environnement {
 
     public void defensesPourChaqueTour(){
         for (int i = defenses.size()-1; i>=0; i--) {
-            defenses.get(i).agir();
+            Defense d = defenses.get(i);
+            d.agir();
+
+            if (d.getEtat() == false)
+                this.enleverDefense(d);
         }
     }
 

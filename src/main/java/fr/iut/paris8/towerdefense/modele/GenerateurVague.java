@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 
 public class GenerateurVague {
 
-    private static int pourcentageDifficulte = 6;
+    private static int pourcentageDifficulte = 60;
     private IntegerProperty nbVague;
     private int nbEnnemisCreeeDansVague;
     private int nbToursDerniereVagueTerminee; // -1 signifie que la vague précédente est terminée

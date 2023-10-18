@@ -10,6 +10,7 @@ module fr.iut.paris8.towerdefense {
     exports fr.iut.paris8.towerdefense.modele.defenses;
     exports fr.iut.paris8.towerdefense.modele.ennemis;
     exports fr.iut.paris8.towerdefense.modele.tirTourelle;
+    exports fr.iut.paris8.towerdefense.modele.ennemis.stratEnnemis;
 
 
 }

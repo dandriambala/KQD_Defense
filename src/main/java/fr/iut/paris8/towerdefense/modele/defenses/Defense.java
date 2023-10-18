@@ -20,6 +20,7 @@ public abstract class Defense {
     private String id;
     private int degats;
     private int cout;
+    private boolean existe;
 
     public Defense(int cout,  int portee, int degats) {
         this.env = Environnement.getInstance(TerrainModele.getInstance());
@@ -28,6 +29,7 @@ public abstract class Defense {
         this.cout = cout;
         this.portee = portee*16;
         this.degats = degats;
+        this.existe = true;
     }
 
     public Defense(int cout, int portee, int degats, int colonne, int ligne) {
@@ -76,6 +78,13 @@ public abstract class Defense {
     }
     public void setId(String id) {
         this.id = id;
+    }
+    public void estMort(){
+        this.existe = false;
+    }
+
+    public boolean getEtat() {
+        return existe;
     }
 
     // Les défenses mettront des dégâts aux ennemis
