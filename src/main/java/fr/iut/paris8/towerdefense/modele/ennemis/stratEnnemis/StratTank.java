@@ -12,7 +12,7 @@ public class StratTank extends StrategyEnnemi{
     @Override
     // enlève les défenses qui sont sur son passage
     public void reagir(Ennemi e) {
-        Defense d = this.getEnv().chercherDefenseDansPorteeEnnemi(e.getX(), e.getY(), 16);
+        Defense d = this.getEnv().chercherDefenseDansPorteeEnnemi(e.getX(), e.getY(), 16, 1).get(0);
         if(d != null) {
             d.estMort();
         }

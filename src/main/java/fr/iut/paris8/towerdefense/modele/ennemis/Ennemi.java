@@ -38,6 +38,7 @@ public abstract class Ennemi extends EnMouvement {
     public int getPrime () {
         return prime;
     }
+
     public void decrementerPv(int nb){
         this.pv-=nb;
     }
