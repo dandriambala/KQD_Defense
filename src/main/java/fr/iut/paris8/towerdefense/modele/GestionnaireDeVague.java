@@ -10,18 +10,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public  class GestionnaireDeVague {
+public class GestionnaireDeVague {
 
     private IntegerProperty nbVague;
     private int nbToursDerniereVagueTerminee; // -1 signifie que la vague précédente est terminée
     private List<String[]> vaguesEnnemiDansFichier = new ArrayList<>();
     private int ligneDeVague = 0;
     private int indiceEnnemiLigne = 0;
+    private FabriqueEnnemi fab;
 
     public GestionnaireDeVague() {
         this.nbVague = new SimpleIntegerProperty(0);
         this.nbToursDerniereVagueTerminee = -1;
         lireFichier("src/main/resources/fr/iut/paris8/towerdefense/vague");
+        fab = new FabriqueEnnemi();
     }
 
     private void lireFichier(String path) {
@@ -57,36 +59,13 @@ public  class GestionnaireDeVague {
                 if (ligneDeVague < vaguesEnnemiDansFichier.size()) {
                     if (indiceEnnemiLigne < vaguesEnnemiDansFichier.get(ligneDeVague).length) {
                         String enemyType = vaguesEnnemiDansFichier.get(ligneDeVague)[indiceEnnemiLigne];
-                        createEnemyBasedOnType(enemyType.trim(), env);
+                        fab.createEnemyBasedOnType(enemyType.trim(), env);
                         indiceEnnemiLigne++;
                     } else {
                         finDUneVague();
                     }
                 }
             }
-        }
-    }
-
-    private void createEnemyBasedOnType(String enemyType, Environnement env) {
-        Ennemi newEnemy = null;
-
-        switch (enemyType) {
-            case "Eclaireur":
-                newEnemy = new Eclaireur(env);
-                break;
-            case "EnnemiBase":
-                newEnemy = new EnnemiBase(env);
-                break;
-            case "Mastodonte":
-                newEnemy = new Mastodonte(env);
-                break;
-            case "Tank":
-                newEnemy = new Tank(env);
-                break;
-        }
-
-        if (newEnemy != null) {
-            env.ajouterEnnemi(newEnemy);  // Supposant que vous avez une méthode addEnnemi dans Environnement
         }
     }
 
