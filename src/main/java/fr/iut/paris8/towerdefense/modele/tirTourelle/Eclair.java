@@ -9,18 +9,16 @@ public class Eclair extends Balle{
     private int Ydepart;
 
     public Eclair(int positionX, int positionY, int vitesse, Environnement env, Ennemi e) {
-        super(positionX, positionY, vitesse, env, e, 10, "eclair");
+        super(positionX, positionY, vitesse, env, e, 10);
         this.e = e;
         this.Xdepart = positionX-8;
         this.Ydepart = positionY-8;
     }
     public void seDeplacer() {
-
         setDirectionX(Math.cos(directionPourCible(getEnnemi().getX()+16,getEnnemi().getY()+16)));
         setDirectionY(Math.sin(directionPourCible(getEnnemi().getX()+16,getEnnemi().getY()+16)));
 
-        setPositionXProperty((int) (getX() + getVitesse() * getDirectionX()));
-        setPositionYProperty((int) (getY() + getVitesse() * getDirectionY()));
+        super.seDeplacer();
     }
 
     // Retourne vrai si la balle détecte un ennemi ou si l'ennemi sort de la portée de la tesla

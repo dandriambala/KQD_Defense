@@ -6,7 +6,7 @@ import fr.iut.paris8.towerdefense.modele.ennemis.Ennemi;
 
 import java.util.ArrayList;
 
-public class Tourelle extends Defense {
+public abstract class Tourelle extends Defense {
 
     private int nbCible;
     private int vitesseAttaque;
@@ -36,8 +36,10 @@ public class Tourelle extends Defense {
         }
     }
 
+    public abstract Balle creerBalle(int positionX, int positionY, int vitesse, Environnement env, Ennemi e, int rayonAction);
+
     public Balle creerBallesDansTourelle(Ennemi e){
-        Balle b = new Balle(this.getColonne(), this.getLigne(), this.vitesseAttaque, getEnv(),e, this.vitesseAttaque+1, "normal");
+        Balle b = creerBalle(this.getColonne(), this.getLigne(), this.vitesseAttaque, getEnv(),e, this.vitesseAttaque+1);
         getEnv().getEnMouvements().add(b);
         return b;
     }

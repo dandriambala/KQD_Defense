@@ -5,6 +5,8 @@ import fr.iut.paris8.towerdefense.modele.*;
 import fr.iut.paris8.towerdefense.modele.ennemis.*;
 import fr.iut.paris8.towerdefense.modele.tirTourelle.Balle;
 //import fr.iut.paris8.towerdefense.vue.BalleMissile;
+import fr.iut.paris8.towerdefense.modele.tirTourelle.Eclair;
+import fr.iut.paris8.towerdefense.modele.tirTourelle.Missile;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -59,13 +61,17 @@ public class ObservateurEnMouvement implements ListChangeListener<EnMouvement> {
             }
         }
     }
+
+
     public void creerSpriteBalle(Balle b) {
         Circle c;
-        if(b.getType().equals("missile")) {
+
+
+        if(b instanceof Missile) {
             c = new Circle(5);
             c.setFill(Color.RED);
         }
-        else if (b.getType().equals("eclair")){
+        else if (b instanceof Eclair){
             c = new Circle(1);
             c.setFill(Color.WHITE);
         }
@@ -81,6 +87,8 @@ public class ObservateurEnMouvement implements ListChangeListener<EnMouvement> {
         c.setId(b.getId());
 
     }
+
+
     private void creerSpriteEnnemi(Ennemi ennemi) {
 
         ImageView c = new ImageView();
