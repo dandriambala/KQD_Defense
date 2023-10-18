@@ -30,9 +30,9 @@ public class LanceMissile extends Tourelle {
 
         if (!ennemis.isEmpty() && balleActuelle == null) {
             ArrayList<Ennemi> degatEnChaine = getEnv().chercherEnnemisDansPortee(ennemis.get(0).getX(), ennemis.get(0).getY(), 32, 5);
+            balleActuelle = creerBallesDansTourelle(ennemis.get(0));
 
             if (!degatEnChaine.isEmpty()) {
-                balleActuelle = creerBallesDansTourelle(ennemis.get(0));
 
                 for (int j = 0; j < degatEnChaine.size(); j++) {
                     degatEnChaine.get(j).decrementerPv(this.getDegats());
