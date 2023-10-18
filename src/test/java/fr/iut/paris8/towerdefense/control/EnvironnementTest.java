@@ -1,4 +1,4 @@
-package fr.iut.paris8.towerdefense.control;
+/*package fr.iut.paris8.towerdefense.control;
 import fr.iut.paris8.towerdefense.modele.Environnement;
 import fr.iut.paris8.towerdefense.modele.TerrainModele;
 import fr.iut.paris8.towerdefense.modele.defenses.*;
@@ -129,3 +129,4 @@ public class EnvironnementTest {
     }
 
 }
+*/

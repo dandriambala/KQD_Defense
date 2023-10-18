@@ -1,6 +1,6 @@
 package fr.iut.paris8.towerdefense.modele;
 
-import fr.iut.paris8.towerdefense.modele.ennemis.*;
+import fr.iut.paris8.towerdefense.modele.ennemis.Ennemi;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
@@ -50,16 +50,19 @@ public class GestionnaireDeVague {
         this.nbVague.set(nbVague);
     }
 
-    public void vaguePourChaqueTour(Environnement env){
-        if (nbToursDerniereVagueTerminee == -1 && env.getEnnemis().isEmpty() && !finPartie(env)){
+    public Ennemi vaguePourChaqueTour(Environnement env){
+
+        Ennemi e=null;
+        if (nbToursDerniereVagueTerminee == -1 && !aFiniVague() && env.getEnnemis().isEmpty()){
         nbToursDerniereVagueTerminee = env.getNbTours();
         }
+
         if (nbToursDerniereVagueTerminee != -1) {
             if (env.getNbTours() % 20 == 0) {
                 if (ligneDeVague < vaguesEnnemiDansFichier.size()) {
                     if (indiceEnnemiLigne < vaguesEnnemiDansFichier.get(ligneDeVague).length) {
-                        String enemyType = vaguesEnnemiDansFichier.get(ligneDeVague)[indiceEnnemiLigne];
-                        fab.createEnemyBasedOnType(enemyType.trim(), env);
+                        String typeEnnemi = vaguesEnnemiDansFichier.get(ligneDeVague)[indiceEnnemiLigne];
+                        e = fab.creationEnnemi(typeEnnemi.trim(), env);
                         indiceEnnemiLigne++;
                     } else {
                         finDUneVague();
@@ -67,12 +70,13 @@ public class GestionnaireDeVague {
                 }
             }
         }
+        return e;
     }
 
 
     //retourne vrai si on est arrivé à la fin de toutes les vagues
-    public boolean finPartie(Environnement env){
-        return ligneDeVague == vaguesEnnemiDansFichier.size() && env.getEnnemis().isEmpty();
+    public boolean aFiniVague(){
+        return ligneDeVague == vaguesEnnemiDansFichier.size();
     }
 
     //A la fin d'une vague on met à jour les attribut pour la prochaine vague

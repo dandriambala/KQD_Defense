@@ -124,7 +124,10 @@ public class Environnement {
 
             this.defensesPourChaqueTour();
 
-            gestionnaireDeVague.vaguePourChaqueTour(this);
+            Ennemi e = gestionnaireDeVague.vaguePourChaqueTour(this);
+            if (e!=null){
+                ajouterEnnemi(e);
+            }
 
             this.enMouvementsPourChaqueTour();
 
@@ -135,7 +138,7 @@ public class Environnement {
 
     public int finPartie(){
         //si les pv sont supérieur à 0 et que les vagues on atteint 50 alors la partie est gagné et ca retourne 0
-        if (!ressourceJeu.partiePerdu() && gestionnaireDeVague.finPartie(this)) {
+        if (!ressourceJeu.partiePerdu() && gestionnaireDeVague.aFiniVague() && getEnnemis().isEmpty()) {
             return 0;
         }
         else if (ressourceJeu.partiePerdu()){
@@ -149,7 +152,7 @@ public class Environnement {
     }
 
 
-    public void enMouvementsPourChaqueTour () {
+    private void enMouvementsPourChaqueTour () {
 
         for (int i = enMouvements.size() - 1; i >= 0; i--) {
             EnMouvement enMo = enMouvements.get(i);
@@ -160,7 +163,7 @@ public class Environnement {
         }
     }
 
-    public void defensesPourChaqueTour(){
+    private void defensesPourChaqueTour(){
         for (int i = defenses.size()-1; i>=0; i--) {
             defenses.get(i).agir();
         }

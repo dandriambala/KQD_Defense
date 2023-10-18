@@ -4,7 +4,7 @@ import fr.iut.paris8.towerdefense.modele.ennemis.*;
 
 public class FabriqueEnnemi {
 
-        public void createEnemyBasedOnType(String enemyType, Environnement env) {
+        public Ennemi creationEnnemi(String enemyType, Environnement env) {
             Ennemi newEnemy = null;
 
             switch (enemyType) {
@@ -22,9 +22,7 @@ public class FabriqueEnnemi {
                     break;
             }
 
-            if (newEnemy != null) {
-                env.ajouterEnnemi(newEnemy);
-            }
+            return newEnemy;
         }
 
 }
