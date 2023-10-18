@@ -8,17 +8,18 @@ import fr.iut.paris8.towerdefense.modele.tirTourelle.Eclair;
 
 public class Tesla extends Tourelle {
 
-    public Tesla(Environnement env) {
-        super(150, env, 5, 3, 5,5);
+    public Tesla() {
+        super(150, 5, 3, 5,5);
     }
 
-    public Tesla(Environnement env, int colonne, int ligne) {
-        super(150, env, 5, 3,5, colonne,ligne,5);
+    public Tesla(int colonne, int ligne) {
+        super(150, 5, 3,5, colonne,ligne,5);
     }
 
     @Override
-    public Balle creerBalle(int positionX, int positionY, int vitesse, Environnement env, Ennemi e, int rayonAction) {
-        return new Eclair(this.getColonne(), this.getLigne(), getVitesseAttaque(), getEnv(),e);
+    public Balle creerBalle(int positionX, int positionY, int vitesse, Ennemi e, int rayonAction) {
+        return new Eclair(this.getColonne(), this.getLigne(), getVitesseAttaque(),e);
+
     }
 
 }

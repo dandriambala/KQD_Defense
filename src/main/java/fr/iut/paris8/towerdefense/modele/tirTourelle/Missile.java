@@ -9,8 +9,9 @@ public class Missile extends Balle{
     private int Ydepart;
 
 
-    public Missile(int positionX, int positionY, int vitesse, Environnement env, Ennemi e) {
-        super(positionX, positionY, vitesse, env, e, 10);
+    public Missile(int positionX, int positionY, int vitesse, Ennemi e) {
+        super(positionX, positionY, vitesse, e, 10);
+
         distance = Math.sqrt(Math.pow((e.getX()+e.getVitesse()-positionX),2)+Math.pow((e.getY()+e.getVitesse()-positionY),2));
         this.Xdepart = positionX;
         this.Ydepart = positionY;

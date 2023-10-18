@@ -5,11 +5,13 @@ import javafx.scene.layout.TilePane;
 
 public class TerrainModele {
 
+    private static TerrainModele uniqueInstance = null;
+
     private int[][] terrain;
     private final int colonne = 60, ligne = 22, pixel = 16;
     // tableau de 60*22
 
-    public TerrainModele() {
+    private TerrainModele() {
 
         int[][] t = new int[ligne][colonne];
 
@@ -29,6 +31,13 @@ public class TerrainModele {
 
 
         this.terrain = t;
+    }
+
+    public static synchronized TerrainModele getInstance() {
+        if (uniqueInstance == null) {
+            uniqueInstance = new TerrainModele();
+        }
+        return uniqueInstance;
     }
 
     public int[][] getTerrain() {
