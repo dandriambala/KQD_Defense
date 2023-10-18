@@ -11,7 +11,7 @@ public class NuageRalentisseur extends PiegeTemporaire {
     private static double ralentissement = 0.4;
 
     public NuageRalentisseur() {
-        super(40, 3, 0, 10000);
+        super(40, 3, 0, 7000);
         setId("NR" + compteurRalentisseur);
 
         ennemisDansZone = new ArrayList<>();
@@ -20,6 +20,7 @@ public class NuageRalentisseur extends PiegeTemporaire {
     }
 
     public void faireEffet() {
+        super.faireEffet();
         ralentir();
         accélèreEnnemiHorsZone();
         /* Si la différence entre le temps actuel le temps de création du nuage est supérieure à la durée de vie du nuage

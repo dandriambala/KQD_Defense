@@ -13,14 +13,11 @@ public abstract class PiegeTemporaire extends Piege{
         this.dureeDeVie = dureeDeVie;
     }
 
-    @Override
-    public boolean finDeVie() {
+    public void faireEffet(){
         if(System.currentTimeMillis() - timer > dureeDeVie){
             finEffet();
-            return true;
-        }; //tant que le temps écoulé depuis qu'on a initialisé le timer est inférieur au delay
-        return false;
+            this.estMort();
+        }
     }
-
     public abstract void finEffet();
 }

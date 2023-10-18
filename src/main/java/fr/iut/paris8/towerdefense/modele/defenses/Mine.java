@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 public class Mine extends Piege {
     private static int compteurMine = 0;
-    private boolean aExplosé = false;
 
     //La durée de vie à 1 n'a pas d'impact
     public Mine (){
@@ -18,7 +17,7 @@ public class Mine extends Piege {
     }
 
     public Mine( int colonne, int ligne){
-        super(25,  1, 200, 1, colonne, ligne);
+        super(25,  1, 200, colonne, ligne);
     }
 
     public void faireEffet(){
@@ -36,11 +35,8 @@ public class Mine extends Piege {
        //Explose sur le premier ennemi qu'il a dans sa portée
         if(!ennemis.isEmpty()) {
                 ennemis.get(0).decrementerPv(this.getDegats());
-                this.aExplosé = true;
+                this.estMort();
         }
     }
 
-    public boolean finDeVie(){
-        return this.aExplosé;
-    }
 }

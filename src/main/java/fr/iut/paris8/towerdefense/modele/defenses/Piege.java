@@ -11,19 +11,15 @@ public abstract class Piege extends Defense {
         super(cout,portee,degats);
     }
 
-    public Piege (int cout,int portee, int degats, int dureeDeVie, int colonne, int ligne){
+    public Piege (int cout,int portee, int degats, int colonne, int ligne){
         super(cout,portee,degats, colonne, ligne);
 
     }
 
     public void agir(){
-        if (finDeVie()){
-            getEnv().enleverDefense(this);
-        }
-        else faireEffet();
+        faireEffet();
     }
 
     public abstract void faireEffet();
-    public abstract boolean finDeVie();
 
 }
