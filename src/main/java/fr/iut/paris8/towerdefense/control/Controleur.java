@@ -163,7 +163,7 @@ public class Controleur implements Initializable {
         pane.getChildren().add(copie);
 
         //Affichage du bfs après sélection de la défense
-        BFS bfsSecondaire = new BFS(new Grille(env.getTerrainModele().getWidth() / 16, env.getTerrainModele().getHeight() / 16), new Case(59, 10));
+        BFS bfsSecondaire = BFS.getInstance(new Grille(env.getTerrainModele().getWidth() / 16, env.getTerrainModele().getHeight() / 16), new Case(59, 10));
         Case caseDentree = new Case(1, 10);
         Case caseTourelle = new Case();
         Case premier = new Case();

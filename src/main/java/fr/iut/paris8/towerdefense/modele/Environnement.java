@@ -31,7 +31,7 @@ public class Environnement {
         this.enMouvements = FXCollections.observableArrayList();
         this.defenses = FXCollections.observableArrayList();
         this.t = t;
-        this.bfs = new BFS(new Grille(t.getWidth() / 16, t.getHeight() / 16), new Case(59, 10));
+        this.bfs = BFS.getInstance(new Grille(t.getWidth() / 16, t.getHeight() / 16), new Case(59, 10));
         ressourceJeu = new RessourceJeu();
         this.partieTerminee = -1;
         gestionnaireDeVague= new GestionnaireDeVague();
