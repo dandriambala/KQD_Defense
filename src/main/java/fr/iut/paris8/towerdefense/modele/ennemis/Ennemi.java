@@ -12,24 +12,42 @@ public abstract class Ennemi extends EnMouvement {
     private int prime; //L'argent que donnera l'ennemi à sa mort
     private int pv;
     private Case destinationCase;
+    private BarreDeVie barreDeVie;
+    private int pvMax;
+
+
 
     public Ennemi( int vitesse,  int prime, int pv) {
       super(0,160,vitesse);
         this.prime = prime;
         this.pv = pv;
+        this.pvMax=pv;
         setId("E"+ compteurEnnemi);
         compteurEnnemi++;
+        this.barreDeVie = new BarreDeVie(getPv(), getPvMax(), getId(), getX(), getY());
+
     }
 
     public Ennemi(int x, int y, int vitesse,  int prime, int pv){
         super(x, y, vitesse);
         this.prime = prime;
         this.pv = pv;
+        this.pvMax=pv;
         setId("E"+ compteurEnnemi);
         compteurEnnemi++;
+        this.barreDeVie = new BarreDeVie(getPv(), getPvMax(), getId(), getX(), getY());
+
     }
 
     public int getPv(){return this.pv;}
+
+    public int getPvMax() {
+        return pvMax;
+    }
+
+    public BarreDeVie getBarreDeVie() {
+        return barreDeVie;
+    }
 
     public boolean estVivant() {
         return this.pv > 0;

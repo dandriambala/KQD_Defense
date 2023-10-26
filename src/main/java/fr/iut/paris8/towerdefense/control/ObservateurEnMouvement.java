@@ -58,6 +58,8 @@ public class ObservateurEnMouvement implements ListChangeListener<EnMouvement> {
             for (EnMouvement em: change.getRemoved()) {
                 Node node = pane.lookup("#" + em.getId());
                 pane.getChildren().remove(node);
+                pane.getChildren().remove(pane.lookup("#"+ em.getId()));
+
             }
         }
     }

@@ -5,6 +5,7 @@ import fr.iut.paris8.towerdefense.BFS.Case;
 import fr.iut.paris8.towerdefense.BFS.Grille;
 import fr.iut.paris8.towerdefense.modele.*;
 import fr.iut.paris8.towerdefense.modele.defenses.*;
+import fr.iut.paris8.towerdefense.modele.ennemis.BarreDeVie;
 import fr.iut.paris8.towerdefense.modele.ennemis.Ennemi;
 import fr.iut.paris8.towerdefense.modele.ennemis.Mastodonte;
 import fr.iut.paris8.towerdefense.vue.TerrainVue;
@@ -100,6 +101,9 @@ public class Controleur implements Initializable {
         ListChangeListener l2 = new ObservateurDefenses(pane);
         this.env.getDefense().addListener(l2);
 
+        ListChangeListener<BarreDeVie> l3 = new ObservateurBarreDeVie(pane);
+        env.getBarreDeVies().addListener(l3);
+
 
         imTourelle.setOnMouseClicked(e -> dragEtReleasedImageView(imTourelle, 1));
         imTesla.setOnMouseClicked(e -> dragEtReleasedImageView(imTesla, 2));
@@ -107,6 +111,7 @@ public class Controleur implements Initializable {
         imNuage.setOnMouseClicked(e -> dragEtReleasedImageView(imNuage, 3));
         imMissile.setOnMouseClicked(e -> dragEtReleasedImageView(imMissile, 4));
         imMine.setOnMouseClicked(e -> dragEtReleasedImageView(imMine, 5));
+
 
     }
 
