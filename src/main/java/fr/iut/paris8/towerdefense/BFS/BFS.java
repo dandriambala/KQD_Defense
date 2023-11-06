@@ -5,47 +5,63 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+
 public class BFS {
+    private static BFS uniqueInstance = null;
+
     private Grille g;
     private Case source;
     private ArrayList<Case> parcours;
     private Map<Case, Case> predecesseurs;
 
-    public BFS(Grille g, Case source) {
+    // Le constructeur est privé pour empêcher l'instanciation directe depuis l'extérieur de la classe.
+    private BFS(Grille g, Case source) {
         this.g = g;
         this.source = source;
         grilleBFS();
     }
+
+    // Méthode pour récupérer l'unique instance de la classe.
+    public static synchronized BFS getInstance(Grille g, Case source) {
+        if (uniqueInstance == null) {
+            uniqueInstance = new BFS(g, source);
+        }
+        return uniqueInstance;
+    }
+
     /**
      * Effectue une recherche en largeur sur une grille à partir d'une case source.
      */
     public void grilleBFS() {
-        Case s; // Variable temporaire pour stocker les cases en cours de traitement
-        LinkedList<Case> fifo = new LinkedList<>(); // File d'attente pour les cases à traiter
-        parcours = new ArrayList<>(); // Liste des cases parcourues
-        predecesseurs = new HashMap<>(); // Dictionnaire des prédecesseurs des cases
+        Case s;
+        LinkedList<Case> fifo = new LinkedList<>();
+        parcours = new ArrayList<>();
+        predecesseurs = new HashMap<>();
 
-        predecesseurs.put(source,null);
+        predecesseurs.put(source, null);
         parcours.add(source);
         fifo.addFirst(source);
 
-        while(!fifo.isEmpty()){
+        while (!fifo.isEmpty()) {
             s = fifo.pollLast();
-            for( Case t: g.adjacents(s))
-                if (!parcours.contains(t)){
+            for (Case t : g.adjacents(s))
+                if (!parcours.contains(t)) {
                     parcours.add(t);
                     fifo.addFirst(t);
-                    predecesseurs.put(t,s);
+                    predecesseurs.put(t, s);
                 }
         }
-
     }
 
-    public ArrayList<Case> cheminVersSource( Case cible) {
+    public ArrayList<Case> cheminVersSource(Case cible) {
         ArrayList<Case> chemin = new ArrayList<>();
         Case s = cible;
 
-        while(s != source){
+        while (s != source) {
             chemin.add(s);
             s = predecesseurs.get(s);
         }
@@ -53,17 +69,19 @@ public class BFS {
         return chemin;
     }
 
-    public ArrayList<Case> getParcours () {
+    public ArrayList<Case> getParcours() {
         return parcours;
     }
 
-    public Case getSource () {
+    public Case getSource() {
         return source;
     }
 
-    public Grille getG () {
+    public Grille getG() {
         return g;
     }
+
+
 
     //928,76 debut donc la sortie de l'ennemie
     //960,76

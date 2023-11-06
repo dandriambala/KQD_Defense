@@ -5,6 +5,7 @@ import fr.iut.paris8.towerdefense.BFS.Grille;
 import fr.iut.paris8.towerdefense.BFS.Case;
 import fr.iut.paris8.towerdefense.modele.defenses.Defense;
 import fr.iut.paris8.towerdefense.modele.defenses.Tourelle;
+import fr.iut.paris8.towerdefense.modele.ennemis.BarreDeVie;
 import fr.iut.paris8.towerdefense.modele.ennemis.Ennemi;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -19,6 +20,7 @@ public class Environnement {
 
     private ObservableList<Defense> defenses;
     private ObservableList<EnMouvement> enMouvements;
+    private ObservableList<BarreDeVie> barreDeVies;
     private IntegerProperty nbToursProperty;
     private TerrainModele t;
     private BFS bfs;
@@ -29,9 +31,10 @@ public class Environnement {
         this.nbToursProperty = new SimpleIntegerProperty();
         this.nbToursProperty.setValue(0);
         this.enMouvements = FXCollections.observableArrayList();
+        this.barreDeVies = FXCollections.observableArrayList();
         this.defenses = FXCollections.observableArrayList();
         this.t = t;
-        this.bfs = new BFS(new Grille(t.getWidth() / 16, t.getHeight() / 16), new Case(59, 10));
+        this.bfs = BFS.getInstance(new Grille(t.getWidth() / 16, t.getHeight() / 16), new Case(59, 10));
         ressourceJeu = new RessourceJeu();
         this.partieTerminee = -1;
         gestionnaireDeVague= new GestionnaireDeVague();
@@ -128,7 +131,13 @@ public class Environnement {
 
     public void ajouterEnnemi ( Ennemi a ) {
         enMouvements.add(a);
+        ajouterBarreDeVie(a.getBarreDeVie());
     }
+
+    public void ajouterBarreDeVie(BarreDeVie b) {
+        barreDeVies.add(b);
+    }
+
 
     public void unTour() {
             nbToursProperty.setValue(nbToursProperty.getValue() + 1);
@@ -166,6 +175,14 @@ public class Environnement {
 
     private void enMouvementsPourChaqueTour () {
 
+        for (int i = 0; i < getEnnemis().size(); i++) {
+            Ennemi a = getEnnemis().get(i);
+            a.getBarreDeVie().setX(a.getX());
+            a.getBarreDeVie().setY(a.getY());
+            a.getBarreDeVie().setVie(a.getPv());
+            a.getBarreDeVie().miseAJourVieTotale();
+        }
+
         for (int i = enMouvements.size() - 1; i >= 0; i--) {
             EnMouvement enMo = enMouvements.get(i);
 
@@ -173,6 +190,7 @@ public class Environnement {
             if (enMo.estTerminé())
                 enMouvements.remove(i);
         }
+
     }
 
     private void defensesPourChaqueTour(){
@@ -183,6 +201,7 @@ public class Environnement {
             if (d.getEtat() == false)
                 this.enleverDefense(d);
         }
+
     }
 
     public BFS getBfs () {
@@ -249,4 +268,7 @@ public class Environnement {
 
     }
 
+    public ObservableList<BarreDeVie> getBarreDeVies() {
+        return barreDeVies;
+    }
 }
