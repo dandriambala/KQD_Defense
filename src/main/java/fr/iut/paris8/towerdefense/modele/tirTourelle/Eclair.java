@@ -10,7 +10,7 @@ public class Eclair extends Balle{
 
 
     public Eclair(int positionX, int positionY, int vitesse, Ennemi e) {
-        super(positionX, positionY, vitesse, e, 10);
+        super(positionX, positionY, vitesse, e, 7);
 
         this.e = e;
         this.Xdepart = positionX-8;

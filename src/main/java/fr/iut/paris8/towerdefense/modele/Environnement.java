@@ -209,7 +209,7 @@ public class Environnement {
         return ennemisDansPortee;
     }
 
-    //retourne une defense qui se situe près d'un tank
+    //retourne les défenses qui se situe sur la route des ennemis
     public ArrayList<Defense> chercherDefenseDansPorteeEnnemi(int x, int y, int portee, int limiteur) {
 
         ArrayList<Defense> defensesDansPortee = new ArrayList<>();
