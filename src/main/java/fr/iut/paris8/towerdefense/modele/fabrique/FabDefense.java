@@ -1,11 +1,32 @@
 package fr.iut.paris8.towerdefense.modele.fabrique;
 
 import fr.iut.paris8.towerdefense.modele.Environnement;
+import fr.iut.paris8.towerdefense.modele.defenses.*;
 
-public abstract class FabDefense {
-    private Environnement env;
-    public FabDefense(Environnement env){
-        this.env = env;
-    }
+public class FabDefense {
+
+   public Defense ajouterDefense(int type, int x,int y ){
+
+       Defense d;
+
+       switch (type) {
+           case 1:
+               d = new TourelleBase(x, y);
+               break;
+           case 2:
+               d = new Tesla(x, y);
+               break;
+           case 3:
+               d = new NuageRalentisseur(x, y);
+               break;
+           case 4:
+               d = new LanceMissile(x, y);
+               break;
+           default:
+               d = new Mine(x, y);
+               break;
+       }
+       return d;
+   }
 
 }

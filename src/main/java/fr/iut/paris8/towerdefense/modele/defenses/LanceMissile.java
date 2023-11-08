@@ -13,15 +13,13 @@ public class LanceMissile extends Tourelle {
     private int cooldown = 0;
     private Balle balleActuelle;
 
-    public LanceMissile() {
-        super(100,  4, 30, 4, 1);
+    public LanceMissile( int colonne, int ligne) {
+        super(100,  4, 30, 4, colonne, ligne, 1);
         this.balleActuelle = null;
     }
-    public LanceMissile( int colonne, int ligne) {
-        super(100,  4, 30, 4, 1);
-        this.balleActuelle = null;
-        setColonne(colonne);
-        setLigne(ligne);
+
+    public LanceMissile() {
+        this(0,0);
     }
 
      private void sniper() {

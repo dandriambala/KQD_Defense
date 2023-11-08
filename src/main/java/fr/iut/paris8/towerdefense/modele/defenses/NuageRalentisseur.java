@@ -10,13 +10,17 @@ public class NuageRalentisseur extends PiegeTemporaire {
     private ArrayList <Ennemi> ennemisDansZone;
     private static double ralentissement = 0.4;
 
-    public NuageRalentisseur() {
-        super(40, 3, 0, 7000);
+    public NuageRalentisseur(int x, int y) {
+        super(40, 3, 0, 7000, x, y);
         setId("NR" + compteurRalentisseur);
 
         ennemisDansZone = new ArrayList<>();
 
         compteurRalentisseur++;
+    }
+
+    public NuageRalentisseur() {
+       this(0,0);
     }
 
     public void faireEffet() {
