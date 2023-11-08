@@ -7,18 +7,19 @@ import fr.iut.paris8.towerdefense.modele.ennemis.Ennemi;
 
 import java.util.ArrayList;
 
-public class StratTank extends StrategyEnnemi{
-    public StratTank(Environnement env) {
+public class StratFreeze extends StrategyEnnemi{
+    public StratFreeze(Environnement env) {
         super(env);
     }
 
     @Override
-    // enlève les défenses qui sont sur son passage
     public void reagir(Ennemi e) {
-        ArrayList<Defense> def = this.getEnv().chercherDefenseDansPorteeEnnemi(e.getX(), e.getY(), 16, 1, Direction.horizontal);
-        if (!def.isEmpty()) {
-            for (int i = 0; i < def.size(); i++)
-                def.get(i).estMort();
+        if(e.estTerminé()) {
+            ArrayList<Defense> def = this.getEnv().chercherDefenseDansPorteeEnnemi(e.getX(), e.getY(), 32, 24, Direction.toute);
+            if (!def.isEmpty()) {
+                for (int i = 0; i < def.size(); i++)
+                    def.get(i).stop(5);
+            }
         }
     }
 }

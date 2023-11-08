@@ -3,6 +3,7 @@ package fr.iut.paris8.towerdefense.modele.ennemis;
 import fr.iut.paris8.towerdefense.modele.Environnement;
 import fr.iut.paris8.towerdefense.modele.TerrainModele;
 import fr.iut.paris8.towerdefense.modele.defenses.Defense;
+import fr.iut.paris8.towerdefense.modele.ennemis.stratEnnemis.StratFreeze;
 import fr.iut.paris8.towerdefense.modele.ennemis.stratEnnemis.StratTank;
 import fr.iut.paris8.towerdefense.modele.ennemis.stratEnnemis.StrategyEnnemi;
 

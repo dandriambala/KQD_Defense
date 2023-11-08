@@ -229,17 +229,36 @@ public class Environnement {
     }
 
     //retourne les défenses qui se situe sur la route des ennemis
-    public ArrayList<Defense> chercherDefenseDansPorteeEnnemi(int x, int y, int portee, int limiteur) {
+    public ArrayList<Defense> chercherDefenseDansPorteeEnnemi(int x, int y, int portee, int limiteur, Direction directionDeRecherche) {
 
         ArrayList<Defense> defensesDansPortee = new ArrayList<>();
+
+
         for (Tourelle t : this.getTourelle()) {
             if ( defensesDansPortee.size() < limiteur ) {
-                if (((x + portee) >= t.getColonne()) && (x <= t.getColonne()) && (t.getLigne() == y)) {
+                if (defensesTrouveDansDirection(x,y,portee,directionDeRecherche, t.getLigne(), t.getColonne())) {
                     defensesDansPortee.add(t);
                 }
             }
         }
         return defensesDansPortee;
+    }
+
+
+    public boolean defensesTrouveDansDirection(int xEnnemi, int yEnnemi, int porteeEnnemi, Direction direction, int ligneDef, int colonneDef) {
+        switch(direction){
+            case horizontal :
+                return ((( xEnnemi - porteeEnnemi ) <= colonneDef) && ( colonneDef <= ( xEnnemi + porteeEnnemi )  && (ligneDef == yEnnemi)));
+            case vertical :
+                // TO-DO coder la recherche en verticale
+                break;
+            case toute :
+                System.out.println("X Ennemi : " + xEnnemi);
+                System.out.println("Tourelle: "+ colonneDef);
+                return (( xEnnemi - porteeEnnemi ) <= colonneDef) && ( colonneDef <= ( xEnnemi + porteeEnnemi ) )
+                    && ( ( yEnnemi - porteeEnnemi ) <= ligneDef ) && ( ligneDef <= yEnnemi + porteeEnnemi );
+        }
+        return false;
     }
 
     public GestionnaireDeVague getVague () {

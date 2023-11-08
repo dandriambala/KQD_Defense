@@ -90,4 +90,8 @@ public abstract class Defense {
     // Les défenses mettront des dégâts aux ennemis
     public abstract void agir();
 
+    public void stop(int duree){
+        //TO-DO dire à la défense d'arrêter d'agir
+
+    }
 }
