@@ -227,35 +227,18 @@ public class Controleur implements Initializable {
             public void handle ( MouseEvent event ) {
 
                 int nbDefenseAncien = env.getDefense().size();
-                Defense d;
 
 
                 if (imageDefenseBienPlacé(copie.getTranslateX(), copie.getTranslateY())) {
-
-                    switch ( numeroDef ) {
-                        case 1:
-                            d = new TourelleBase();
-                            break;
-                        case 2:
-                            d = new Tesla();
-                            break;
-                        case 3:
-                            d = new NuageRalentisseur();
-                            break;
-                        case 4:
-                            d = new LanceMissile();
-                            break;
-                        default:
-                            d = new Mine();
-                            break;
-                    }
-
-                    copie.setId(d.getId());
                     t1.ajusterEmplacementDefense(copie, (int) ( copie.getTranslateX() / 16 ), (int) ( copie.getTranslateY() / 16 ));
-                    d.setColonne((int) copie.getTranslateX());
-                    d.setLigne((int) copie.getTranslateY());
-                    env.ajouterDefense(d);
-                    afficherRayonPortee(d);
+
+
+ //                   afficherRayonPortee(d);
+
+                    int x = (int) copie.getTranslateX();
+                    int y = (int) copie.getTranslateY();
+                    String id = env.ajouterDefense(numeroDef, x, y);
+                    copie.setId(id);
 
                     env.getBfs().grilleBFS();
 

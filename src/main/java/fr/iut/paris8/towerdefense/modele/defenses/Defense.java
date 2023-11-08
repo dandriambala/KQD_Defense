@@ -22,16 +22,6 @@ public abstract class Defense {
     private int cout;
     private boolean existe;
 
-    public Defense(int cout,  int portee, int degats) {
-        this.env = Environnement.getInstance(TerrainModele.getInstance());
-        this.colonne = new SimpleIntegerProperty();
-        this.ligne = new SimpleIntegerProperty();
-        this.cout = cout;
-        this.portee = portee*16;
-        this.degats = degats;
-        this.existe = true;
-    }
-
     public Defense(int cout, int portee, int degats, int colonne, int ligne) {
         this.colonne = new SimpleIntegerProperty(colonne);
         this.ligne = new SimpleIntegerProperty(ligne);
@@ -39,6 +29,11 @@ public abstract class Defense {
         this.env = Environnement.getInstance(TerrainModele.getInstance());
         this.portee = portee*16;
         this.degats = degats;
+        this.existe = true;
+    }
+
+    public Defense(int cout,  int portee, int degats) {
+        this(cout, portee, degats, 0, 0);
     }
 
     public  int getColonne() {

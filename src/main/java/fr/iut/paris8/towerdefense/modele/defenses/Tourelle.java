@@ -12,19 +12,18 @@ public abstract class Tourelle extends Defense {
     private int nbCible;
     private int vitesseAttaque;
     private static int compteurTourelle = 0;
-    public Tourelle(int cout, int portee, int degats, int vitesseAttaque, int nbCible) {
-        super(cout, portee, degats);
 
+    public Tourelle(int cout, int portee, int degat, int vitesseAttaque, int colonne, int ligne, int nbCible) {
+
+        super(cout, portee, degat, colonne, ligne);
         this.vitesseAttaque = vitesseAttaque;
         this.nbCible = nbCible;
         this.setId("T" + compteurTourelle);
         compteurTourelle++;
     }
 
-
-    public Tourelle(int cout, int portee, int degat, int vitesseAttaque, int colonne, int ligne, int nbCible) {
-        super(cout, portee, degat, colonne, ligne);
-        this.nbCible = nbCible;
+    public Tourelle(int cout, int portee, int degats, int vitesseAttaque, int nbCible) {
+        this(cout, portee, degats, vitesseAttaque, 0, 0, nbCible);
     }
 
     public void attaquer(){
