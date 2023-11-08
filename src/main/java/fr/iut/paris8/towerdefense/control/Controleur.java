@@ -162,7 +162,6 @@ public class Controleur implements Initializable {
         }
 
         pane.getChildren().add(copie);
-
         //Affichage du bfs après sélection de la défense
 
         BFS bfsSecondaire = new BFS(new Grille(env.getTerrainModele().getWidth() / 16, env.getTerrainModele().getHeight() / 16), new Case(59, 10));
@@ -233,14 +232,14 @@ public class Controleur implements Initializable {
                     t1.ajusterEmplacementDefense(copie, (int) ( copie.getTranslateX() / 16 ), (int) ( copie.getTranslateY() / 16 ));
 
 
- //                   afficherRayonPortee(d);
-
                     int x = (int) copie.getTranslateX();
                     int y = (int) copie.getTranslateY();
-                    String id = env.ajouterDefense(numeroDef, x, y);
+                    Defense d = env.ajouterDefense(numeroDef, x, y);
+                    String id = d.getId();
                     copie.setId(id);
-
                     env.getBfs().grilleBFS();
+
+                    afficherRayonPortee(d);
 
                     int nbDefenseCourant = env.getDefense().size();
                     if ( nbDefenseAncien == nbDefenseCourant ) {

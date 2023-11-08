@@ -99,9 +99,10 @@ public class Environnement {
      *   - Si la défense n'est pas une tourelle, elle l'ajoute simplement à la liste des défenses.
      *   - Ajoute la défense dans le modèle du terrain.
      */
-    public String ajouterDefense (int type, int x, int y) {
+    public Defense ajouterDefense (int type, int x, int y) {
 
         Defense d = fabDefense.ajouterDefense(type, x, y);
+
         if (getRessourceJeu().peutEncoreAcheter(d.getCout()) ) {
 
             if ( d instanceof Tourelle ) {
@@ -125,10 +126,12 @@ public class Environnement {
             else {
                 getRessourceJeu().achatTourelle(d.getCout());
                 defenses.add(d);
+
+
             }
             getTerrainModele().ajouterDefenseDansModele(x,y);
         }
-        return d.getId();
+        return d;
 
     }
 
