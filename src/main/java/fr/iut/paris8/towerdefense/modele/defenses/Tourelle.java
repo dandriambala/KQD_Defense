@@ -12,10 +12,13 @@ public abstract class Tourelle extends Defense {
     private int nbCible;
     private int vitesseAttaque;
     private static int compteurTourelle = 0;
+    private boolean peutTirer;
+
     public Tourelle(int cout, int portee, int degats, int vitesseAttaque, int nbCible) {
         super(cout, portee, degats);
 
         this.vitesseAttaque = vitesseAttaque;
+        this.peutTirer = true;
         this.nbCible = nbCible;
         this.setId("T" + compteurTourelle);
         compteurTourelle++;
@@ -50,8 +53,17 @@ public abstract class Tourelle extends Defense {
         return nbCible;
     }
 
-    public void agir(){attaquer();}
+    public void agir(){
+        if(peutTirer)
+            attaquer();
+    }
+    public void neutralise(){
+        peutTirer = false;
+    }
 
+    public void recharge(){
+        peutTirer = true;
+    }
     public int getVitesseAttaque() {
         return vitesseAttaque;
     }
