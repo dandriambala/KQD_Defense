@@ -4,6 +4,7 @@ import fr.iut.paris8.towerdefense.BFS.Case;
 import fr.iut.paris8.towerdefense.modele.EnMouvement;
 import fr.iut.paris8.towerdefense.modele.Environnement;
 import fr.iut.paris8.towerdefense.modele.TerrainModele;
+import fr.iut.paris8.towerdefense.modele.ennemis.stratEnnemis.StrategyEnnemi;
 
 import java.util.ArrayList;
 
@@ -14,7 +15,7 @@ public abstract class Ennemi extends EnMouvement {
     private Case destinationCase;
     private BarreDeVie barreDeVie;
     private int pvMax;
-
+    private StrategyEnnemi strat;
 
 
     public Ennemi( int vitesse,  int prime, int pv) {

@@ -229,19 +229,19 @@ public class Environnement {
     }
 
     //retourne les défenses qui se situe sur la route des ennemis
-    public ArrayList<Defense> chercherDefenseDansPorteeEnnemi(int x, int y, int portee, int limiteur, Direction directionDeRecherche) {
+    public ArrayList<Tourelle> chercherTourelleDansPorteeEnnemi(int x, int y, int portee, int limiteur, Direction directionDeRecherche) {
 
-        ArrayList<Defense> defensesDansPortee = new ArrayList<>();
+        ArrayList<Tourelle> tourelleDansPortee = new ArrayList<>();
 
 
         for (Tourelle t : this.getTourelle()) {
-            if ( defensesDansPortee.size() < limiteur ) {
+            if ( tourelleDansPortee.size() < limiteur ) {
                 if (defensesTrouveDansDirection(x,y,portee,directionDeRecherche, t.getLigne(), t.getColonne())) {
-                    defensesDansPortee.add(t);
+                    tourelleDansPortee.add(t);
                 }
             }
         }
-        return defensesDansPortee;
+        return tourelleDansPortee;
     }
 
 
@@ -253,8 +253,6 @@ public class Environnement {
                 // TO-DO coder la recherche en verticale
                 break;
             case toute :
-                System.out.println("X Ennemi : " + xEnnemi);
-                System.out.println("Tourelle: "+ colonneDef);
                 return (( xEnnemi - porteeEnnemi ) <= colonneDef) && ( colonneDef <= ( xEnnemi + porteeEnnemi ) )
                     && ( ( yEnnemi - porteeEnnemi ) <= ligneDef ) && ( ligneDef <= yEnnemi + porteeEnnemi );
         }

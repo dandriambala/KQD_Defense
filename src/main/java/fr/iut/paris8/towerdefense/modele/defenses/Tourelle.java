@@ -1,8 +1,6 @@
 package fr.iut.paris8.towerdefense.modele.defenses;
 
-import fr.iut.paris8.towerdefense.modele.TerrainModele;
 import fr.iut.paris8.towerdefense.modele.tirTourelle.Balle;
-import fr.iut.paris8.towerdefense.modele.Environnement;
 import fr.iut.paris8.towerdefense.modele.ennemis.Ennemi;
 
 import java.util.ArrayList;
@@ -12,7 +10,9 @@ public abstract class Tourelle extends Defense {
     private int nbCible;
     private int vitesseAttaque;
     private static int compteurTourelle = 0;
+
     private boolean peutTirer;
+    private long tempsAlaDesactivation;
 
     public Tourelle(int cout, int portee, int degats, int vitesseAttaque, int nbCible) {
         super(cout, portee, degats);
@@ -53,18 +53,27 @@ public abstract class Tourelle extends Defense {
         return nbCible;
     }
 
-    public void agir(){
-        if(peutTirer)
-            attaquer();
-    }
-    public void neutralise(){
-        peutTirer = false;
-    }
-
-    public void recharge(){
-        peutTirer = true;
-    }
     public int getVitesseAttaque() {
         return vitesseAttaque;
     }
+
+    public void agir(){
+        if(peutTirer)
+            attaquer();
+        else
+            //Rechargement automatique après 5 secondes
+            this.rechargeAutomatique( 5000);
+    }
+
+    public void neutralise(){
+        peutTirer = false;
+        tempsAlaDesactivation = System.currentTimeMillis();
+    }
+
+    private void rechargeAutomatique(long tempsDeReactivation){
+        if(!(System.currentTimeMillis()- tempsAlaDesactivation <= tempsDeReactivation)) {
+            peutTirer = true;
+        }
+    }
+
 }

@@ -13,7 +13,7 @@ public class Tank extends Ennemi{
 
     public Tank () {
         super(1,100,450);
-        this.stratTank = new StratFreeze(this.getEnv());
+        this.stratTank = new StratTank(this.getEnv());
     }
     public Tank ( int x, int y) {
         super( 1,100,450);
