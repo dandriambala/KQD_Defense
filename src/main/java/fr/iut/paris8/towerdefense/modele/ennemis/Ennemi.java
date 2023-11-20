@@ -26,6 +26,7 @@ public abstract class Ennemi extends EnMouvement {
         setId("E"+ compteurEnnemi);
         compteurEnnemi++;
         this.barreDeVie = new BarreDeVie(getPv(), getPvMax(), getId(), getX(), getY());
+        this.strat = null;
 
     }
 
@@ -37,6 +38,7 @@ public abstract class Ennemi extends EnMouvement {
         setId("E"+ compteurEnnemi);
         compteurEnnemi++;
         this.barreDeVie = new BarreDeVie(getPv(), getPvMax(), getId(), getX(), getY());
+        this.strat = null;
 
     }
 
@@ -62,9 +64,17 @@ public abstract class Ennemi extends EnMouvement {
         this.pv-=nb;
     }
 
+    public void setStrat(StrategyEnnemi strat) {
+        this.strat = strat;
+    }
+
+    public StrategyEnnemi getStrat() {
+        return strat;
+    }
 
     public void agir () {
         TerrainModele t = getEnv().getTerrainModele();
+        if(getStrat() != null) getStrat().reagir(this);
        if (t.dansTerrain(this.getY() / 16, this.getX() / 16)  && estVivant()) {
 
             if (destinationCase == null)
@@ -100,6 +110,7 @@ public abstract class Ennemi extends EnMouvement {
                     avancerEnX();
                 }
             }
+
         }
     }
 
