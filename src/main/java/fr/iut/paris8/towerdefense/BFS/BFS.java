@@ -11,27 +11,18 @@ import java.util.LinkedList;
 import java.util.Map;
 
 public class BFS {
-    private static BFS uniqueInstance = null;
-
     private Grille g;
     private Case source;
     private ArrayList<Case> parcours;
     private Map<Case, Case> predecesseurs;
 
     // Le constructeur est privé pour empêcher l'instanciation directe depuis l'extérieur de la classe.
-    private BFS(Grille g, Case source) {
+    public BFS(Grille g, Case source) {
         this.g = g;
         this.source = source;
         grilleBFS();
     }
 
-    // Méthode pour récupérer l'unique instance de la classe.
-    public static synchronized BFS getInstance(Grille g, Case source) {
-        if (uniqueInstance == null) {
-            uniqueInstance = new BFS(g, source);
-        }
-        return uniqueInstance;
-    }
 
     /**
      * Effectue une recherche en largeur sur une grille à partir d'une case source.

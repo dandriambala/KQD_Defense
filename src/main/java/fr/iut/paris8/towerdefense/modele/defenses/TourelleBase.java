@@ -8,12 +8,12 @@ import fr.iut.paris8.towerdefense.modele.tirTourelle.Balle;
 
 public class TourelleBase extends Tourelle {
 
-    public TourelleBase() {
-        super(60, 2, 4,10,1);
-    }
-
     public TourelleBase( int colonne, int ligne) {
         super(60, 2,4,10, colonne, ligne,1);
+    }
+
+    public TourelleBase() {
+        this(0,0);
     }
 
     @Override

@@ -19,6 +19,7 @@ public class ObservateurDefenses implements ListChangeListener<Defense>{
             for (Defense d : change.getRemoved()) {
                     Node node = pane.lookup("#" + d.getId());
                     pane.getChildren().remove(node);
+                this.pane.getChildren().remove(this.pane.lookup("#" + d.getId()));
             }
         }
     }

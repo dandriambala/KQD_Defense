@@ -6,25 +6,21 @@ import fr.iut.paris8.towerdefense.BFS.Grille;
 import fr.iut.paris8.towerdefense.modele.*;
 import fr.iut.paris8.towerdefense.modele.defenses.*;
 import fr.iut.paris8.towerdefense.modele.ennemis.BarreDeVie;
-import fr.iut.paris8.towerdefense.modele.ennemis.Ennemi;
-import fr.iut.paris8.towerdefense.modele.ennemis.Mastodonte;
 import fr.iut.paris8.towerdefense.vue.TerrainVue;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 
 import javafx.scene.input.MouseEvent;
@@ -166,9 +162,9 @@ public class Controleur implements Initializable {
         }
 
         pane.getChildren().add(copie);
-
         //Affichage du bfs après sélection de la défense
-        BFS bfsSecondaire = BFS.getInstance(new Grille(env.getTerrainModele().getWidth() / 16, env.getTerrainModele().getHeight() / 16), new Case(59, 10));
+
+        BFS bfsSecondaire = new BFS(new Grille(env.getTerrainModele().getWidth() / 16, env.getTerrainModele().getHeight() / 16), new Case(59, 10));
         Case caseDentree = new Case(1, 10);
         Case caseTourelle = new Case();
         Case premier = new Case();
@@ -230,36 +226,20 @@ public class Controleur implements Initializable {
             public void handle ( MouseEvent event ) {
 
                 int nbDefenseAncien = env.getDefense().size();
-                Defense d;
 
 
                 if (imageDefenseBienPlacé(copie.getTranslateX(), copie.getTranslateY())) {
-
-                    switch ( numeroDef ) {
-                        case 1:
-                            d = new TourelleBase();
-                            break;
-                        case 2:
-                            d = new Tesla();
-                            break;
-                        case 3:
-                            d = new NuageRalentisseur();
-                            break;
-                        case 4:
-                            d = new LanceMissile();
-                            break;
-                        default:
-                            d = new Mine();
-                            break;
-                    }
-
-                    copie.setId(d.getId());
                     t1.ajusterEmplacementDefense(copie, (int) ( copie.getTranslateX() / 16 ), (int) ( copie.getTranslateY() / 16 ));
-                    d.setColonne((int) copie.getTranslateX());
-                    d.setLigne((int) copie.getTranslateY());
-                    env.ajouterDefense(d);
 
+
+                    int x = (int) copie.getTranslateX();
+                    int y = (int) copie.getTranslateY();
+                    Defense d = env.ajouterDefense(numeroDef, x, y);
+                    String id = d.getId();
+                    copie.setId(id);
                     env.getBfs().grilleBFS();
+
+                    afficherRayonPortee(d);
 
                     int nbDefenseCourant = env.getDefense().size();
                     if ( nbDefenseAncien == nbDefenseCourant ) {
@@ -376,6 +356,22 @@ public class Controleur implements Initializable {
             compteur++;
             list.add(circle);
         }
+    }
+    public void afficherRayonPortee(Defense tourelle) {
+        Circle rayonPortee = new Circle();
+        double centerX = tourelle.getColonne()+8;
+        double centerY = tourelle.getLigne()+8;
+
+        rayonPortee.setCenterX(centerX);
+        rayonPortee.setCenterY(centerY);
+        rayonPortee.setRadius(tourelle.getPortee());
+        rayonPortee.setFill(null); // Aucun remplissage
+        rayonPortee.setStroke(Color.rgb(255, 177, 6));
+        rayonPortee.setStrokeWidth(2.0);
+        rayonPortee.setId(tourelle.getId());
+        DropShadow dropShadow = new DropShadow(10, Color.rgb(255, 0, 2, 0.4));
+        rayonPortee.setEffect(dropShadow);
+        pane.getChildren().add(rayonPortee);
     }
 
     private boolean imageDefenseBienPlacé(double x, double y) {

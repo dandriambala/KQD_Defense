@@ -13,15 +13,13 @@ public class LanceMissile extends Tourelle {
     private int cooldown = 0;
     private Balle balleActuelle;
 
-    public LanceMissile() {
-        super(100,  4, 30, 4, 1);
+    public LanceMissile( int colonne, int ligne) {
+        super(100,  4, 30, 4, colonne, ligne, 1);
         this.balleActuelle = null;
     }
-    public LanceMissile( int colonne, int ligne) {
-        super(100,  4, 30, 4, 1);
-        this.balleActuelle = null;
-        setColonne(colonne);
-        setLigne(ligne);
+
+    public LanceMissile() {
+        this(0,0);
     }
 
      private void sniper() {
@@ -30,9 +28,9 @@ public class LanceMissile extends Tourelle {
 
         if (!ennemis.isEmpty() && balleActuelle == null) {
             ArrayList<Ennemi> degatEnChaine = getEnv().chercherEnnemisDansPortee(ennemis.get(0).getX(), ennemis.get(0).getY(), 32, 5);
+            balleActuelle = creerBallesDansTourelle(ennemis.get(0));
 
             if (!degatEnChaine.isEmpty()) {
-                balleActuelle = creerBallesDansTourelle(ennemis.get(0));
 
                 for (int j = 0; j < degatEnChaine.size(); j++) {
                     degatEnChaine.get(j).decrementerPv(this.getDegats());

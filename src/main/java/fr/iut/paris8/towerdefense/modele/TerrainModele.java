@@ -71,6 +71,16 @@ public class TerrainModele {
         }
     }
 
+    public void afficherTerrain(){
+
+        for (int i=0; i<this.terrain.length; i++){
+            for (int j =0; j<this.terrain[i].length; j++){
+                System.out.print(terrain[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
     public void ajusterEmplacementDefense(ImageView c, double colonne, double ligne ) {
         c.setTranslateX(colonne * 16 );
         c.setTranslateY(ligne * 16 );

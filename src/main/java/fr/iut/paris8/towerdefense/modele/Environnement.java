@@ -7,6 +7,7 @@ import fr.iut.paris8.towerdefense.modele.defenses.Defense;
 import fr.iut.paris8.towerdefense.modele.defenses.Tourelle;
 import fr.iut.paris8.towerdefense.modele.ennemis.BarreDeVie;
 import fr.iut.paris8.towerdefense.modele.ennemis.Ennemi;
+import fr.iut.paris8.towerdefense.modele.fabrique.FabDefense;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
@@ -26,6 +27,7 @@ public class Environnement {
     private BFS bfs;
     private RessourceJeu ressourceJeu;
     private int partieTerminee;
+    private FabDefense fabDefense;
 
     private Environnement(TerrainModele t) {
         this.nbToursProperty = new SimpleIntegerProperty();
@@ -34,10 +36,11 @@ public class Environnement {
         this.barreDeVies = FXCollections.observableArrayList();
         this.defenses = FXCollections.observableArrayList();
         this.t = t;
-        this.bfs = BFS.getInstance(new Grille(t.getWidth() / 16, t.getHeight() / 16), new Case(59, 10));
+        this.bfs = new BFS(new Grille(t.getWidth() / 16, t.getHeight() / 16), new Case(59, 10));
         ressourceJeu = new RessourceJeu();
         this.partieTerminee = -1;
         gestionnaireDeVague= new GestionnaireDeVague();
+        fabDefense = new FabDefense();
     }
 
     public static synchronized Environnement getInstance(TerrainModele terrainModele) {
@@ -46,8 +49,6 @@ public class Environnement {
         }
         return uniqueInstance;
     }
-
-
 
     public final int getNbTours () {
         return this.nbToursProperty.getValue();
@@ -98,9 +99,11 @@ public class Environnement {
      *   - Si la défense n'est pas une tourelle, elle l'ajoute simplement à la liste des défenses.
      *   - Ajoute la défense dans le modèle du terrain.
      */
-    public void ajouterDefense ( Defense d ) {
+    public Defense ajouterDefense (int type, int x, int y) {
 
-        if ( getRessourceJeu().peutEncoreAcheter(d.getCout()) ) {
+        Defense d = fabDefense.ajouterDefense(type, x, y);
+
+        if (getRessourceJeu().peutEncoreAcheter(d.getCout()) ) {
 
             if ( d instanceof Tourelle ) {
 
@@ -123,9 +126,12 @@ public class Environnement {
             else {
                 getRessourceJeu().achatTourelle(d.getCout());
                 defenses.add(d);
+
+
             }
-            getTerrainModele().ajouterDefenseDansModele(d.getColonne(), d.getLigne());
+            getTerrainModele().ajouterDefenseDansModele(x,y);
         }
+        return d;
 
     }
 

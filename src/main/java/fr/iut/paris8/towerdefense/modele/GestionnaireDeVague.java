@@ -1,6 +1,7 @@
 package fr.iut.paris8.towerdefense.modele;
 
 import fr.iut.paris8.towerdefense.modele.ennemis.Ennemi;
+import fr.iut.paris8.towerdefense.modele.fabrique.FabriqueEnnemi;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 

@@ -1,4 +1,4 @@
-package fr.iut.paris8.towerdefense.modele;
+package fr.iut.paris8.towerdefense.modele.fabrique;
 
 import fr.iut.paris8.towerdefense.modele.ennemis.*;
 

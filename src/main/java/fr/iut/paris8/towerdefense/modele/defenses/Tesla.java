@@ -8,12 +8,12 @@ import fr.iut.paris8.towerdefense.modele.tirTourelle.Eclair;
 
 public class Tesla extends Tourelle {
 
-    public Tesla() {
-        super(150, 5, 3, 5,5);
-    }
-
     public Tesla(int colonne, int ligne) {
         super(150, 5, 3,5, colonne,ligne,5);
+    }
+
+    public Tesla() {
+       this(0,0);
     }
 
     @Override
