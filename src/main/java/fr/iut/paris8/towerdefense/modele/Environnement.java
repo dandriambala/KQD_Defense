@@ -54,6 +54,10 @@ public class Environnement {
         return this.nbToursProperty.getValue();
     }
 
+    public ObservableList<BarreDeVie> getBarreDeVies() {
+        return barreDeVies;
+    }
+
     public ObservableList<Ennemi> getEnnemis () {
         ObservableList<Ennemi> listeEnnemis = FXCollections.observableArrayList();
         for (EnMouvement em : enMouvements) {
@@ -79,6 +83,13 @@ public class Environnement {
         return listeTourelles;
     }
 
+    public GestionnaireDeVague getVague () {
+        return gestionnaireDeVague;
+    }
+
+    public RessourceJeu getRessourceJeu () {
+        return ressourceJeu;
+    }
 
     public TerrainModele getTerrainModele () {
         return this.t;
@@ -86,6 +97,14 @@ public class Environnement {
 
     public ObservableList<EnMouvement> getEnMouvements () {
         return enMouvements;
+    }
+
+    public BFS getBfs () {
+        return bfs;
+    }
+
+    public int getPartieTerminee () {
+        return partieTerminee;
     }
 
     /**
@@ -174,9 +193,6 @@ public class Environnement {
         return -1;
     }
 
-    public int getPartieTerminee () {
-        return partieTerminee;
-    }
 
 
     private void enMouvementsPourChaqueTour () {
@@ -210,8 +226,22 @@ public class Environnement {
 
     }
 
-    public BFS getBfs () {
-        return bfs;
+    /**
+     * La méthode "enleverDefense" permet de supprimer une défense du jeu.
+     * Elle effectue les actions suivantes :
+     *   - Met à zéro la valeur de la case correspondant à la position de la défense dans le tableau du terrain.
+     *   - Supprime la défense de la liste des défenses du jeu.
+     *   - Crée un objet "Case" à partir des coordonnées de la défense pour reconnecter cette case dans le graphe BFS.
+     *   - Effectue une nouvelle recherche BFS pour mettre à jour les informations du graphe après la suppression de la défense.
+     */
+    public void enleverDefense(Defense d) {
+        t.caseAZero(d.getColonne() / 16, d.getLigne() / 16);
+        this.defenses.remove(d);
+
+        Case sommet = new Case(d.getColonne() / 16, d.getLigne() / 16);
+        bfs.getG().reconnecte(sommet);
+        this.getBfs().grilleBFS();
+
     }
 
 
@@ -235,46 +265,34 @@ public class Environnement {
     }
 
     //retourne les défenses qui se situe sur la route des ennemis
-    public ArrayList<Defense> chercherDefenseDansPorteeEnnemi(int x, int y, int portee, int limiteur) {
+    public ArrayList<Tourelle> chercherTourelleDansPorteeEnnemi(int x, int y, int portee, int limiteur, Direction directionDeRecherche) {
 
-        ArrayList<Defense> defensesDansPortee = new ArrayList<>();
+        ArrayList<Tourelle> tourelleDansPortee = new ArrayList<>();
+
+
         for (Tourelle t : this.getTourelle()) {
-            if ( defensesDansPortee.size() < limiteur ) {
-                if (((x + portee) >= t.getColonne()) && (x <= t.getColonne()) && (t.getLigne() == y)) {
-                    defensesDansPortee.add(t);
+            if ( tourelleDansPortee.size() < limiteur ) {
+                if (defensesTrouveDansDirection(x,y,portee,directionDeRecherche, t.getLigne(), t.getColonne())) {
+                    tourelleDansPortee.add(t);
                 }
             }
         }
-        return defensesDansPortee;
+        return tourelleDansPortee;
     }
 
-    public GestionnaireDeVague getVague () {
-        return gestionnaireDeVague;
+
+    public boolean defensesTrouveDansDirection(int xEnnemi, int yEnnemi, int porteeEnnemi, Direction direction, int ligneDef, int colonneDef) {
+        switch(direction){
+            case horizontal :
+                return ((( xEnnemi - porteeEnnemi ) <= colonneDef) && ( colonneDef <= ( xEnnemi + porteeEnnemi )  && (ligneDef == yEnnemi)));
+            case vertical :
+                // TO-DO coder la recherche en verticale
+                break;
+            case toute :
+                return (( xEnnemi - porteeEnnemi ) <= colonneDef) && ( colonneDef <= ( xEnnemi + porteeEnnemi ) )
+                    && ( ( yEnnemi - porteeEnnemi ) <= ligneDef ) && ( ligneDef <= yEnnemi + porteeEnnemi );
+        }
+        return false;
     }
 
-    public RessourceJeu getRessourceJeu () {
-        return ressourceJeu;
-    }
-
-    /**
-     * La méthode "enleverDefense" permet de supprimer une défense du jeu.
-     * Elle effectue les actions suivantes :
-     *   - Met à zéro la valeur de la case correspondant à la position de la défense dans le tableau du terrain.
-     *   - Supprime la défense de la liste des défenses du jeu.
-     *   - Crée un objet "Case" à partir des coordonnées de la défense pour reconnecter cette case dans le graphe BFS.
-     *   - Effectue une nouvelle recherche BFS pour mettre à jour les informations du graphe après la suppression de la défense.
-     */
-    public void enleverDefense(Defense d) {
-        t.caseAZero(d.getColonne() / 16, d.getLigne() / 16);
-        this.defenses.remove(d);
-
-        Case sommet = new Case(d.getColonne() / 16, d.getLigne() / 16);
-        bfs.getG().reconnecte(sommet);
-        this.getBfs().grilleBFS();
-
-    }
-
-    public ObservableList<BarreDeVie> getBarreDeVies() {
-        return barreDeVies;
-    }
 }
