@@ -10,15 +10,14 @@ import java.util.ArrayList;
 
 public class StratFreeze extends StrategyEnnemi {
 
-    public StratFreeze(Environnement env) {
-        super(env);
+    public StratFreeze() {
 
     }
 
     @Override
     public void reagir(Ennemi e) {
         if (e.estTerminé()) {
-            ArrayList<Tourelle> def = this.getEnv().chercherTourelleDansPorteeEnnemi(e.getX(), e.getY(), 32, 24, Direction.toute);
+            ArrayList<Tourelle> def = e.getEnv().chercherTourelleDansPorteeEnnemi(e.getX(), e.getY(), 32, 24, Direction.toute);
 
             if (!def.isEmpty()) {
                 for (int i = 0; i < def.size(); i++) {

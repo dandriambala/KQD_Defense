@@ -13,13 +13,13 @@ public class Tank extends Ennemi{
 
     public Tank () {
         super(1,100,450);
-        this.setStrat(new StratTank(this.getEnv()));
+        this.setStrat(new StratTank());
     }
     public Tank ( int x, int y) {
         super( 1,100,450);
         setPositionXProperty(x);
         setPositionYProperty(y);
-        this.setStrat(new StratTank(this.getEnv()));
+        this.setStrat(new StratTank());
     }
 
     @Override

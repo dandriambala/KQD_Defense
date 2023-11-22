@@ -8,6 +8,6 @@ public class Eclaireur extends Ennemi {
 
     public Eclaireur() {
         super( 4, 20, 100);
-        this.setStrat(new StratFreeze(this.getEnv()));
+        this.setStrat(new StratFreeze());
     }
 }

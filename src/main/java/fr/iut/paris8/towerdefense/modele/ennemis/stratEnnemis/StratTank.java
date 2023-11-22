@@ -9,14 +9,13 @@ import fr.iut.paris8.towerdefense.modele.ennemis.Ennemi;
 import java.util.ArrayList;
 
 public class StratTank extends StrategyEnnemi{
-    public StratTank(Environnement env) {
-        super(env);
+    public StratTank() {
     }
 
     @Override
     // enlève les défenses qui sont sur son passage
     public void reagir(Ennemi e) {
-        ArrayList<Tourelle> def = this.getEnv().chercherTourelleDansPorteeEnnemi(e.getX(), e.getY(), 16, 1, Direction.horizontal);
+        ArrayList<Tourelle> def = e.getEnv().chercherTourelleDansPorteeEnnemi(e.getX(), e.getY(), 16, 1, Direction.horizontal);
         if (!def.isEmpty()) {
 
             for (int i = 0; i < def.size(); i++)
