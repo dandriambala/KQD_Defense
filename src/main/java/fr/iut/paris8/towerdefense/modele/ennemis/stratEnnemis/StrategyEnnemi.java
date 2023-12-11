@@ -5,15 +5,10 @@ import fr.iut.paris8.towerdefense.modele.ennemis.Ennemi;
 
 public abstract class StrategyEnnemi {
 
-    private Environnement env;
 
-    public StrategyEnnemi(Environnement env){
-        this.env = env;
+    public StrategyEnnemi(){
     }
 
     public abstract void reagir(Ennemi e);
 
-    public Environnement getEnv() {
-        return env;
-    }
 }

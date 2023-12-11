@@ -4,6 +4,7 @@ import fr.iut.paris8.towerdefense.BFS.Case;
 import fr.iut.paris8.towerdefense.modele.EnMouvement;
 import fr.iut.paris8.towerdefense.modele.Environnement;
 import fr.iut.paris8.towerdefense.modele.TerrainModele;
+import fr.iut.paris8.towerdefense.modele.ennemis.stratEnnemis.StrategyEnnemi;
 
 import java.util.ArrayList;
 
@@ -14,7 +15,7 @@ public abstract class Ennemi extends EnMouvement {
     private Case destinationCase;
     private BarreDeVie barreDeVie;
     private int pvMax;
-
+    private StrategyEnnemi strat;
 
 
     public Ennemi( int vitesse,  int prime, int pv) {
@@ -25,6 +26,7 @@ public abstract class Ennemi extends EnMouvement {
         setId("E"+ compteurEnnemi);
         compteurEnnemi++;
         this.barreDeVie = new BarreDeVie(getPv(), getPvMax(), getId(), getX(), getY());
+        this.strat = null;
 
     }
 
@@ -36,6 +38,7 @@ public abstract class Ennemi extends EnMouvement {
         setId("E"+ compteurEnnemi);
         compteurEnnemi++;
         this.barreDeVie = new BarreDeVie(getPv(), getPvMax(), getId(), getX(), getY());
+        this.strat = null;
 
     }
 
@@ -61,9 +64,20 @@ public abstract class Ennemi extends EnMouvement {
         this.pv-=nb;
     }
 
+    public void setStrat(StrategyEnnemi strat) {
+        this.strat = strat;
+    }
+
+    public StrategyEnnemi getStrat() {
+        return strat;
+    }
 
     public void agir () {
+
         TerrainModele t = getEnv().getTerrainModele();
+
+        if(getStrat() != null) getStrat().reagir(this);
+
        if (t.dansTerrain(this.getY() / 16, this.getX() / 16)  && estVivant()) {
 
             if (destinationCase == null)
@@ -99,6 +113,7 @@ public abstract class Ennemi extends EnMouvement {
                     avancerEnX();
                 }
             }
+
         }
     }
 
