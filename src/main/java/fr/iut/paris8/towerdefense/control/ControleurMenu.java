@@ -21,9 +21,9 @@ public class ControleurMenu implements Initializable {
     void lancement( ActionEvent event ) throws IOException {
         Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader();
-        URL ressource = getClass().getResource("/fr/iut/paris8/towerdefense/Vue.fxml");
+        URL ressource = getClass().getResource("/fr/iut/paris8/towerdefense/Connexion.fxml");
         Parent root = fxmlLoader.load(ressource);
-        Scene scene = new Scene(root,960,770);
+        Scene scene = new Scene(root,500,500);
         primaryStage.setResizable(false);
         primaryStage.setTitle("Towerdefense");
         primaryStage.setScene(scene);
@@ -36,6 +36,7 @@ public class ControleurMenu implements Initializable {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
+
 
 
 }

@@ -29,7 +29,6 @@ public class TerrainModele {
             }
         }
 
-
         this.terrain = t;
     }
 
