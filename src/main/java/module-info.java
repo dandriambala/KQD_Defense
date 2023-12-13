@@ -4,6 +4,7 @@ module fr.iut.paris8.towerdefense {
 
     requires org.controlsfx.controls;
     requires java.sql;
+    requires jbcrypt;
 
     opens fr.iut.paris8.towerdefense.control to javafx.fxml;
     exports fr.iut.paris8.towerdefense;

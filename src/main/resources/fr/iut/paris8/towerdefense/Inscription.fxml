@@ -43,7 +43,7 @@
                   <HBox prefHeight="100.0" prefWidth="324.0">
                      <children>
                         <Label prefHeight="36.0" prefWidth="417.0" text="mot de passe:" />
-                        <TextField fx:id="mdpText" prefHeight="26.0" prefWidth="334.0" />
+                        <PasswordField fx:id="mdpText" prefHeight="26.0" prefWidth="334.0" />
                      </children>
                   </HBox>
                </children>

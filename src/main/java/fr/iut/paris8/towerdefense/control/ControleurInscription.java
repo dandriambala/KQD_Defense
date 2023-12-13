@@ -16,6 +16,7 @@ import javafx.geometry.Pos;
 
 import java.io.IOException;
 import java.net.URL;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class ControleurInscription {
 
@@ -28,9 +29,12 @@ public class ControleurInscription {
         String nom = loginText.getText();
         String motDePasse = mdpText.getText();
 
+        String motDePasseHache = BCrypt.hashpw(motDePasse, BCrypt.gensalt());
+
+        // Créer une instance de InscriptionJDBC pour gérer l'inscription
         InscriptionJDBC inscriptionJDBC = new InscriptionJDBC();
 
-        int idJoueur = inscriptionJDBC.inscrireJoueur(nom, motDePasse);
+        int idJoueur = inscriptionJDBC.inscrireJoueur(nom, motDePasseHache);
 
         if (idJoueur != -1) {
             SessionUtilisateur.setIdJoueur(idJoueur);
