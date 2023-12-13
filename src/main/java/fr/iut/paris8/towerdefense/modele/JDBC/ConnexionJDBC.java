@@ -52,7 +52,7 @@ public class ConnexionJDBC {
 
 
     public int trouverIDJoueur(String login) throws SQLException {
-        Connection connexion = getConnection(); // Assurez-vous d'avoir une méthode obtenirConnexion()
+        Connection connexion = getConnection();
 
         String query = "SELECT idJoueur FROM Joueur WHERE Nom = ?";
         try (PreparedStatement preparedStatement = connexion.prepareStatement(query)) {

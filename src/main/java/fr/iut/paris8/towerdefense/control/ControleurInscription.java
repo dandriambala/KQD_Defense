@@ -31,7 +31,6 @@ public class ControleurInscription {
 
         String motDePasseHache = BCrypt.hashpw(motDePasse, BCrypt.gensalt());
 
-        // Créer une instance de InscriptionJDBC pour gérer l'inscription
         InscriptionJDBC inscriptionJDBC = new InscriptionJDBC();
 
         int idJoueur = inscriptionJDBC.inscrireJoueur(nom, motDePasseHache);
