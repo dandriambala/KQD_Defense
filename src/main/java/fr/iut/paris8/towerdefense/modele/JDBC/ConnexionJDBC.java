@@ -1,5 +1,7 @@
 package fr.iut.paris8.towerdefense.modele.JDBC;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import java.sql.*;
 
 public class ConnexionJDBC {
@@ -23,26 +25,31 @@ public class ConnexionJDBC {
         return connection;
     }
 
-    public int connexionJoueur(String loginAVerifier, String mdpAVerifier)  {
-        String requete = "SELECT * FROM Joueur WHERE Nom = ? AND Mot_de_passe = ?";
+
+
+    public int connexionJoueur(String loginAVerifier, String mdpAVerifier) throws SQLException {
+        String requete = "SELECT Mot_de_passe FROM Joueur WHERE Nom = ?";
         try (PreparedStatement preparedStatement = getConnection().prepareStatement(requete)) {
             preparedStatement.setString(1, loginAVerifier);
-            preparedStatement.setString(2, mdpAVerifier);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    System.out.println("Connexion réussie !");
-                    return trouverIDJoueur(loginAVerifier); // Retourner l'ID du joueur après une connexion réussie
-                } else {
-                    System.out.println("Login ou mot de passe incorrect.");
-                    return -1;
+                    String mdpStocke = resultSet.getString("Mot_de_passe");
+                    if (BCrypt.checkpw(mdpAVerifier, mdpStocke)) {
+                        System.out.println("Connexion réussie !");
+                        return trouverIDJoueur(loginAVerifier);
+                    }
                 }
+                System.out.println("Login ou mot de passe incorrect.");
+                return -1;
             }
         } catch (SQLException e) {
             e.printStackTrace();
             return -1;
         }
     }
+
+
 
     public int trouverIDJoueur(String login) throws SQLException {
         Connection connexion = getConnection(); // Assurez-vous d'avoir une méthode obtenirConnexion()

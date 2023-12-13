@@ -14,9 +14,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class ControleurConnexion implements Initializable {
@@ -30,7 +32,7 @@ public class ControleurConnexion implements Initializable {
     private TextField mdpText;
 
     @FXML
-    void connexion(ActionEvent event) throws IOException{
+    void connexion(ActionEvent event) throws IOException, SQLException {
         String login = loginText.getText();
         String mdp = mdpText.getText();
         ConnexionJDBC connexionJDBC = new ConnexionJDBC();
