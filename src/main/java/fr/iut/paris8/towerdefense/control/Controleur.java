@@ -4,6 +4,7 @@ import fr.iut.paris8.towerdefense.BFS.BFS;
 import fr.iut.paris8.towerdefense.BFS.Case;
 import fr.iut.paris8.towerdefense.BFS.Grille;
 import fr.iut.paris8.towerdefense.modele.*;
+import fr.iut.paris8.towerdefense.modele.JDBC.GestionPartieJDBC;
 import fr.iut.paris8.towerdefense.modele.defenses.*;
 import fr.iut.paris8.towerdefense.modele.ennemis.BarreDeVie;
 import fr.iut.paris8.towerdefense.vue.TerrainVue;
@@ -37,7 +38,9 @@ import javafx.util.Duration;
 import java.io.IOException;
 
 import java.net.URL;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 public class Controleur implements Initializable {
@@ -264,16 +267,15 @@ public class Controleur implements Initializable {
         gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);
 
-
         KeyFrame kf = new KeyFrame(
-
                 Duration.seconds(0.08),
-                ( ev -> {
-                    switch ( env.getPartieTerminee() ) {
+                (ev -> {
+                    switch (env.getPartieTerminee()) {
                         case -1:
                             env.unTour();
                             break;
                         case 0:
+                            enregistrerDonneesPartie();
                             gameLoop.stop();
                             try {
                                 scene("Gagnant");
@@ -282,6 +284,7 @@ public class Controleur implements Initializable {
                             }
                             break;
                         case 1:
+                            enregistrerDonneesPartie();
                             gameLoop.stop();
                             try {
                                 scene("Perdant");
@@ -294,6 +297,26 @@ public class Controleur implements Initializable {
         );
         gameLoop.getKeyFrames().add(kf);
     }
+
+    private void enregistrerDonneesPartie() {
+        Random random = new Random();
+        int idPartie = random.nextInt(100000);
+        String etatPartie = (env.getPartieTerminee() == 0) ? "Gagnée" : "Perdue";
+        int vagueActuelle = Integer.parseInt(nbVague.getText());
+        int idJoueur = SessionUtilisateur.getIdJoueur();
+        int idTerrain = 1;
+
+        // Créer une instance de GestionPartieJDBC et enregistrer la partie
+        GestionPartieJDBC gestionPartieJDBC = new GestionPartieJDBC();
+        boolean succes = gestionPartieJDBC.enregistrerPartie(idPartie, etatPartie,vagueActuelle, idJoueur, idTerrain);
+
+        if (succes) {
+            System.out.println("Partie enregistrée avec succès dans la base de données.");
+        } else {
+            System.out.println("Erreur lors de l'enregistrement de la partie.");
+        }
+    }
+
     private void scene(String typeFin) throws IOException {
         Stage primaryStage = (Stage) ( pane.getScene().getWindow() );
         FXMLLoader fxmlLoader = new FXMLLoader();

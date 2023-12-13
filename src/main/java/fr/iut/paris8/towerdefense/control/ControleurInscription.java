@@ -1,41 +1,37 @@
 package fr.iut.paris8.towerdefense.control;
 
-import fr.iut.paris8.towerdefense.modele.JDBC.ConnexionJDBC;
+import fr.iut.paris8.towerdefense.modele.JDBC.InscriptionJDBC;
 import fr.iut.paris8.towerdefense.modele.SessionUtilisateur;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.geometry.Pos;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ResourceBundle;
 
-public class ControleurConnexion implements Initializable {
-    @Override
-    public void initialize (URL url, ResourceBundle resourceBundle ) {
-    }
+public class ControleurInscription {
+
     @FXML
     private TextField loginText;
-
     @FXML
     private TextField mdpText;
 
-    @FXML
-    void connexion(ActionEvent event) throws IOException{
-        String login = loginText.getText();
-        String mdp = mdpText.getText();
-        ConnexionJDBC connexionJDBC = new ConnexionJDBC();
+    public void inscription(ActionEvent event) throws IOException {
+        String nom = loginText.getText();
+        String motDePasse = mdpText.getText();
 
-        int idJoueur = connexionJDBC.connexionJoueur(login, mdp);
+        InscriptionJDBC inscriptionJDBC = new InscriptionJDBC();
+
+        int idJoueur = inscriptionJDBC.inscrireJoueur(nom, motDePasse);
+
         if (idJoueur != -1) {
             SessionUtilisateur.setIdJoueur(idJoueur);
             Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -48,7 +44,7 @@ public class ControleurConnexion implements Initializable {
             primaryStage.setResizable(false);
             primaryStage.show();
         } else {
-            afficherErreur("Login ou mot de passe incorrect");
+            afficherErreur("Utilisateur déjà existant");
         }
     }
 
