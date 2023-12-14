@@ -299,8 +299,6 @@ public class Controleur implements Initializable {
     }
 
     private void enregistrerDonneesPartie() {
-        Random random = new Random();
-        int idPartie = random.nextInt(100000);
         String etatPartie = (env.getPartieTerminee() == 0) ? "Gagnée" : "Perdue";
         int vagueActuelle = Integer.parseInt(nbVague.getText());
         int idJoueur = SessionUtilisateur.getIdJoueur();
@@ -308,7 +306,7 @@ public class Controleur implements Initializable {
 
         // Créer une instance de GestionPartieJDBC et enregistrer la partie
         GestionPartieJDBC gestionPartieJDBC = new GestionPartieJDBC();
-        boolean succes = gestionPartieJDBC.enregistrerPartie(idPartie, etatPartie,vagueActuelle, idJoueur, idTerrain);
+        boolean succes = gestionPartieJDBC.enregistrerPartie(etatPartie,vagueActuelle, idJoueur, idTerrain);
 
         if (succes) {
             System.out.println("Partie enregistrée avec succès dans la base de données.");
